@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="core-center:war exploded">
+    <output-path>$PROJECT_DIR$/core-center/target/corecenter</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="core-center" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="G:\2-工作\GitHub\gamecenter\core-center\target/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="core-center/web/Web" />
+    </root>
+  </artifact>
+</component>

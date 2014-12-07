@@ -25,6 +25,8 @@
         <module name="core-center" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="core-center" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
 </project>
-

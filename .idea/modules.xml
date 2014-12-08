@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/core-center/core-center.iml" filepath="$PROJECT_DIR$/core-center/core-center.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core-center/corecenter.iml" filepath="$PROJECT_DIR$/core-center/corecenter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core-center/corecenter.iml" filepath="$PROJECT_DIR$/core-center/corecenter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core-center/corecenter.iml" filepath="$PROJECT_DIR$/core-center/corecenter.iml" />
     </modules>
   </component>
 </project>
-

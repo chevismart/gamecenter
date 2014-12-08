@@ -53,6 +53,12 @@
             <artifactId>struts2-core</artifactId>
             <version>${struts.version}</version>
         </dependency>
+        <!-- UrlRewriteFilter -->
+        <dependency>
+            <groupId>org.tuckey</groupId>
+            <artifactId>urlrewritefilter</artifactId>
+            <version>4.0.3</version>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
@@ -110,6 +116,7 @@
                             <directory>${basedir}/src/main/webapp/WEB-INF/</directory>
                             <excludes>      <!--排除哪些内容不被清除-->
                                 <excluse>**/web.xml</excluse>
+                                <excluse>**/urlrewrite.xml</excluse>
                             </excludes>
                         </fileset>
                     </filesets>

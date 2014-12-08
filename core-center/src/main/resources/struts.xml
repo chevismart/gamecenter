@@ -2,9 +2,28 @@
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
 
-    <package name="simpleAction" extends="struts-default">
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.enable.DynamicMethodInvocation" value="false"></constant>
+    <!-- <constant name="struts.custom.i18n.resources" value="itcast"></constant> -->
+    <package name="struts-global" namespace="/" extends="struts-default">
+        <global-results>
+            <result name="errHandler" type="chain">
+                <param name="actionName">errorProcessor</param>
+            </result>
+        </global-results>
+        <global-exception-mappings>
+            <exception-mapping result="errHandler" exception="java.lang.Exception">
+            </exception-mapping>
+        </global-exception-mappings>
+
+        <action name="errorProcessor" class="gamecenter.core.actions.ErrorProcesser">
+            <result>/jsp/error.jsp</result>
+        </action>
+    </package>
+
+    <package name="simpleAction" extends="struts-global">
         <action name="simpleAction" class="gamecenter.core.actions.DemoAction" method="hello">
-            <result name="success">/demo.jsp</result>
+            <result name="success">/jsp/demo.jsp</result>
         </action>
     </package>
 

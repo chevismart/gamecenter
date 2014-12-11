@@ -1,4 +1,4 @@
-package gamecenter.core.actions;
+package gamecenter.core.processors;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;

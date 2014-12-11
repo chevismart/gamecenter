@@ -17,13 +17,13 @@
             </exception-mapping>
         </global-exception-mappings>
 
-        <action name="errorProcessor" class="gamecenter.core.actions.ErrorProcesser">
+        <action name="errorProcessor" class="gamecenter.core.processors.ErrorProcesser">
             <result>/jsp/error.jsp</result>
         </action>
     </package>
 
     <package name="simpleAction" extends="struts-global">
-        <action name="simpleAction" class="gamecenter.core.actions.DemoAction" method="hello">
+        <action name="simpleAction" class="demoActionClass" method="hello">
             <result name="success">/jsp/demo.jsp</result>
         </action>
     </package>

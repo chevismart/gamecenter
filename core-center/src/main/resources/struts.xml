@@ -23,7 +23,8 @@
     </package>
 
     <package name="simpleAction" extends="struts-global">
-        <action name="simpleAction" class="demoActionClass" method="hello">
+        <action name="simpleAction" class="demoActionClass">
+            <result name="success" type="chain">simpleAction</result>
             <result name="success">/jsp/demo.jsp</result>
         </action>
     </package>

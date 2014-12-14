@@ -1,8 +1,7 @@
 package gamecenter.core.processors;
 
-import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
-import gamecenter.core.beans.wechat.Profile;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import gamecenter.core.processors.wechat.ProfileManager;
 
 /**
@@ -22,13 +21,12 @@ public class DemoAction extends ActionSupport {
 
     public String hello(){
 
-        Profile profile = new Profile();
-        profile.setName("ChevisTest");
-        profile.setAppId("appId");
-        profile.setAppSecret("appsec");
+        String appId = "chevisappid";
+        profileManager.addProfile("chevisApp", appId);
+        profileManager.addWechatProfile(appId, "wxe89a9d2fa17df80f", "71d8fc7778571e6b54712953b68084e4");
+//        profileManager.requestWechatAccessToken("chevisappid");
 
-        profileManager.addProfile(profile);
-        profileManager.updateAllProfiles();
+        LoggerFactory.getLogger(this.getClass()).error(profileManager.getAppProfile(appId).toString());
 
         return ActionSupport.SUCCESS;
     }

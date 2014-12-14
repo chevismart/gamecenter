@@ -16,7 +16,9 @@
     <bean id="tasks" class="gamecenter.core.beans.Tasks">
         <property name="normalTask">
             <list>
-                <bean id="demoRunnable" class="gamecenter.core.listeners.DemoRunnable"/>
+                <bean id="demoRunnable" class="gamecenter.core.processors.tasks.wechatTokenManager">
+                    <constructor-arg name="profileManager" ref="profileManager"/>
+                </bean>
             </list>
         </property>
         <property name="scheduledTasks">
@@ -25,6 +27,8 @@
         </property>
     </bean>
 
+    <bean id="authProcessor" class="gamecenter.core.processors.AuthProcessor">
+    </bean>
 
     <bean id="demoActionClass" class="gamecenter.core.processors.DemoAction">
         <property name="profileManager" ref="profileManager"/>

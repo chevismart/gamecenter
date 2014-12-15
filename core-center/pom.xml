@@ -22,7 +22,7 @@
     <name>corecenter Maven Webapp</name>
     <url>http://maven.apache.org</url>
     <dependencies>
-        <!-- log -->
+        <!-- log dependency-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

@@ -2,12 +2,13 @@ package gamecenter.core.processors.wechat;
 
 import gamecenter.core.Constants.CommonConstants;
 import gamecenter.core.beans.AppProfile;
+import gamecenter.core.beans.builders.AppProfileBuilder;
+import gamecenter.core.beans.builders.WechatProfileBuilder;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.utils.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import weixin.popular.api.SnsAPI;
 import weixin.popular.api.TokenAPI;
 import weixin.popular.bean.Token;
 
@@ -20,13 +21,11 @@ public class ProfileManager {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     private Map<String, AppProfile> profiles;
-    private SnsAPI wechatSnsApi;
-    private TokenAPI wechatAccessTokenApi;
+    AccessTokenFactory accessTokenFactory;
 
     public ProfileManager(Map<String, AppProfile> profiles) {
         this.profiles = profiles;
-        wechatSnsApi = new SnsAPI();
-        wechatAccessTokenApi = new TokenAPI();
+        accessTokenFactory = new AccessTokenFactory(new TokenAPI());
     }
 
     public Map<String, AppProfile> getProfiles() {
@@ -34,15 +33,17 @@ public class ProfileManager {
     }
 
     public AppProfile addProfile(String appId, String appName) {
-        AppProfile appProfile = new AppProfile(appId, appName);
+        AppProfile appProfile = AppProfileBuilder.newBuilder().appId(appId).appName(appName).build();
         profiles.put(appProfile.getAppId(), appProfile);
         return appProfile;
     }
 
     public void addWechatProfile(String appId, String wechatAppId, String wechatAppSecret) {
-        WechatProfile wechatProfile = new WechatProfile();
-        wechatProfile.setWechatAppId(wechatAppId);
-        wechatProfile.setWechatAppSecret(wechatAppSecret);
+
+        WechatProfile wechatProfile = WechatProfileBuilder.newBuilder()
+                .wechatAppIdBuilder(wechatAppId)
+                .WechatAppSecretBuilder(wechatAppSecret)
+                .build();
         AppProfile appProfile = profiles.get(appId);
         if (verifyAppProfile(appProfile)) {
             appProfile.setWechatProfile(wechatProfile);
@@ -54,14 +55,8 @@ public class ProfileManager {
 
     public Token requestWechatAccessToken(String appId) {
         AppProfile appProfile = profiles.get(appId);
-        if (verifyAppProfile(appProfile) && appProfile.isWechatProfileValid()) {
-            WechatProfile wechatProfile = appProfile.getWechatProfile();
-            Token accessToken = wechatAccessTokenApi.token(appProfile.getWechatProfile().getWechatAppId(), appProfile.getWechatProfile().getWechatAppSecret());
-            wechatProfile.setWechatAccessTokenUpdateTime(TimeUtil.getCurrentDateTime());
-            accessToken.setExpires_in(CommonConstants.DEFAULT_WECHAT_ACCESS_TOKEN_EXPIRY_TIME_IN_SECOND);
-            wechatProfile.setWechatAccessToken(accessToken);
-            logger.info("Access token is updated successfully for appId {}", appId);
-            System.err.println(accessToken.getAccess_token());
+        if (verifyAppProfile(appProfile)) {
+            accessTokenFactory.requestWechatAccessToken(appProfile);
         } else {
             logger.warn("AppId {} is invalid to be requested!", appId);
             return null;

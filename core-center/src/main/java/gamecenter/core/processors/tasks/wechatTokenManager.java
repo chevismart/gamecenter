@@ -9,13 +9,13 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Chevis on 2014/12/11.
  */
-public class wechatTokenManager extends AbstractRunnable {
+public class WechatTokenManager extends AbstractRunnable {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private ProfileManager profileManager;
 
-    public wechatTokenManager(ProfileManager profileManager) {
+    public WechatTokenManager(ProfileManager profileManager) {
 
         this.profileManager = profileManager;
     }

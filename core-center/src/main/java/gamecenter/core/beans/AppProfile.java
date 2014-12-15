@@ -11,6 +11,9 @@ public class AppProfile {
     private String appId;
     private WechatProfile wechatProfile;
 
+    public AppProfile() {
+    }
+
     public AppProfile(String appName, String appId) {
         this.appName = appName;
         this.appId = appId;

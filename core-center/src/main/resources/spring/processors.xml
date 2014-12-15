@@ -16,7 +16,7 @@
     <bean id="tasks" class="gamecenter.core.beans.Tasks">
         <property name="normalTask">
             <list>
-                <bean id="demoRunnable" class="gamecenter.core.processors.tasks.wechatTokenManager">
+                <bean id="demoRunnable" class="gamecenter.core.processors.tasks.WechatTokenManager">
                     <constructor-arg name="profileManager" ref="profileManager"/>
                 </bean>
             </list>

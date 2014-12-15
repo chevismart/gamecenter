@@ -19,6 +19,11 @@ public class WechatProfile {
     private Date wechatAccessTokenUpdateTime;
     private Token wechatAccessToken;
 
+    public WechatProfile(String wechatAppId, String wechatAppSecret) {
+        this.wechatAppId = wechatAppId;
+        this.wechatAppSecret = wechatAppSecret;
+    }
+
     @Override
     public String toString() {
         return "WechatProfile{" +

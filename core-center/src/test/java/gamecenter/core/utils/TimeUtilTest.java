@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.Calendar;
 import java.util.Date;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 
 public class TimeUtilTest {
@@ -17,7 +17,7 @@ public class TimeUtilTest {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(current);
         calendar.add(Calendar.SECOND, 1);
-        Date oneSecondDelayDate = TimeUtil.getExpiryDateTime(current, onesecond);
+        Date oneSecondDelayDate = TimeUtil.getExpiryDateTime(current, onesecond,0);
         assertEquals(calendar.getTime().getTime(), oneSecondDelayDate.getTime());
     }
 }

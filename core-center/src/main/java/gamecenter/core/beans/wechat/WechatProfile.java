@@ -5,7 +5,7 @@ import weixin.popular.bean.SnsToken;
 import weixin.popular.bean.Token;
 import weixin.popular.bean.User;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by Chevis on 2014/12/13.
@@ -18,10 +18,12 @@ public class WechatProfile {
     private User wechatUserProfile;
     private Date wechatAccessTokenUpdateTime;
     private Token wechatAccessToken;
+    private Map<String, User> activeUserList;
 
     public WechatProfile(String wechatAppId, String wechatAppSecret) {
         this.wechatAppId = wechatAppId;
         this.wechatAppSecret = wechatAppSecret;
+        activeUserList = new HashMap<String, User>();
     }
 
     @Override
@@ -33,7 +35,16 @@ public class WechatProfile {
                 ", wechatUserProfile=" + wechatUserProfile +
                 ", wechatAccessTokenUpdateTime=" + wechatAccessTokenUpdateTime +
                 ", wechatAccessToken=" + wechatAccessToken +
+                ", activeUserList=" + activeUserList +
                 '}';
+    }
+
+    public Map<String, User> getActiveUserList() {
+        return activeUserList;
+    }
+
+    public void setActiveUserList(Map<String, User> activeUserList) {
+        this.activeUserList = activeUserList;
     }
 
     public Date getWechatAccessTokenUpdateTime() {

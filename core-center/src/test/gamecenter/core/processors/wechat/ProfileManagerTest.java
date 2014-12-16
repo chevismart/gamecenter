@@ -34,7 +34,7 @@ public class ProfileManagerTest {
 
     @Test
     public void requestAccessTokenByProfileManagerSuccessfully() throws Exception {
-        profileManager.addProfile(appName, appId);
+        profileManager.addAppProfile(appName, appId);
         profileManager.addWechatProfile(appId, "wxe89a9d2fa17df80f", "71d8fc7778571e6b54712953b68084e4");
         Whitebox.setInternalState(profileManager, "wechatAccessTokenApi", wechatAccessTokenApi);
         when(mockToken.getAccess_token()).thenReturn("tokenDetails");

@@ -27,10 +27,16 @@
         </property>
     </bean>
 
-    <bean id="authProcessor" class="gamecenter.core.processors.AuthProcessor">
+    <bean id="accessRouterProcessor" class="gamecenter.core.processors.AccessRouterProcessor">
     </bean>
 
     <bean id="demoActionClass" class="gamecenter.core.processors.DemoAction">
         <property name="profileManager" ref="profileManager"/>
     </bean>
+
+    <!-- Intercepters -->
+    <bean id="accessControl" class="gamecenter.core.intercepters.AccessControlIntercepter">
+
+    </bean>
+
 </beans>

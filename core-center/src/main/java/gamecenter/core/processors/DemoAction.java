@@ -19,10 +19,11 @@ public class DemoAction extends ActionSupport {
         this.profileManager = profileManager;
     }
 
+
     public String hello(){
 
         String appId = "chevisappid";
-        profileManager.addProfile(appId,"chevisApp");
+        profileManager.addAppProfile(appId, "chevisApp");
         profileManager.addWechatProfile(appId, "wxe89a9d2fa17df80f", "71d8fc7778571e6b54712953b68084e4");
 //        profileManager.requestWechatAccessToken("chevisappid");
 

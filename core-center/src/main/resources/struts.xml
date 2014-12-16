@@ -7,10 +7,22 @@
     <constant name="struts.enable.DynamicMethodInvocation" value="false"></constant>
     <constant name="struts.custom.i18n.resources" value="messageSource"></constant>
     <package name="struts-global" namespace="/" extends="struts-default">
+        <interceptors>
+            <interceptor name="accessControlInterceptor" class="accessControl"/>
+            <interceptor-stack name="accessStack">
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+                <interceptor-ref name="accessControlInterceptor"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+
+        <default-interceptor-ref name="accessStack"></default-interceptor-ref>
+
         <global-results>
             <result name="errHandler" type="chain">
                 <param name="actionName">errorProcessor</param>
             </result>
+            <result name="login" type="redirect">/jsp/login.jsp</result>
+            <result name="wechatAuth" type="chain">wechatOAuth</result>
         </global-results>
         <global-exception-mappings>
             <exception-mapping result="errHandler" exception="java.lang.Exception">
@@ -22,11 +34,21 @@
         </action>
     </package>
 
-    <package name="simpleAction" extends="struts-global">
+    <package name="simplePackage" extends="struts-global">
         <action name="simpleAction" class="demoActionClass">
             <result name="success" type="chain">simpleAction</result>
             <result name="success">/jsp/demo.jsp</result>
         </action>
+    </package>
+
+    <package name="authPackage" extends="struts-global">
+        <action name="auth" class="accessRouterProcessor">
+            <result name="success">/jsp/demo.jsp</result>
+        </action>
+    </package>
+
+    <package name="wechatAuth" extends="struts-default">
+        <action name="wechatOAuth" class="gamecenter.core.processors.wechat.WechatOAuthProcessor"/>
     </package>
 
 </struts>

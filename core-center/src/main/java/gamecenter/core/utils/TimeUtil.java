@@ -15,9 +15,8 @@ public class TimeUtil {
         return second * 1000000;
     }
 
-
-    public static Date getExpiryDateTime(Date datetime, int expiryInSeconds) {
-        return null == datetime ? null : new Date(datetime.getTime() + millionSecondFromSecond(expiryInSeconds));
+    public static Date getExpiryDateTime(Date datetime, int expiryInSeconds, int shiftSecond) {
+        return null == datetime ? null : new Date(datetime.getTime() + millionSecondFromSecond(expiryInSeconds - shiftSecond));
     }
 
     public static boolean isExpiry(Date current, Date date) {

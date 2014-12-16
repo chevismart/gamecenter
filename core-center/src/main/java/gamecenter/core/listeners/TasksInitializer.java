@@ -1,6 +1,6 @@
 package gamecenter.core.listeners;
 
-import gamecenter.core.Constants.CommonConstants;
+import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.beans.Tasks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

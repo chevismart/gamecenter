@@ -1,6 +1,6 @@
 package gamecenter.core.processors.tasks;
 
-import gamecenter.core.constant.CommonConstants;
+import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.listeners.AbstractRunnable;
 import gamecenter.core.processors.wechat.ProfileManager;
 import org.slf4j.Logger;

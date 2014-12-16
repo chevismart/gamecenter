@@ -1,4 +1,4 @@
-package gamecenter.core.Constants;
+package gamecenter.core.constants;
 
 /**
  * Created by Chevis on 2014/12/11.

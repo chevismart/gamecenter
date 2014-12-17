@@ -1,10 +1,10 @@
 package gamecenter.core.processors.wechat;
 
-import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.beans.builders.AppProfileBuilder;
 import gamecenter.core.beans.builders.WechatProfileBuilder;
 import gamecenter.core.beans.wechat.WechatProfile;
+import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.services.wechat.AccessTokenService;
 import gamecenter.core.services.wechat.SnsAuthService;
 import gamecenter.core.utils.TimeUtil;
@@ -77,8 +77,9 @@ public class ProfileManager {
         if (verifyAppProfile(appProfile)) {
             user = snsAuthService.getUserInfo(appProfile, code, locale.getLanguage());
         }
-        if (null == user) logger.warn("User info is not found for {}", appId);
-        return null;
+        if (null == user)
+            logger.warn("User info is not found for {}", appId); // TODO: enhance the method to check the user is empty or not
+        return user;
     }
 
     public void checkAndUpdateAllAccessToken() {

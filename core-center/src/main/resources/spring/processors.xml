@@ -28,6 +28,7 @@
     </bean>
 
     <bean id="accessRouterProcessor" class="gamecenter.core.processors.AccessRouterProcessor">
+        <property name="profileManager" ref="profileManager"/>
     </bean>
 
     <bean id="demoActionClass" class="gamecenter.core.processors.DemoAction">

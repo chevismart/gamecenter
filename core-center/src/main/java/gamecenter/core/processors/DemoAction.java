@@ -25,9 +25,9 @@ public class DemoAction extends ActionSupport {
         String appId = "chevisappid";
         profileManager.addAppProfile(appId, "chevisApp");
         profileManager.addWechatProfile(appId, "wxe89a9d2fa17df80f", "71d8fc7778571e6b54712953b68084e4");
-//        profileManager.requestWechatAccessToken("chevisappid");
+        profileManager.requestWechatAccessToken("chevisappid");
 
-        LoggerFactory.getLogger(this.getClass()).error(profileManager.getAppProfile(appId).toString());
+        LoggerFactory.getLogger(this.getClass()).info(profileManager.getAppProfile(appId).toString());
 
         return ActionSupport.SUCCESS;
     }

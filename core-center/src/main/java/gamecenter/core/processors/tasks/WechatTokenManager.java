@@ -3,6 +3,7 @@ package gamecenter.core.processors.tasks;
 import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.listeners.AbstractRunnable;
 import gamecenter.core.processors.wechat.ProfileManager;
+import gamecenter.core.utils.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +35,7 @@ public class WechatTokenManager extends AbstractRunnable {
         while (isContinue) {
             try {
                 //休眠时间
-                Thread.sleep(CommonConstants.DEFAULT_WECHAT_ACCESS_TOKEN_CHECK_INTERVAL_IN_SECOND);
+                Thread.sleep(TimeUtil.millionSecondFromSecond(CommonConstants.DEFAULT_WECHAT_ACCESS_TOKEN_CHECK_INTERVAL_IN_SECOND));
                 logger.debug("Start to check the access token.");
                 profileManager.checkAndUpdateAllAccessToken();
 

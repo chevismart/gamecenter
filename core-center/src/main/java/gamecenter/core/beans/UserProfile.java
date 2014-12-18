@@ -6,6 +6,7 @@ package gamecenter.core.beans;
 public class UserProfile {
     private String displayName;
     private String internalId;
+    private String userImgUrl;
     private AccessChannel accessChannel;
 
     @Override
@@ -13,8 +14,17 @@ public class UserProfile {
         return "UserProfile{" +
                 "displayName='" + displayName + '\'' +
                 ", internalId='" + internalId + '\'' +
-                ", channel=" + accessChannel +
+                ", userImgUrl='" + userImgUrl + '\'' +
+                ", accessChannel=" + accessChannel +
                 '}';
+    }
+
+    public String getUserImgUrl() {
+        return userImgUrl;
+    }
+
+    public void setUserImgUrl(String userImgUrl) {
+        this.userImgUrl = userImgUrl;
     }
 
     public String getDisplayName() {

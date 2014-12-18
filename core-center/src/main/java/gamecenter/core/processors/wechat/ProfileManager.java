@@ -7,6 +7,7 @@ import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.services.wechat.AccessTokenService;
 import gamecenter.core.services.wechat.SnsAuthService;
+import gamecenter.core.utils.ProfileUtil;
 import gamecenter.core.utils.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class ProfileManager {
                 .WechatAppSecretBuilder(wechatAppSecret)
                 .build();
         AppProfile appProfile = profiles.get(appId);
-        if (verifyAppProfile(appProfile)) {
+        if (ProfileUtil.verifyAppProfile(appProfile)) {
             appProfile.setWechatProfile(wechatProfile);
             logger.info("{} appId is added successfully", appId);
         } else {
@@ -62,7 +63,7 @@ public class ProfileManager {
 
     public Token requestWechatAccessToken(String appId) {
         AppProfile appProfile = profiles.get(appId);
-        if (verifyAppProfile(appProfile)) {
+        if (ProfileUtil.verifyAppProfile(appProfile)) {
             accessTokenService.requestWechatAccessToken(appProfile);
         } else {
             logger.warn("AppId {} is invalid to be requested!", appId);
@@ -74,11 +75,12 @@ public class ProfileManager {
     public User getUserInfo(String appId, String code, Locale locale) {
         User user = null;
         AppProfile appProfile = profiles.get(appId);
-        if (verifyAppProfile(appProfile)) {
+        if (ProfileUtil.verifyAppProfile(appProfile)) {
             user = snsAuthService.getUserInfo(appProfile, code, locale.getLanguage());
         }
-        if (null == user)
-            logger.warn("User info is not found for {}", appId); // TODO: enhance the method to check the user is empty or not
+        if (!isUserValid(user)) {
+            logger.warn("User info is not found for {}", appId);
+        }
         return user;
     }
 
@@ -88,9 +90,13 @@ public class ProfileManager {
         }
     }
 
+    private boolean isUserValid(User user) {
+        return null != user && StringUtils.isNotEmpty(user.getOpenid());
+    }
+
     private void chevkWechatProfile(AppProfile appProfile) {
         WechatProfile wechatProfile = appProfile.getWechatProfile();
-        if (verifyAppProfile(appProfile) &&
+        if (ProfileUtil.verifyAppProfile(appProfile) &&
                 appProfile.isWechatProfileValid() && (null == wechatProfile.getWechatAccessToken() ||
                 TimeUtil.isExpiry(TimeUtil.getCurrentDateTime(),
                         TimeUtil.getExpiryDateTime(wechatProfile.getWechatAccessTokenUpdateTime(),
@@ -106,12 +112,6 @@ public class ProfileManager {
 
     private int getExpiryInSecond(int defaultPeriod, int actualPeriod) {
         return actualPeriod <= 0 ? defaultPeriod : actualPeriod;
-    }
-
-    private boolean verifyAppProfile(AppProfile appProfile) {
-        return null != appProfile &&
-                StringUtils.isNotEmpty(appProfile.getAppId()) &&
-                StringUtils.isNotEmpty(appProfile.getAppName());
     }
 
     public AppProfile getAppProfile(String appId) {

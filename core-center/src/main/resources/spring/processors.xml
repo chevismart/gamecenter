@@ -35,6 +35,10 @@
         <property name="profileManager" ref="profileManager"/>
     </bean>
 
+    <bean id="wechatOAuthProcessor" class="gamecenter.core.processors.wechat.WechatOAuthProcessor">
+        <property name="profileManager" ref="profileManager"/>
+    </bean>
+
     <!-- Intercepters -->
     <bean id="accessControl" class="gamecenter.core.intercepters.AccessControlIntercepter">
 

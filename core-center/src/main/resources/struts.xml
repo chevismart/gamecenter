@@ -23,6 +23,7 @@
             </result>
             <result name="login" type="redirect">/jsp/login.jsp</result>
             <result name="wechatAuth" type="chain">wechatOAuth</result>
+            <result name="register" type="redirect">/jsp/register.jsp</result>
         </global-results>
         <global-exception-mappings>
             <exception-mapping result="errHandler" exception="java.lang.Exception">
@@ -48,7 +49,7 @@
     </package>
 
     <package name="wechatAuth" extends="struts-default">
-        <action name="wechatOAuth" class="gamecenter.core.processors.wechat.WechatOAuthProcessor"/>
+        <action name="wechatOAuth" class="wechatOAuthProcessor"/>
     </package>
 
 </struts>

@@ -2,7 +2,6 @@ package gamecenter.core.services.wechat;
 
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.beans.wechat.WechatProfile;
-import gamecenter.core.utils.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import weixin.popular.api.TokenAPI;
@@ -20,21 +19,18 @@ public class AccessTokenService {
         this.wechatAccessTokenApi = wechatAccessTokenApi;
     }
 
-    public Token requestWechatAccessToken(AppProfile appProfile) {
-
+    public Token requestWechatAccessToken(final AppProfile appProfile) {
+        Token accessToken;
         String appId = appProfile.getAppId();
         if (appProfile.isWechatProfileValid()) {
             WechatProfile wechatProfile = appProfile.getWechatProfile();
-            Token accessToken = wechatAccessTokenApi.token(appProfile.getWechatProfile().getWechatAppId(), appProfile.getWechatProfile().getWechatAppSecret());
-            wechatProfile.setWechatAccessTokenUpdateTime(TimeUtil.getCurrentDateTime());
-            wechatProfile.setWechatAccessToken(accessToken);
-            logger.info("Access token is updated successfully for appId: {}", appId);
-            System.err.println(accessToken.getAccess_token());
+            accessToken = wechatAccessTokenApi.token(wechatProfile.getWechatAppId(), wechatProfile.getWechatAppSecret());
+            logger.info("Access token is returned successfully for appId: {}", appId);
         } else {
             logger.warn("AppId({}) is invalid to be requested!", appId);
-            return null;
+            accessToken = null;
         }
-        return appProfile.getWechatProfile().getWechatAccessToken();
+        return accessToken;
     }
 
 }

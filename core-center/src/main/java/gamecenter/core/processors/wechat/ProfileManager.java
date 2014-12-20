@@ -65,7 +65,7 @@ public class ProfileManager {
     public Token requestWechatAccessToken(String appId) {
         AppProfile appProfile = profiles.get(appId);
         if (ProfileUtil.verifyAppProfile(appProfile)) {
-            accessTokenService.requestWechatAccessToken(appProfile);
+            appProfile.getWechatProfile().setWechatAccessToken(accessTokenService.requestWechatAccessToken(appProfile));
         } else {
             logger.warn("AppId {} is invalid to be requested!", appId);
             return null;

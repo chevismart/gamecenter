@@ -8,6 +8,9 @@ public class UserProfile {
     private String internalId;
     private String userImgUrl;
     private AccessChannel accessChannel;
+    private Boolean isFollowed;
+    private String deviceId;
+
 
     @Override
     public String toString() {
@@ -16,7 +19,25 @@ public class UserProfile {
                 ", internalId='" + internalId + '\'' +
                 ", userImgUrl='" + userImgUrl + '\'' +
                 ", accessChannel=" + accessChannel +
+                ", isFollowed=" + isFollowed +
+                ", deviceId='" + deviceId + '\'' +
                 '}';
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public Boolean getIsFollowed() {
+        return isFollowed;
+    }
+
+    public void setIsFollowed(Boolean isFollowed) {
+        this.isFollowed = isFollowed;
     }
 
     public String getUserImgUrl() {

@@ -6,8 +6,7 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-import gamecenter.core.beans.AccessChannel;
-import gamecenter.core.beans.UserProfile;
+import gamecenter.core.constants.ActionResults;
 import gamecenter.core.constants.CommonConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.StrutsStatics;
@@ -27,32 +26,39 @@ public class AccessControlIntercepter extends AbstractInterceptor {
         Map<String, Object> session = actionInvocation.getInvocationContext().getSession();
         HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(StrutsStatics.HTTP_REQUEST);
 
-        String result = StringUtils.EMPTY;
+        String result;
         if (isLoginValid(session)) {
-            result = actionInvocation.invoke();
-        } else if (isWechatAccess(request)) {
-
-            String code = request.getParameter(CommonConstants.WECHAT_AUTH_CODE);
-
-            if (StringUtils.isNotEmpty(code)) {
-                UserProfile userProfile = new UserProfile();
-                userProfile.setAccessChannel(AccessChannel.WECHAT);
-                session.put(CommonConstants.SESSION_KEY_IS_LOGIN_VALID, userProfile);
-                result = actionInvocation.invoke();
-            } else {
-                result = "wechatAuth";
-            }
-
+            result = ActionResults.AUTHENTIC;
+        } else {
+            result = ActionResults.LOGIN_REQUIRE;
         }
-        return StringUtils.isNotEmpty(result) ? result : Action.LOGIN;
+
+        return result;
+//
+//
+//        else if (isWechatAccess(request)) {
+//
+//            String code = request.getParameter(CommonConstants.WECHAT_AUTH_CODE);
+//
+//            if (StringUtils.isNotEmpty(code)) {
+//                UserProfile userProfile = new UserProfile();
+//                userProfile.setAccessChannel(AccessChannel.WECHAT);
+//                session.put(CommonConstants.SESSION_KEY_IS_LOGIN_VALID, userProfile);
+//                result = actionInvocation.invoke();
+//            } else {
+//                result = "wechatAuth";
+//            }
+//
+//        }
+//        return StringUtils.isNotEmpty(result) ? result : Action.LOGIN;
+
+
     }
 
     private boolean isLoginValid(Map<String, Object> session) {
         return null != session.get(CommonConstants.SESSION_KEY_IS_LOGIN_VALID);
     }
 
-    private boolean isWechatAccess(HttpServletRequest httpRequest) {
-        return httpRequest.getParameterMap().keySet().contains(CommonConstants.WECHAT_AUTH_STATE) && httpRequest.getParameterMap().size() >= 2;
-    }
+
 
 }

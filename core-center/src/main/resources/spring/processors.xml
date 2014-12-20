@@ -27,9 +27,7 @@
         </property>
     </bean>
 
-    <bean id="accessRouterProcessor" class="gamecenter.core.processors.AccessRouterProcessor">
-        <property name="profileManager" ref="profileManager"/>
-    </bean>
+    <bean id="accessRouterProcessor" class="gamecenter.core.processors.AccessRouterProcessor"/>
 
     <bean id="demoActionClass" class="gamecenter.core.processors.DemoAction">
         <property name="profileManager" ref="profileManager"/>
@@ -38,6 +36,16 @@
     <bean id="wechatOAuthProcessor" class="gamecenter.core.processors.wechat.WechatOAuthProcessor">
         <property name="profileManager" ref="profileManager"/>
     </bean>
+
+    <bean id="wechatLoginProcessor" class="gamecenter.core.processors.wechat.WechatLoginProcessor">
+        <property name="profileManager" ref="profileManager"/>
+    </bean>
+
+    <bean id="welcomeProcessor" class="gamecenter.core.processors.WelcomeProcessor">
+        <property name="userProfile" ref="userProfile"/>
+    </bean>
+
+    <bean id="loginProcessor" class="gamecenter.core.processors.LoginProcessor"/>
 
     <!-- Intercepters -->
     <bean id="accessControl" class="gamecenter.core.intercepters.AccessControlIntercepter">

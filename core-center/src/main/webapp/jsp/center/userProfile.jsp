@@ -127,7 +127,7 @@
         .user .headphoto {
             float: left;
             display: inline-block;
-            background: url('<s:text name="user.headimgurl"/>') center center no-repeat;
+            background: url('<s:text name="userProfile.headimgurl"/>') center center no-repeat;
             width: 50px;
             height: 50px;
             background-size: 50px 50px;
@@ -145,7 +145,7 @@
         }
 
         .main {
-            background: url(../../images/bg.jpg) center center no-repeat;
+            background: url(../../../images/bg.jpg) center center no-repeat;
             width: 100%;
             height: 100%;
             background-size: 320px 640px;
@@ -166,7 +166,7 @@
         <div class="headphoto">
         </div>
         <div class="username">
-            <s:text name="user.nickname"/>
+            <s:text name="userProfile.nickname"/>
         </div>
     </div>
     <div class="title">
@@ -180,7 +180,7 @@
     </s:else>
 
         <h1>
-            荔园3楼 - <b> <s:text name="deviceId"/></b>号机...
+            荔园3楼 - <b> <s:text name="userProfile.deviceId"/></b>号机...
         </h1>
     </div>
 

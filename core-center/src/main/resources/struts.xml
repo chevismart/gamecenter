@@ -6,7 +6,26 @@
     <constant name="struts.devMode" value="true"/>
     <constant name="struts.enable.DynamicMethodInvocation" value="false"></constant>
     <constant name="struts.custom.i18n.resources" value="messageSource"></constant>
-    <package name="struts-global" namespace="/" extends="struts-default">
+
+    <package name="common-global" namespace="/" extends="struts-default">
+
+        <global-results>
+            <result name="errHandler" type="chain">
+                <param name="actionName">errorProcessor</param>
+            </result>
+            <result name="login" type="redirect">/jsp/login.jsp</result>
+            <result name="register" type="redirect">/jsp/register.jsp</result>
+            <result name="wechatAuth" type="chain">wechatOAuth</result>
+            <result name="accessAuth" type="chain">auth</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping result="errHandler" exception="java.lang.Exception">
+            </exception-mapping>
+        </global-exception-mappings>
+    </package>
+
+    <package name="authentic" namespace="/" extends="common-global">
         <interceptors>
             <interceptor name="accessControlInterceptor" class="accessControl"/>
             <interceptor-stack name="accessStack">
@@ -14,42 +33,42 @@
                 <interceptor-ref name="accessControlInterceptor"></interceptor-ref>
             </interceptor-stack>
         </interceptors>
-
         <default-interceptor-ref name="accessStack"></default-interceptor-ref>
 
-        <global-results>
-            <result name="errHandler" type="chain">
-                <param name="actionName">errorProcessor</param>
-            </result>
-            <result name="login" type="redirect">/jsp/login.jsp</result>
-            <result name="wechatAuth" type="chain">wechatOAuth</result>
-            <result name="register" type="redirect">/jsp/register.jsp</result>
-        </global-results>
-        <global-exception-mappings>
-            <exception-mapping result="errHandler" exception="java.lang.Exception">
-            </exception-mapping>
-        </global-exception-mappings>
+        <action name="welcome" class="welcomeProcessor">
+            <result name="success">/jsp/center/userProfile.jsp</result>
+        </action>
+
+
+    </package>
+
+    <package name="simplePackage" extends="authentic">
+
+    </package>
+
+    <package name="authPackage" extends="common-global">
+        <action name="auth" class="accessRouterProcessor">
+            <result name="wechatLogin" type="chain">wechatLogin</result>
+        </action>
+        <action name="wechatLogin" class="wechatLoginProcessor">
+            <result name="wechatOAuth" type="chain">wechatOAuth</result>
+            <result name="success" type="chain">welcome</result>
+        </action>
+        <action name="wechatOAuth" class="wechatOAuthProcessor"/>
+
+        <action name="commonLogin" class="loginProcessor">
+            <result name="success" type="chain">welcome</result>
+        </action>
 
         <action name="errorProcessor" class="gamecenter.core.processors.ErrorProcesser">
             <result>/jsp/error.jsp</result>
         </action>
-    </package>
 
-    <package name="simplePackage" extends="struts-global">
+
         <action name="simpleAction" class="demoActionClass">
             <result name="success" type="chain">simpleAction</result>
             <result name="success">/jsp/demo.jsp</result>
         </action>
-    </package>
-
-    <package name="authPackage" extends="struts-global">
-        <action name="auth" class="accessRouterProcessor">
-            <result name="success">/jsp/center/userProfile.jsp</result>
-        </action>
-    </package>
-
-    <package name="wechatAuth" extends="struts-default">
-        <action name="wechatOAuth" class="wechatOAuthProcessor"/>
     </package>
 
 </struts>

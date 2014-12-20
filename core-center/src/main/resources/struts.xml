@@ -35,10 +35,6 @@
         </interceptors>
         <default-interceptor-ref name="accessStack"></default-interceptor-ref>
 
-        <action name="welcome" class="welcomeProcessor">
-            <result name="success">/jsp/center/userProfile.jsp</result>
-        </action>
-
 
     </package>
 
@@ -58,6 +54,10 @@
 
         <action name="commonLogin" class="loginProcessor">
             <result name="success" type="chain">welcome</result>
+        </action>
+
+        <action name="welcome" class="welcomeProcessor">
+            <result name="success" type="dispatcher">/jsp/center/userProfile.jsp</result>
         </action>
 
         <action name="errorProcessor" class="gamecenter.core.processors.ErrorProcesser">

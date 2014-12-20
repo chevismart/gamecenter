@@ -127,7 +127,7 @@
         .user .headphoto {
             float: left;
             display: inline-block;
-            background: url('<s:text name="userProfile.headimgurl"/>') center center no-repeat;
+            background: url('<s:text name="userProfile.userImgUrl"/>') center center no-repeat;
             width: 50px;
             height: 50px;
             background-size: 50px 50px;
@@ -145,7 +145,7 @@
         }
 
         .main {
-            background: url(../../../images/bg.jpg) center center no-repeat;
+            background: url(<s:if test="userProfile.isFollowed==true">../../../images/bg.jpg</s:if>) center center no-repeat;
             width: 100%;
             height: 100%;
             background-size: 320px 640px;
@@ -166,11 +166,11 @@
         <div class="headphoto">
         </div>
         <div class="username">
-            <s:text name="userProfile.nickname"/>
+            <s:text name="userProfile.displayName"/>
         </div>
     </div>
     <div class="title">
-        <s:if test="isFollowed==false">
+        <s:if test="userProfile.isFollowed==false">
             <s:a href="http://mp.weixin.qq.com/s?__biz=MzA5NzAwOTE5MA==&mid=201512829&idx=1&sn=7dfc26347eac047d6494212e2d49ef3f#rd"
                  cssClass="focus">一键关注</s:a>
             <%--<a href="http://mp.weixin.qq.com/s?__biz=MzA5NzAwOTE5MA==&mid=201512829&idx=1&sn=7dfc26347eac047d6494212e2d49ef3f#rd"--%>
@@ -186,9 +186,10 @@
 
 
     <div id="lanchBtn" class="lanchBtn">
-        <a href="javascript:;">
-            按
-        </a>
+        <s:if test="userProfile.isFollowed==true">
+            <a href="javascript:;">
+                按
+            </a></s:if>
     </div>
 </div>
 <div class="product">

@@ -44,7 +44,7 @@
 
     <package name="authPackage" extends="struts-global">
         <action name="auth" class="accessRouterProcessor">
-            <result name="success">/jsp/demo.jsp</result>
+            <result name="success">/jsp/center/userProfile.jsp</result>
         </action>
     </package>
 

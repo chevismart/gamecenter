@@ -25,6 +25,9 @@ public class AccessRouterProcessor extends ActionSupport {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private ProfileManager profileManager;
+    private User user;
+    private String deviceId;
+    private Boolean isFollowed = Boolean.FALSE;
 
     public void setProfileManager(ProfileManager profileManager) {
         this.profileManager = profileManager;
@@ -77,6 +80,7 @@ public class AccessRouterProcessor extends ActionSupport {
         Map<String, String> stateParam = ParameterUtil.extractParam(state);
         String appId = stateParam.get(CommonConstants.WECHAT_STATE_PARAM_APPID);
 
+
         try {
             if (StringUtils.isNotEmpty(appId) &&
                     ProfileUtil.verifyAppProfile(profileManager.getAppProfile(appId)) &&
@@ -87,12 +91,15 @@ public class AccessRouterProcessor extends ActionSupport {
                 if (StringUtils.isEmpty(user.getOpenid())) {
                     result = CommonConstants.ACCESS_ROUTER_WECHAT_OAUTH;
                 } else {
-
+                    this.user = user;
                     // TODO: to retrieve the user from DB by openId, or create profile
                     userProfile.setDisplayName(user.getNickname());
                     userProfile.setInternalId(ProfileUtil.getUserUnifyId(userProfile.getAccessChannel(), user.getOpenid()));
                     userProfile.setUserImgUrl(user.getHeadimgurl());
                     profileManager.getAppProfile(appId).getWechatProfile().getActiveUserList().put(user.getOpenid(), user);
+
+                    deviceId = stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID);
+                    isFollowed = Boolean.valueOf(null != user.getSubscribe() && user.getSubscribe() != 0);
                     result = Action.SUCCESS;
                 }
             }
@@ -103,5 +110,29 @@ public class AccessRouterProcessor extends ActionSupport {
         }
 
         return result;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Boolean getIsFollowed() {
+        return isFollowed;
+    }
+
+    public void setIsFollowed(Boolean isFollowed) {
+        this.isFollowed = isFollowed;
     }
 }

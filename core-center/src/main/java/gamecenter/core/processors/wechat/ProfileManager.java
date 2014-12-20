@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import weixin.popular.api.SnsAPI;
 import weixin.popular.api.TokenAPI;
+import weixin.popular.api.UserAPI;
 import weixin.popular.bean.Token;
 import weixin.popular.bean.User;
 
@@ -33,7 +34,7 @@ public class ProfileManager {
     public ProfileManager(Map<String, AppProfile> profiles) {
         this.profiles = profiles;
         accessTokenService = new AccessTokenService(new TokenAPI());
-        snsAuthService = new SnsAuthService(new SnsAPI());
+        snsAuthService = new SnsAuthService(new SnsAPI(), new UserAPI());
     }
 
     public Map<String, AppProfile> getProfiles() {

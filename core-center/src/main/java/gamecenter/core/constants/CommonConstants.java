@@ -13,6 +13,7 @@ public class CommonConstants {
 
 
     public static final String WECHAT_STATE_PARAM_APPID = "appid";
+    public static final String WECHAT_STATE_PARAM_DEVICEID = "deviceid";
 
 
 

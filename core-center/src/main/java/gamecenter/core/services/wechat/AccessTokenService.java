@@ -2,6 +2,7 @@ package gamecenter.core.services.wechat;
 
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.beans.wechat.WechatProfile;
+import gamecenter.core.utils.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import weixin.popular.api.TokenAPI;
@@ -25,6 +26,7 @@ public class AccessTokenService {
         if (appProfile.isWechatProfileValid()) {
             WechatProfile wechatProfile = appProfile.getWechatProfile();
             accessToken = wechatAccessTokenApi.token(wechatProfile.getWechatAppId(), wechatProfile.getWechatAppSecret());
+            wechatProfile.setWechatAccessTokenUpdateTime(TimeUtil.getCurrentDateTime());
             logger.info("Access token is returned successfully for appId: {}", appId);
         } else {
             logger.warn("AppId({}) is invalid to be requested!", appId);

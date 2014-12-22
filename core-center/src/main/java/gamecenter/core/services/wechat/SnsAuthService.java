@@ -36,6 +36,7 @@ public class SnsAuthService {
 
             if (isUserInfoCached(appProfile.getWechatProfile(), snsToken.getOpenid())) {
                 userInfo = wechatProfile.getActiveUserList().get(snsToken.getOpenid());
+                logForUserInfoRetrieval("cache", userInfo);
             } else {
                 userInfo = userAPI.userInfo(wechatProfile.getWechatAccessToken().getAccess_token(), snsToken.getOpenid());
                 if (!isUserValid(userInfo)) {
@@ -43,10 +44,15 @@ public class SnsAuthService {
                 } else {
                     wechatProfile.getActiveUserList().put(snsToken.getOpenid(), userInfo);
                 }
+                logForUserInfoRetrieval("wechat server", userInfo);
             }
-            logger.debug("User info is retrieved: {}", userInfo);
+
         }
         return userInfo;
+    }
+
+    private void logForUserInfoRetrieval(String channel, User userInfo) {
+        logger.info("User({}:{}) info is retrieved from {}.", userInfo.getNickname(), userInfo.getOpenid(), channel);
     }
 
     private boolean isUserValid(User user) {

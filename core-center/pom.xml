@@ -144,7 +144,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.7.1</version>
                 <configuration>
-                    <skipTests>true</skipTests>
+                    <skipTests>false</skipTests>
                     <!--这里选择跳过测试-->
                 </configuration>
             </plugin>

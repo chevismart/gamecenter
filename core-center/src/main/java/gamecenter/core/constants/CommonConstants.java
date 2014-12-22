@@ -16,10 +16,9 @@ public class CommonConstants {
     public static final String WECHAT_STATE_PARAM_DEVICEID = "deviceid";
 
 
-
     public static final int DEFAULT_WECHAT_ACCESS_TOKEN_EXPIRY_TIME_IN_SECOND = 5400;
-    public static final int DEFAULT_WECHAT_ACCESS_TOKEN_CHECK_INTERVAL_IN_SECOND = 60;
     public static final int EXPIRY_SHIFT_PERIOD_IN_SECOND = 120;
+    public static final int DEFAULT_WECHAT_ACCESS_TOKEN_CHECK_INTERVAL_IN_SECOND = EXPIRY_SHIFT_PERIOD_IN_SECOND / 2;
 
     public static final String ACCESS_ROUTER_REGISTER = "register";
     public static final String ACCESS_ROUTER_WECHAT_OAUTH = "wechatAuth";

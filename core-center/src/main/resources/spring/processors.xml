@@ -51,8 +51,9 @@
     <bean id="loginProcessor" class="gamecenter.core.processors.LoginProcessor"/>
 
     <!-- Intercepters -->
-    <bean id="accessControl" class="gamecenter.core.intercepters.AccessControlIntercepter">
+    <bean id="accessControl" class="gamecenter.core.intercepters.AccessControlIntercepter"/>
 
-    </bean>
+    <!-- Task runner -->
+    <bean id="cloudServer" class="gamecenter.core.processors.tasks.CloudServerLoader"/>
 
 </beans>

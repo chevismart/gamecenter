@@ -34,8 +34,6 @@
             </interceptor-stack>
         </interceptors>
         <default-interceptor-ref name="accessStack"></default-interceptor-ref>
-
-
     </package>
 
     <package name="simplePackage" extends="authentic">
@@ -68,6 +66,10 @@
         <action name="simpleAction" class="demoActionClass">
             <result name="success" type="chain">simpleAction</result>
             <result name="success">/jsp/demo.jsp</result>
+        </action>
+
+        <action name="wechatNotice" class="wechatPayNotificationProcessor">
+            <result name="success">/jsp/payment/paymentResult.jsp</result>
         </action>
     </package>
 

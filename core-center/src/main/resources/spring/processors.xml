@@ -50,6 +50,8 @@
 
     <bean id="loginProcessor" class="gamecenter.core.processors.LoginProcessor"/>
 
+    <bean id="wechatPayNotificationProcessor" class="gamecenter.core.processors.wechat.WechatPayNotificationProcessor"/>
+
     <!-- Intercepters -->
     <bean id="accessControl" class="gamecenter.core.intercepters.AccessControlIntercepter"/>
 

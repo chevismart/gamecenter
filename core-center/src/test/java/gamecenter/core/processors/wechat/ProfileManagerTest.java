@@ -6,6 +6,7 @@ import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.services.wechat.AccessTokenService;
 import gamecenter.core.services.wechat.SnsAuthService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +59,7 @@ public class ProfileManagerTest {
     @Test
     public void requestAccessTokenByProfileManagerSuccessfully() throws Exception {
         profileManager.addAppProfile(appId, appName);
-        profileManager.addWechatProfile(appId, "wxe89a9d2fa17df80f", "71d8fc7778571e6b54712953b68084e4");
+        profileManager.addWechatProfile(appId, "wxe89a9d2fa17df80f", "71d8fc7778571e6b54712953b68084e4", null, null);
         Whitebox.setInternalState(profileManager, "accessTokenService", accessTokenService);
         Whitebox.setInternalState(profileManager, "snsAuthService", snsAuthService);
         when(accessTokenService.requestWechatAccessToken(any(AppProfile.class))).thenReturn(accessToken);
@@ -92,7 +93,7 @@ public class ProfileManagerTest {
         when(appProfile.getAppId()).thenReturn(appId);
         when(appProfile.getAppName()).thenReturn(appName);
 
-        profileManager.addWechatProfile(appId, wechatId, wechatSecret);
+        profileManager.addWechatProfile(appId, wechatId, wechatSecret, RandomStringUtils.random(10), RandomStringUtils.random(32));
 
         verify(appProfiles, atLeastOnce()).get(eq(appId));
         verify(appProfile, times(1)).setWechatProfile(any(WechatProfile.class));
@@ -106,7 +107,7 @@ public class ProfileManagerTest {
         when(appProfiles.get(eq(appId))).thenReturn(appProfile);
         when(appProfile.getAppId()).thenReturn(StringUtils.EMPTY);
 
-        profileManager.addWechatProfile(appId, wechatId, wechatSecret);
+        profileManager.addWechatProfile(appId, wechatId, wechatSecret, RandomStringUtils.random(10), RandomStringUtils.random(32));
 
         verify(appProfiles, only()).get(eq(appId));
         verify(appProfile, never()).setWechatProfile(any(WechatProfile.class));
@@ -159,7 +160,7 @@ public class ProfileManagerTest {
         Date now = new Date();
         when(wechatProfile1.getWechatAccessTokenUpdateTime()).thenReturn(now);
         when(wechatProfile1.getWechatAccessToken()).thenReturn(accessToken);
-        when(accessToken.getExpires_in()).thenReturn(CommonConstants.EXPIRY_SHIFT_PERIOD_IN_SECOND+1);
+        when(accessToken.getExpires_in()).thenReturn(CommonConstants.EXPIRY_SHIFT_PERIOD_IN_SECOND + 1);
 
         profileManager.checkAndUpdateAllAccessToken();
 

@@ -5,7 +5,9 @@ import weixin.popular.bean.SnsToken;
 import weixin.popular.bean.Token;
 import weixin.popular.bean.User;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Chevis on 2014/12/13.
@@ -15,14 +17,18 @@ public class WechatProfile {
     private String wechatAppId;
     private String wechatAppSecret;
     private SnsToken wechatSnsToken;
+    private String mchid;
+    private String payKey;
     private User wechatUserProfile;
     private Date wechatAccessTokenUpdateTime;
     private Token wechatAccessToken;
     private Map<String, User> activeUserList;
 
-    public WechatProfile(String wechatAppId, String wechatAppSecret) {
+    public WechatProfile(String wechatAppId, String wechatAppSecret, String mchid, String payKey) {
         this.wechatAppId = wechatAppId;
         this.wechatAppSecret = wechatAppSecret;
+        this.mchid = mchid;
+        this.payKey = payKey;
         activeUserList = new HashMap<String, User>();
     }
 
@@ -32,12 +38,15 @@ public class WechatProfile {
                 "wechatAppId='" + wechatAppId + '\'' +
                 ", wechatAppSecret='" + wechatAppSecret + '\'' +
                 ", wechatSnsToken=" + wechatSnsToken +
+                ", mchid='" + mchid + '\'' +
+                ", payKey='" + payKey + '\'' +
                 ", wechatUserProfile=" + wechatUserProfile +
                 ", wechatAccessTokenUpdateTime=" + wechatAccessTokenUpdateTime +
                 ", wechatAccessToken=" + wechatAccessToken +
                 ", activeUserList=" + activeUserList +
                 '}';
     }
+
 
     public Map<String, User> getActiveUserList() {
         return activeUserList;
@@ -94,5 +103,21 @@ public class WechatProfile {
 
     public void setWechatSnsToken(SnsToken wechatSnsToken) {
         this.wechatSnsToken = wechatSnsToken;
+    }
+
+    public String getMchid() {
+        return mchid;
+    }
+
+    public void setMchid(String mchid) {
+        this.mchid = mchid;
+    }
+
+    public String getPayKey() {
+        return payKey;
+    }
+
+    public void setPayKey(String payKey) {
+        this.payKey = payKey;
     }
 }

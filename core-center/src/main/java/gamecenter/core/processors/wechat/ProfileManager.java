@@ -47,11 +47,13 @@ public class ProfileManager {
         return appProfile;
     }
 
-    public void addWechatProfile(String appId, String wechatAppId, String wechatAppSecret) {
+    public void addWechatProfile(String appId, String wechatAppId, String wechatAppSecret, String mchid, String payKey) {
 
         WechatProfile wechatProfile = WechatProfileBuilder.newBuilder()
-                .wechatAppIdBuilder(wechatAppId)
-                .WechatAppSecretBuilder(wechatAppSecret)
+                .wechatAppId(wechatAppId)
+                .wechatAppSecret(wechatAppSecret)
+                .mchid(mchid)
+                .payKey(payKey)
                 .build();
         AppProfile appProfile = profiles.get(appId);
         if (ProfileUtil.verifyAppProfile(appProfile)) {

@@ -52,6 +52,10 @@
 
     <bean id="wechatPayNotificationProcessor" class="gamecenter.core.processors.wechat.WechatPayNotificationProcessor"/>
 
+    <bean id="wechatPayOrderProcessor" class="gamecenter.core.processors.wechat.WechatPayOrderProcessor">
+        <property name="profileManager" ref="profileManager"/>
+    </bean>
+
     <!-- Intercepters -->
     <bean id="accessControl" class="gamecenter.core.intercepters.AccessControlIntercepter"/>
 

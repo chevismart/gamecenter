@@ -1,6 +1,7 @@
 package gamecenter.core.processors.tasks;
 
 import gamecenter.core.beans.AppProfile;
+import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.listeners.AbstractRunnable;
 import gamecenter.core.processors.wechat.ProfileManager;
 import gamecenter.core.utils.XMLMessageConverter;
@@ -30,8 +31,13 @@ public class AppLoader extends AbstractRunnable {
 
         for (AppProfile appProfile : appProfileList) {
             profileManager.addAppProfile(appProfile.getAppId(), appProfile.getAppName());
-            if (null != appProfile.getWechatProfile()) {
-                profileManager.addWechatProfile(appProfile.getAppId(), appProfile.getWechatProfile().getWechatAppId(), appProfile.getWechatProfile().getWechatAppSecret());
+            WechatProfile wechatProfile = appProfile.getWechatProfile();
+            if (null != wechatProfile) {
+                profileManager.addWechatProfile(appProfile.getAppId(),
+                        wechatProfile.getWechatAppId(),
+                        wechatProfile.getWechatAppSecret(),
+                        wechatProfile.getMchid(),
+                        wechatProfile.getPayKey());
                 profileManager.requestWechatAccessToken(appProfile.getAppId());
                 logger.info("Wechat access token is successfully obtained!");
             }

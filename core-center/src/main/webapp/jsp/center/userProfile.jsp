@@ -10,9 +10,9 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0,user-scalable=0">
-    <script type="text/javascript" src="js/third-party/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="js/gamecenter.js"></script>
-    <script type="text/javascript" src="js/test.js"></script>
+    <script type="text/javascript" src="../../js/third-party/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../../js/gamecenter.js"></script>
+    <script type="text/javascript" src="../../js/test.js"></script>
     <script type="text/javascript">
         function deviceList() {
             getClientList("00000000");
@@ -178,7 +178,7 @@
         </s:if><s:else>
         谢谢您的关注！
     </s:else>
-
+        <s:a href="/wechatOrder">充值</s:a>
         <h1>
             荔园3楼 - <b> <s:text name="userProfile.deviceId"/></b>号机...
         </h1>

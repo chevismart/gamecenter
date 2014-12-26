@@ -108,6 +108,14 @@
             <version>1.4.6</version>
         </dependency>
 
+        <!-- Google guava util-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+
+        <!--Junit-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

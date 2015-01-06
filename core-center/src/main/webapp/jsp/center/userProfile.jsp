@@ -47,6 +47,11 @@
         function disableCounter() {
             switchCounterStatus("00000000", "accf233b95f6", "false")
         }
+
+        function chargeMoney() {
+            var amount = $("#chargeSelect").val();
+            window.open('http://alcock.gicp.net:8888/wechatOrder?chargeAmount=' + amount);
+        }
     </script>
 
     <style>
@@ -69,7 +74,7 @@
             width: 100%;
             position: relative;
             top: 50%;
-            margin-top: -150px;
+            margin-top: -155px;
             text-align: center;
         }
 
@@ -178,7 +183,14 @@
         </s:if><s:else>
         谢谢您的关注！
     </s:else>
-        <s:a href="/wechatOrder">充值</s:a>
+        <br>
+        <%--<s:a href="/wechatOrder">充值</s:a>--%>
+        <select id="chargeSelect">
+            <option value="1">1元</option>
+            <option value="5">5元</option>
+            <option value="10">10元 - 送1币</option>
+            <option value="20">20元 - 送2币</option>
+        </select>
         <h1>
             荔园3楼 - <b> <s:text name="userProfile.deviceId"/></b>号机...
         </h1>
@@ -186,10 +198,11 @@
 
 
     <div id="lanchBtn" class="lanchBtn">
-        <s:if test="userProfile.isFollowed==true">
-            <a href="javascript:;">
-                按
-            </a></s:if>
+        <%--<s:if test="userProfile.isFollowed==true">--%>
+        <a href="javascript:void(0);">
+            充
+        </a>
+        <%--</s:if>--%>
     </div>
 </div>
 <div class="product">
@@ -198,7 +211,7 @@
 </body>
 <script>
     $("#lanchBtn").click(function () {
-        topup1();
+        chargeMoney();
     });
 
 </script>

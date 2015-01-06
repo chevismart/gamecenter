@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ProfileUtil {
 
+    private final static String HYPEN = "-";
+
     public static boolean verifyAppProfile(AppProfile appProfile) {
         return null != appProfile &&
                 StringUtils.isNotEmpty(appProfile.getAppId()) &&
@@ -16,6 +18,10 @@ public class ProfileUtil {
     }
 
     public static String getUserUnifyId(AccessChannel accessChannel, String id) {
-        return accessChannel.name().concat("-").concat(id);
+        return accessChannel.name().concat(HYPEN).concat(id);
+    }
+
+    public static String getUserOriginalId(String internalId) {
+        return internalId.split(HYPEN)[1];
     }
 }

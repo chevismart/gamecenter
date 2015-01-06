@@ -1,6 +1,7 @@
 //var server = "http://alcock.gicp.net:8003";
 //var server = "http://alcock.gicp.net:1314/game/fronter.php";
 var server = "http://www.ruijunhao.com/test/fronter.php";
+var gamecenter_server = "http://wawaonline.net/wechatOrder";
 //var server = "http://www.chayeagin.com/fronter.php";
 var dataType = "JSONP";
 var token = "tokenStr";
@@ -296,4 +297,22 @@ function switchPowerStatus(groupId, mac, isPowerOn) {
 
     });
 
+}
+
+function charge(charge_amount) {
+    $.ajax({
+        type: "POST",
+        url: gamecenter_server,
+        data: {
+            CHARGE_NUM: charge_amount
+        },
+        dataType: dataType,
+        jsonp: "jsonpCallback",
+        success: function (data) {
+            alert("充值成功！");
+        },
+        error: function () {
+            alert('Charge failure!');
+        }
+    });
 }

@@ -30,6 +30,7 @@ public class ProfileManager {
     AccessTokenService accessTokenService;
     SnsAuthService snsAuthService;
     private Map<String, AppProfile> profiles;
+    private Boolean isHost;
 
     public ProfileManager(Map<String, AppProfile> profiles) {
         this.profiles = profiles;
@@ -67,12 +68,18 @@ public class ProfileManager {
     public Token requestWechatAccessToken(String appId) {
         AppProfile appProfile = profiles.get(appId);
         if (ProfileUtil.verifyAppProfile(appProfile)) {
-            appProfile.getWechatProfile().setWechatAccessToken(accessTokenService.requestWechatAccessToken(appProfile));
+            appProfile.getWechatProfile().setWechatAccessToken(getToken(appProfile));
         } else {
             logger.warn("AppId {} is invalid to be requested!", appId);
             return null;
         }
         return appProfile.getWechatProfile().getWechatAccessToken();
+    }
+
+    private Token getToken(AppProfile appProfile) {
+        return isHost ?
+                accessTokenService.requestWechatAccessToken(appProfile) :
+                accessTokenService.requestWechatAccessTokenFromHost(appProfile);
     }
 
     public User getUserInfo(String appId, String code, Locale locale) {
@@ -115,6 +122,14 @@ public class ProfileManager {
 
     private int getExpiryInSecond(int defaultPeriod, int actualPeriod) {
         return actualPeriod <= 0 ? defaultPeriod : actualPeriod;
+    }
+
+    public Boolean getIsHost() {
+        return isHost;
+    }
+
+    public void setIsHost(Boolean isHost) {
+        this.isHost = isHost;
     }
 
     public AppProfile getAppProfile(String appId) {

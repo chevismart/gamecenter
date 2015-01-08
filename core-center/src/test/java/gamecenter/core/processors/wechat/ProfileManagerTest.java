@@ -63,6 +63,7 @@ public class ProfileManagerTest {
         Whitebox.setInternalState(profileManager, "accessTokenService", accessTokenService);
         Whitebox.setInternalState(profileManager, "snsAuthService", snsAuthService);
         when(accessTokenService.requestWechatAccessToken(any(AppProfile.class))).thenReturn(accessToken);
+        profileManager.setIsHost(true);
         Token token = profileManager.requestWechatAccessToken(appId);
 
         assertNotNull(token);

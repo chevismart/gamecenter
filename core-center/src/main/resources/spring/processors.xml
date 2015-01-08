@@ -22,6 +22,7 @@
                 <bean id="tokenManager" class="gamecenter.core.processors.tasks.WechatTokenManager">
                     <constructor-arg name="profileManager" ref="profileManager"/>
                 </bean>
+                <bean id="cloudServerLoader" class="gamecenter.core.processors.tasks.CloudServerLoader"/>
             </list>
         </property>
         <property name="scheduledTasks">
@@ -55,6 +56,10 @@
     </bean>
 
     <bean id="wechatPayOrderProcessor" class="gamecenter.core.processors.wechat.WechatPayOrderProcessor">
+        <property name="profileManager" ref="profileManager"/>
+    </bean>
+
+    <bean id="credentialProcessor" class="gamecenter.core.processors.CredentialProcessor">
         <property name="profileManager" ref="profileManager"/>
     </bean>
 

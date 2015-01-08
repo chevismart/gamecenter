@@ -5,8 +5,8 @@
         <wechatProfile>
             <wechatAppId>wxe89a9d2fa17df80f</wechatAppId>
             <wechatAppSecret>71d8fc7778571e6b54712953b68084e4</wechatAppSecret>
-            <mchid></mchid>
-            <payKey></payKey>
+            <mchid>1224905202</mchid>
+            <payKey>wawaonline20150101wechatpaybilly</payKey>
         </wechatProfile>
     </application>
 </applications>

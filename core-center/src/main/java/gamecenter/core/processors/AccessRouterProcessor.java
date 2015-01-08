@@ -10,13 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  * Created by Chevis on 2014/12/13.
  */
 public class AccessRouterProcessor extends ActionSupport {
-
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 

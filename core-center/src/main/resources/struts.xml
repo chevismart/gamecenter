@@ -76,6 +76,10 @@
             <result name="success" type="dispatcher">/jsp/payment/charge.jsp</result>
         </action>
 
+        <action name="credential" class="credentialProcessor">
+            <result name="success" type="dispatcher">/jsp/payment/charge.jsp</result>
+        </action>
+
     </package>
 
 </struts>

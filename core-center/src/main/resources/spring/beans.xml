@@ -12,6 +12,7 @@
         <constructor-arg>
             <map/>
         </constructor-arg>
+        <property name="isHost" value="true"/>
     </bean>
 
     <bean id="userProfile" class="gamecenter.core.beans.UserProfile" scope="prototype"/>

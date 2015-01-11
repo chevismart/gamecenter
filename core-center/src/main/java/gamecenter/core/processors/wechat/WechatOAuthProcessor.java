@@ -24,7 +24,7 @@ public class WechatOAuthProcessor extends ActionSupport {
     private String oauthUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
             "appid=%s" +
             "&" +
-            "redirect_uri=http://alcock.gicp.net:8888/auth" +
+            "redirect_uri=http://alcock.gicp.net:8888/corecenter/auth" +
             "&" +
             "response_type=code" +
             "&" +

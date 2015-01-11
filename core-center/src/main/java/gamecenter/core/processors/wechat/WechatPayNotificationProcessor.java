@@ -3,11 +3,13 @@ package gamecenter.core.processors.wechat;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.PayNotification;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.constants.CommonConstants;
+import gamecenter.core.utils.CollectionUtils;
+import gamecenter.core.utils.ProfileUtil;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -20,7 +22,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.struts2.StrutsStatics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import weixin.popular.client.LocalHttpClient;
 import weixin.popular.util.MapUtil;
 import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.XMLConverUtil;
@@ -31,6 +32,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Chevis on 2014/12/25.
@@ -41,13 +43,16 @@ public class WechatPayNotificationProcessor extends ActionSupport {
 
     ProfileManager profileManager;
 
+    WechatProfile wechatProfile;
+
     @Override
     public String execute() throws Exception {
 
-        WechatProfile wechatProfile = profileManager.getAppProfile("liyuanapp").getWechatProfile();
+        UserProfile userProfile = (UserProfile) ProfileUtil.getSession().get(CommonConstants.SESSION_KEY_IS_LOGIN_VALID);
+
+        wechatProfile = userProfile.getAccessInfo().getAppProfile().getWechatProfile();
 
         HttpServletRequest request = getHttpRequest();
-        HttpServletResponse response = getHttpResponse();
 
         boolean isValidMsg = false;
 
@@ -57,16 +62,13 @@ public class WechatPayNotificationProcessor extends ActionSupport {
         logger.debug("Received pay notification xml: {}", xml);
 
         //获取数据
-//        PayNativeReply payNativeReply = XMLConverUtil.convertToObject(PayNativeReply.class, inputStream);
         PayNotification payNotification = XMLConverUtil.convertToObject(PayNotification.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
 
         logger.debug("Payment notification is: {} ", payNotification.toString());
 
         if (payNotification.getReturn_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
             if (payNotification.getResult_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
-                String sign = payNotification.getSign();
-                String validationSign =  SignatureUtil.generateSign(MapUtil.order(MapUtil.objectToMap(payNotification,"device_info","err_code","err_code_des","return_msg")), "wawaonline20150101wechatpaybilly");
-                isValidMsg = sign.equals(validationSign);
+                isValidMsg = verifySign(payNotification);
 
             } else {
                 logger.warn("Payment notification with error: ({}={}) \n Error Details: {}", payNotification.getErr_code(), payNotification.getErr_code_des(), payNotification);
@@ -78,11 +80,22 @@ public class WechatPayNotificationProcessor extends ActionSupport {
 
         if (isValidMsg) {
             logger.info("Received success payment with amount {} for openid({})", payNotification.getTotal_fee(), payNotification.getOpenid());
-            topupCoins(payNotification.getOut_trade_no(), 1); // TODO: calculate the topup amount
-
-            // TODO: Reply to wechat for the payment notification.
+            boolean isSuccess = topupCoins(payNotification.getOut_trade_no(), 1); // TODO: calculate the topup amount
+            replayWechatForPayNotification(isSuccess);
+        } else {
+            replayWechatForPayNotification(isValidMsg);
         }
+
         return Action.SUCCESS;
+    }
+
+    private void replayWechatForPayNotification(boolean isSuccess) {
+        PayNotification payNotification = new PayNotification();
+        payNotification.setReturn_code(isSuccess ? CommonConstants.SUCCESS : CommonConstants.FAIL);
+//        ServletOutputStream os = getHttpResponse().getOutputStream();
+
+        // TODO: Reply to wechat for the payment notification.
+
     }
 
     protected boolean topupCoins(String tradeNum, int coins) throws URISyntaxException {
@@ -109,6 +122,14 @@ public class WechatPayNotificationProcessor extends ActionSupport {
 //        LocalHttpClient.execute(httpUriRequest);
 
         return true;
+    }
+
+    private boolean verifySign(PayNotification payNotification) {
+        String sign = payNotification.getSign();
+        Map<String, String> valueableMap = MapUtil.order(MapUtil.objectToMap(payNotification));
+        String validationSign = SignatureUtil.generateSign(MapUtil.order(CollectionUtils.removeEmptyValueEntry(valueableMap)),
+                wechatProfile.getPayKey());
+        return sign.equals(validationSign);
     }
 
     protected HttpServletRequest getHttpRequest() {

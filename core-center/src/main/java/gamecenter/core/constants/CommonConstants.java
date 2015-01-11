@@ -24,5 +24,6 @@ public class CommonConstants {
     public static final String ACCESS_ROUTER_WECHAT_OAUTH = "wechatAuth";
 
     public static final String SUCCESS = "SUCCESS";
+    public static final String FAIL = "FAIL";
 
 }

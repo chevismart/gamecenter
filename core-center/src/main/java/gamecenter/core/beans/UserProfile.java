@@ -5,20 +5,19 @@ package gamecenter.core.beans;
  */
 public class UserProfile {
     private String displayName;
-    private String internalId;
+    private String internalId; //channel+id
+    private AccessInfo accessInfo;
     private String userImgUrl;
-    private AccessChannel accessChannel;
     private Boolean isFollowed;
     private String deviceId;
-
 
     @Override
     public String toString() {
         return "UserProfile{" +
                 "displayName='" + displayName + '\'' +
                 ", internalId='" + internalId + '\'' +
+                ", accessInfo=" + accessInfo +
                 ", userImgUrl='" + userImgUrl + '\'' +
-                ", accessChannel=" + accessChannel +
                 ", isFollowed=" + isFollowed +
                 ", deviceId='" + deviceId + '\'' +
                 '}';
@@ -64,11 +63,12 @@ public class UserProfile {
         this.internalId = internalId;
     }
 
-    public AccessChannel getAccessChannel() {
-        return accessChannel;
+
+    public AccessInfo getAccessInfo() {
+        return accessInfo;
     }
 
-    public void setAccessChannel(AccessChannel accessChannel) {
-        this.accessChannel = accessChannel;
+    public void setAccessInfo(AccessInfo accessInfo) {
+        this.accessInfo = accessInfo;
     }
 }

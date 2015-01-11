@@ -6,6 +6,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import gamecenter.core.beans.AccessChannel;
+import gamecenter.core.beans.AccessInfo;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.utils.ParameterUtil;
@@ -49,10 +50,14 @@ public class WechatLoginProcessor extends ActionSupport {
 
                     UserProfile userProfile = new UserProfile();
 
+                    AccessInfo accessInfo = new AccessInfo();
+                    accessInfo.setAccessChannel(AccessChannel.WECHAT);
+                    accessInfo.setAppProfile(profileManager.getAppProfile(appId));
+
                     // TODO: to retrieve the user from DB by openId, or create profile
-                    userProfile.setAccessChannel(AccessChannel.WECHAT);
+                    userProfile.setAccessInfo(accessInfo);
                     userProfile.setDisplayName(user.getNickname());
-                    userProfile.setInternalId(ProfileUtil.getUserUnifyId(userProfile.getAccessChannel(), user.getOpenid()));
+                    userProfile.setInternalId(ProfileUtil.getUserUnifyId(AccessChannel.WECHAT, user.getOpenid()));
                     userProfile.setUserImgUrl(user.getHeadimgurl());
                     userProfile.setIsFollowed(null != user.getSubscribe() && user.getSubscribe() != 0);
                     userProfile.setDeviceId(stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID));

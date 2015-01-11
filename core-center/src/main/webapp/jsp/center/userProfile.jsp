@@ -50,7 +50,7 @@
 
         function chargeMoney() {
             var amount = $("#chargeSelect").val();
-            window.open('http://alcock.gicp.net:8888/wechatOrder?chargeAmount=' + amount);
+            window.open('http://alcock.gicp.net:8888/corecenter/wechatOrder?chargeAmount=' + amount);
         }
     </script>
 

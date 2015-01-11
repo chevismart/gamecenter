@@ -3,15 +3,16 @@ package gamecenter.core.processors.wechat;
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.beans.wechat.PayNotification;
 import gamecenter.core.beans.wechat.WechatProfile;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import weixin.popular.bean.pay.PayNotify;
 import weixin.popular.util.MapUtil;
 import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.XMLConverUtil;
 
 import java.util.Map;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.mock;
 
 public class WechatPayNotificationProcessorTest {
@@ -39,7 +40,7 @@ public class WechatPayNotificationProcessorTest {
         payNotification.setBank_type("CFT");
         payNotification.setCash_fee("1");
         payNotification.setFee_type("CNY");
-        payNotification.setIsSubscribe("Y");
+        payNotification.setIs_subscribe("Y");
         payNotification.setMch_id("1224905202");
         payNotification.setNonce_str("oiqYaWCchi4fcVoCAkiVxryfBvC7oCtC");
         payNotification.setOpenid("oJpyYuBcMmRKmVCt6AaAKN9EDGac");
@@ -73,11 +74,9 @@ public class WechatPayNotificationProcessorTest {
 
         PayNotification notification = XMLConverUtil.convertToObject(PayNotification.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
 
-        String fakeXML = XMLConverUtil.convertToXML(notification);
+        String validationSign = SignatureUtil.generateSign(MapUtil.order(MapUtil.objectToMap(notification,"device_info","err_code","err_code_des","return_msg")), "wawaonline20150101wechatpaybilly");
 
-        String validationSign = SignatureUtil.generateSign(MapUtil.objectToMap(notification, StringUtils.EMPTY), "wawaonline20150101wechatpaybilly");
-
-//        assertEquals(notification.getSign(), validationSign);
+        assertEquals(notification.getSign(), validationSign);
 
     }
 

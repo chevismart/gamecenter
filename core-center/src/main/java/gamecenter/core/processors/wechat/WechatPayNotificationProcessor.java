@@ -58,15 +58,15 @@ public class WechatPayNotificationProcessor extends ActionSupport {
 
         //获取数据
 //        PayNativeReply payNativeReply = XMLConverUtil.convertToObject(PayNativeReply.class, inputStream);
-        PayNotification payNotification = XMLConverUtil.convertToObject(PayNotification.class, xml);
+        PayNotification payNotification = XMLConverUtil.convertToObject(PayNotification.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
 
         logger.debug("Payment notification is: {} ", payNotification.toString());
 
         if (payNotification.getReturn_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
             if (payNotification.getResult_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
                 String sign = payNotification.getSign();
-                String validationSign = SignatureUtil.generateSign(MapUtil.objectToMap(payNotification, StringUtils.EMPTY), wechatProfile.getPayKey());
-                isValidMsg = true;// TODO: sign.equals(validationSign);
+                String validationSign =  SignatureUtil.generateSign(MapUtil.order(MapUtil.objectToMap(payNotification,"device_info","err_code","err_code_des","return_msg")), "wawaonline20150101wechatpaybilly");
+                isValidMsg = sign.equals(validationSign);
 
             } else {
                 logger.warn("Payment notification with error: ({}={}) \n Error Details: {}", payNotification.getErr_code(), payNotification.getErr_code_des(), payNotification);

@@ -47,7 +47,7 @@ public class PayNotification {
     private String openid;
 
     @XmlElement(name = "is_subscribe")
-    private String isSubscribe;
+    private String is_subscribe;
 
     @XmlElement(name = "trade_type")
     private String trade_type;
@@ -164,12 +164,12 @@ public class PayNotification {
         this.openid = openid;
     }
 
-    public String getIsSubscribe() {
-        return isSubscribe;
+    public String getIs_subscribe() {
+        return is_subscribe;
     }
 
-    public void setIsSubscribe(String isSubscribe) {
-        this.isSubscribe = isSubscribe;
+    public void setIs_subscribe(String is_subscribe) {
+        this.is_subscribe = is_subscribe;
     }
 
     public String getTrade_type() {
@@ -210,7 +210,7 @@ public class PayNotification {
                 ", err_code='" + err_code + '\'' +
                 ", err_code_des='" + err_code_des + '\'' +
                 ", openid='" + openid + '\'' +
-                ", isSubscribe='" + isSubscribe + '\'' +
+                ", isSubscribe='" + is_subscribe + '\'' +
                 ", trade_type='" + trade_type + '\'' +
                 ", bank_type='" + bank_type + '\'' +
                 ", total_fee=" + total_fee +

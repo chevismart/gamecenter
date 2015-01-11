@@ -106,7 +106,7 @@ public class WechatPayNotificationProcessor extends ActionSupport {
                         "/test/fronter.php", param, null))
                 .build();
 
-        LocalHttpClient.execute(httpUriRequest);
+//        LocalHttpClient.execute(httpUriRequest);
 
         return true;
     }

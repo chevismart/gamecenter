@@ -43,6 +43,7 @@
 
     <bean id="wechatLoginProcessor" class="gamecenter.core.processors.wechat.WechatLoginProcessor">
         <property name="profileManager" ref="profileManager"/>
+        <property name="userProfile" ref="userProfile"/>
     </bean>
 
     <bean id="welcomeProcessor" class="gamecenter.core.processors.WelcomeProcessor">
@@ -53,10 +54,12 @@
 
     <bean id="wechatPayNotificationProcessor" class="gamecenter.core.processors.wechat.WechatPayNotificationProcessor">
         <property name="profileManager" ref="profileManager"/>
+        <property name="userProfile" ref="userProfile"/>
     </bean>
 
     <bean id="wechatPayOrderProcessor" class="gamecenter.core.processors.wechat.WechatPayOrderProcessor">
         <property name="profileManager" ref="profileManager"/>
+        <property name="userProfile" ref="userProfile"/>
     </bean>
 
     <bean id="credentialProcessor" class="gamecenter.core.processors.CredentialProcessor">
@@ -64,7 +67,9 @@
     </bean>
 
     <!-- Intercepters -->
-    <bean id="accessControl" class="gamecenter.core.intercepters.AccessControlIntercepter"/>
+    <bean id="accessControl" class="gamecenter.core.intercepters.AccessControlIntercepter">
+        <property name="userProfile" ref="userProfile"/>
+    </bean>
 
     <!-- Task runner -->
     <bean id="cloudServer" class="gamecenter.core.processors.tasks.CloudServerLoader"/>

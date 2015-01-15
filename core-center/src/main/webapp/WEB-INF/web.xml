@@ -37,7 +37,9 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
     <!-- 配置spring配置文件加载的位置-->
     <context-param>
         <param-name>contextConfigLocation</param-name>

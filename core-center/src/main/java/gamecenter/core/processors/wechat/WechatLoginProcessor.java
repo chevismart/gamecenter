@@ -24,6 +24,7 @@ public class WechatLoginProcessor extends ActionSupport {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     ProfileManager profileManager;
+    UserProfile userProfile;
 
     @Override
     public String execute() throws Exception {
@@ -47,9 +48,6 @@ public class WechatLoginProcessor extends ActionSupport {
                 if (StringUtils.isEmpty(user.getOpenid())) {
                     result = CommonConstants.ACCESS_ROUTER_WECHAT_OAUTH;
                 } else {
-
-                    UserProfile userProfile = new UserProfile();
-
                     AccessInfo accessInfo = new AccessInfo();
                     accessInfo.setAccessChannel(AccessChannel.WECHAT);
                     accessInfo.setAppProfile(profileManager.getAppProfile(appId));
@@ -61,7 +59,6 @@ public class WechatLoginProcessor extends ActionSupport {
                     userProfile.setUserImgUrl(user.getHeadimgurl());
                     userProfile.setIsFollowed(null != user.getSubscribe() && user.getSubscribe() != 0);
                     userProfile.setDeviceId(stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID));
-                    getSession().put(CommonConstants.SESSION_KEY_IS_LOGIN_VALID, userProfile);
                     profileManager.getAppProfile(appId).getWechatProfile().getActiveUserList().put(user.getOpenid(), user);
 
                     result = Action.SUCCESS;
@@ -79,11 +76,15 @@ public class WechatLoginProcessor extends ActionSupport {
         return (HttpServletRequest) ActionContext.getContext().get(org.apache.struts2.StrutsStatics.HTTP_REQUEST);
     }
 
-    protected Map<String, Object> getSession() {
-        return ActionContext.getContext().getSession();
-    }
-
     public void setProfileManager(ProfileManager profileManager) {
         this.profileManager = profileManager;
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 }

@@ -3,9 +3,9 @@ package gamecenter.core.processors.wechat;
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.beans.wechat.PayNotification;
 import gamecenter.core.beans.wechat.WechatProfile;
+import gamecenter.core.constants.CommonConstants;
 import org.junit.Before;
 import org.junit.Test;
-import weixin.popular.bean.pay.PayNotify;
 import weixin.popular.util.MapUtil;
 import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.XMLConverUtil;
@@ -48,7 +48,7 @@ public class WechatPayNotificationProcessorTest {
         payNotification.setResult_code("SUCCESS");
         payNotification.setReturn_code("SUCCESS");
         payNotification.setTime_end("20150103010049");
-        payNotification.setTotal_fee(1);
+        payNotification.setTotal_fee("1");
         payNotification.setTrade_type("NATIVE");
         payNotification.setTransaction_id("1003440412201501030009220721");
         payNotification.setSign("5D7787D69DDC7DF9E2BB1B6EDF9C32C6");
@@ -81,8 +81,14 @@ public class WechatPayNotificationProcessorTest {
     }
 
     @Test
-    public void raiseTheHttpRequestAndTopupCoinSuccessfullly() throws Exception {
-//        processor.topupCoins("ABCDEF0000",1);
-
+    public void returnRsponseToWechatWithSuccessResult() throws Exception {
+        String excepted = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                "<xml>\n" +
+                "    <return_code>SUCCESS</return_code>\n" +
+                "</xml>\n";
+        PayNotification payNotification = new PayNotification();
+        payNotification.setReturn_code(true ? CommonConstants.SUCCESS : CommonConstants.FAIL);
+        String xml = XMLConverUtil.convertToXML(payNotification);
+        assertEquals(excepted, xml);
     }
 }

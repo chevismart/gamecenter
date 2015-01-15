@@ -72,6 +72,11 @@
             <artifactId>spring-tx</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.2.2</version>
+        </dependency>
         <!-- Struts2 Dependency -->
         <dependency>
             <groupId>org.apache.struts</groupId>

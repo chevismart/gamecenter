@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:aop="http://www.springframework.org/schema/aop"
         xmlns="http://www.springframework.org/schema/beans"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+        xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
     <bean id="demoBean" class="gamecenter.core.beans.DemoBean">
         <property name="name" value="Cobe"/>
@@ -15,6 +19,8 @@
         <property name="isHost" value="true"/>
     </bean>
 
-    <bean id="userProfile" class="gamecenter.core.beans.UserProfile" scope="prototype"/>
+    <bean id="userProfile" class="gamecenter.core.beans.UserProfile" scope="session">
+        <aop:scoped-proxy/>
+    </bean>
 
 </beans>

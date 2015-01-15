@@ -5,7 +5,6 @@ import com.opensymphony.xwork2.ActionSupport;
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.WechatProfile;
-import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.utils.ProfileUtil;
 import gamecenter.core.utils.TimeUtil;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -22,7 +21,6 @@ import weixin.popular.util.SignatureUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * Created by Chevis on 2014/12/25.
@@ -32,22 +30,20 @@ public class WechatPayOrderProcessor extends ActionSupport {
     Logger logger = LoggerFactory.getLogger(this.getClass());
     ProfileManager profileManager;
 
+    private UserProfile userProfile;
     private String tempJsonStr;
 
     @Override
     public String execute() throws Exception {
 
         logger.info("Received payment order request");
-
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        UserProfile userProfile = (UserProfile) session.get(CommonConstants.SESSION_KEY_IS_LOGIN_VALID);
         String wechatOpenId = ProfileUtil.getUserOriginalId(userProfile.getInternalId());
         HttpServletRequest request = getHttpRequest();
-        int chargeAmount = Integer.valueOf((String) request.getParameter("chargeAmount"));
+        int chargeAmount = Integer.valueOf(request.getParameter("chargeAmount"));
 
         PayMchAPI payMchAPI = new PayMchAPI();
         Unifiedorder unifiedorder = new Unifiedorder();
-        AppProfile appProfile = profileManager.getAppProfile("liyuanapp");
+        AppProfile appProfile = userProfile.getAccessInfo().getAppProfile();
         if (null != appProfile && appProfile.isWechatProfileValid()) {
             WechatProfile wechatProfile = appProfile.getWechatProfile();
             unifiedorder.setAppid(wechatProfile.getWechatAppId());
@@ -57,10 +53,11 @@ public class WechatPayOrderProcessor extends ActionSupport {
             unifiedorder.setOut_trade_no("trade_" + TimeUtil.getCurrentDateTime().getTime());
             unifiedorder.setTotal_fee(String.valueOf(chargeAmount));
             unifiedorder.setSpbill_create_ip(getRemoteAddress(getHttpRequest()));
-            unifiedorder.setNotify_url("alcock.gicp.net:8888/wechatNotice");
+            unifiedorder.setNotify_url("alcock.gicp.net:8888/corecenter/wechatNotice");
             unifiedorder.setTrade_type("NATIVE");
             unifiedorder.setOpenid(wechatOpenId);
-            unifiedorder.setAttach("ATM001");
+            unifiedorder.setAttach(appProfile.getAppId());
+            unifiedorder.setDevice_info("ATM001");
             unifiedorder.setSign(SignatureUtil.generateSign(MapUtil.order(MapUtil.objectToMap(unifiedorder, StringUtils.EMPTY)), wechatProfile.getPayKey()));
 
             UnifiedorderResult result = payMchAPI.payUnifiedorder(unifiedorder);
@@ -114,6 +111,14 @@ public class WechatPayOrderProcessor extends ActionSupport {
 
     public void setTempJsonStr(String tempJsonStr) {
         this.tempJsonStr = tempJsonStr;
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 }
 

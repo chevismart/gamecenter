@@ -56,7 +56,7 @@ public class PayNotification {
     private String bank_type;
 
     @XmlElement(name = "total_fee")
-    private int total_fee;
+    private String total_fee;
 
     @XmlElement(name = "cash_fee")
     private String cash_fee;
@@ -188,11 +188,11 @@ public class PayNotification {
         this.bank_type = bank_type;
     }
 
-    public int getTotal_fee() {
+    public String getTotal_fee() {
         return total_fee;
     }
 
-    public void setTotal_fee(int total_fee) {
+    public void setTotal_fee(String total_fee) {
         this.total_fee = total_fee;
     }
 

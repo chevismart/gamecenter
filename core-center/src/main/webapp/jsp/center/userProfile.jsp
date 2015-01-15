@@ -10,9 +10,10 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0,user-scalable=0">
-    <script type="text/javascript" src="../../js/third-party/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="../../js/gamecenter.js"></script>
-    <script type="text/javascript" src="../../js/test.js"></script>
+    <script type="text/javascript"
+            src="http://alcock.gicp.net:8888/corecenter/js/third-party/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="http://alcock.gicp.net:8888/corecenter/js/gamecenter.js"></script>
+    <script type="text/javascript" src="http://alcock.gicp.net:8888/corecenter/js/test.js"></script>
     <script type="text/javascript">
         function deviceList() {
             getClientList("00000000");
@@ -150,7 +151,7 @@
         }
 
         .main {
-            background: url(<s:if test="userProfile.isFollowed==true">../../../images/bg.jpg</s:if>) center center no-repeat;
+            background: url('<s:if test="userProfile.isFollowed==true">http://alcock.gicp.net:8888/corecenter/images/bg.jpg</s:if>') center center no-repeat;
             width: 100%;
             height: 100%;
             background-size: 320px 640px;

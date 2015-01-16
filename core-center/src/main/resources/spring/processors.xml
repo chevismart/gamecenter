@@ -55,11 +55,13 @@
     <bean id="wechatPayNotificationProcessor" class="gamecenter.core.processors.wechat.WechatPayNotificationProcessor">
         <property name="profileManager" ref="profileManager"/>
         <property name="userProfile" ref="userProfile"/>
+        <property name="globalPaymentBean" ref="globalPaymentBean"/>
     </bean>
 
     <bean id="wechatPayOrderProcessor" class="gamecenter.core.processors.wechat.WechatPayOrderProcessor">
         <property name="profileManager" ref="profileManager"/>
         <property name="userProfile" ref="userProfile"/>
+        <property name="globalPaymentBean" ref="globalPaymentBean"/>
     </bean>
 
     <bean id="credentialProcessor" class="gamecenter.core.processors.CredentialProcessor">

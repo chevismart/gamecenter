@@ -62,11 +62,7 @@ public class WechatPayNotificationProcessor extends ActionSupport {
 
             if (payNotification.getReturn_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
                 if (payNotification.getResult_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
-                    isValidMsg = verifySign(payNotification);
-                    if (isValidMsg && globalPaymentBean.getSettledPayments().keySet().contains(payNotification.getOut_trade_no())) {
-                        globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
-                        globalPaymentBean.getSettledPayments().put(payNotification.getOut_trade_no(), payNotification);
-                    }
+                    isValidMsg = verifySign(payNotification) && !isPaymentProcessed(payNotification);
                 } else {
                     logger.warn("Payment notification with error: ({}={}) \n Error Details: {}", payNotification.getErr_code(), payNotification.getErr_code_des(), payNotification);
                 }
@@ -78,12 +74,18 @@ public class WechatPayNotificationProcessor extends ActionSupport {
             if (isValidMsg) {
                 logger.info("Received success payment with amount {} for user({})", payNotification.getTotal_fee(), payNotification.getOpenid());
                 boolean isSuccess = topupCoins(payNotification.getOut_trade_no(), 1); // TODO: calculate the topup amount
+                globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
+                globalPaymentBean.getSettledPayments().put(payNotification.getOut_trade_no(), payNotification);
                 replayWechatForPayNotification(isSuccess);
             } else {
                 replayWechatForPayNotification(isValidMsg);
             }
         }
         return null;
+    }
+
+    protected boolean isPaymentProcessed(PayNotification payNotification) {
+        return globalPaymentBean.getSettledPayments().keySet().contains(payNotification.getOut_trade_no());
     }
 
     private void replayWechatForPayNotification(boolean isSuccess) {
@@ -99,9 +101,6 @@ public class WechatPayNotificationProcessor extends ActionSupport {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // TODO: Reply to wechat for the payment notification.
-
     }
 
     protected boolean topupCoins(String tradeNum, int coins) throws URISyntaxException {

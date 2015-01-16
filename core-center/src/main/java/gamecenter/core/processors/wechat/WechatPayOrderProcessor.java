@@ -63,7 +63,7 @@ public class WechatPayOrderProcessor extends ActionSupport {
 
             UnifiedorderResult result = payMchAPI.payUnifiedorder(unifiedorder);
             logger.info(result.getCode_url());
-            globalPaymentBean.getUnSettlementPayments().put(unifiedorder.getOut_trade_no(), null);
+            globalPaymentBean.getUnSettlementPayments().put(unifiedorder.getOut_trade_no(), unifiedorder.getOut_trade_no());
             getHttpResponse().sendRedirect(result.getCode_url());
 
             tempJsonStr = PayUtil.generateMchPayJsRequestJson(result.getPrepay_id(), result.getAppid(), appProfile.getWechatProfile().getPayKey());

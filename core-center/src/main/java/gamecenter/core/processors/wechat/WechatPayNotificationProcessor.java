@@ -2,6 +2,7 @@ package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import gamecenter.core.beans.GlobalPaymentBean;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.PayNotification;
 import gamecenter.core.beans.wechat.WechatProfile;
@@ -42,14 +43,12 @@ public class WechatPayNotificationProcessor extends ActionSupport {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     ProfileManager profileManager;
+    GlobalPaymentBean globalPaymentBean;
     WechatProfile wechatProfile;
     private UserProfile userProfile;
 
     @Override
     public String execute() throws Exception {
-
-        logger.info("Received pay notification.");
-
         HttpServletRequest request = getHttpRequest();
         InputStream inputStream = request.getInputStream();
         String xml = IOUtils.toString(inputStream);
@@ -61,12 +60,13 @@ public class WechatPayNotificationProcessor extends ActionSupport {
             wechatProfile = profileManager.getAppProfile(appId).getWechatProfile();
             boolean isValidMsg = false;
 
-            logger.debug("Payment notification is: {} ", payNotification.toString());
-
             if (payNotification.getReturn_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
                 if (payNotification.getResult_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
                     isValidMsg = verifySign(payNotification);
-
+                    if (isValidMsg && globalPaymentBean.getSettledPayments().keySet().contains(payNotification.getOut_trade_no())) {
+                        globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
+                        globalPaymentBean.getSettledPayments().put(payNotification.getOut_trade_no(), payNotification);
+                    }
                 } else {
                     logger.warn("Payment notification with error: ({}={}) \n Error Details: {}", payNotification.getErr_code(), payNotification.getErr_code_des(), payNotification);
                 }
@@ -76,7 +76,7 @@ public class WechatPayNotificationProcessor extends ActionSupport {
             }
 
             if (isValidMsg) {
-                logger.info("Received success payment with amount {} for openid({})", payNotification.getTotal_fee(), payNotification.getOpenid());
+                logger.info("Received success payment with amount {} for user({})", payNotification.getTotal_fee(), payNotification.getOpenid());
                 boolean isSuccess = topupCoins(payNotification.getOut_trade_no(), 1); // TODO: calculate the topup amount
                 replayWechatForPayNotification(isSuccess);
             } else {
@@ -91,7 +91,9 @@ public class WechatPayNotificationProcessor extends ActionSupport {
         payNotification.setReturn_code(isSuccess ? CommonConstants.SUCCESS : CommonConstants.FAIL);
         try {
             ServletOutputStream os = getHttpResponse().getOutputStream();
-            os.print(XMLConverUtil.convertToXML(payNotification));
+            String responseXML = XMLConverUtil.convertToXML(payNotification);
+            logger.info("Payment notification response: {}", responseXML);
+            os.write(responseXML.getBytes());
             os.flush();
             os.close();
         } catch (IOException e) {
@@ -159,6 +161,14 @@ public class WechatPayNotificationProcessor extends ActionSupport {
 
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
+    }
+
+    public GlobalPaymentBean getGlobalPaymentBean() {
+        return globalPaymentBean;
+    }
+
+    public void setGlobalPaymentBean(GlobalPaymentBean globalPaymentBean) {
+        this.globalPaymentBean = globalPaymentBean;
     }
 }
 

@@ -23,4 +23,6 @@
         <aop:scoped-proxy/>
     </bean>
 
+    <bean id="globalPaymentBean" class="gamecenter.core.beans.GlobalPaymentBean" scope="singleton"></bean>
+
 </beans>

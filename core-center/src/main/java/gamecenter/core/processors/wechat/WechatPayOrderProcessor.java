@@ -3,6 +3,7 @@ package gamecenter.core.processors.wechat;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import gamecenter.core.beans.AppProfile;
+import gamecenter.core.beans.GlobalPaymentBean;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.utils.ProfileUtil;
@@ -29,7 +30,7 @@ public class WechatPayOrderProcessor extends ActionSupport {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     ProfileManager profileManager;
-
+    GlobalPaymentBean globalPaymentBean;
     private UserProfile userProfile;
     private String tempJsonStr;
 
@@ -62,7 +63,7 @@ public class WechatPayOrderProcessor extends ActionSupport {
 
             UnifiedorderResult result = payMchAPI.payUnifiedorder(unifiedorder);
             logger.info(result.getCode_url());
-
+            globalPaymentBean.getUnSettlementPayments().put(unifiedorder.getOut_trade_no(), null);
             getHttpResponse().sendRedirect(result.getCode_url());
 
             tempJsonStr = PayUtil.generateMchPayJsRequestJson(result.getPrepay_id(), result.getAppid(), appProfile.getWechatProfile().getPayKey());
@@ -119,6 +120,14 @@ public class WechatPayOrderProcessor extends ActionSupport {
 
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
+    }
+
+    public GlobalPaymentBean getGlobalPaymentBean() {
+        return globalPaymentBean;
+    }
+
+    public void setGlobalPaymentBean(GlobalPaymentBean globalPaymentBean) {
+        this.globalPaymentBean = globalPaymentBean;
     }
 }
 

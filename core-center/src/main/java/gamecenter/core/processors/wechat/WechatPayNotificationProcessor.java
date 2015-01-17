@@ -11,6 +11,7 @@ import gamecenter.core.utils.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
@@ -19,9 +20,11 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.apache.struts2.StrutsStatics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import weixin.popular.client.LocalHttpClient;
 import weixin.popular.util.MapUtil;
 import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.XMLConverUtil;
@@ -77,7 +80,7 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
             if (isValidMsg) {
                 logger.info("Received success payment with amount {} for user({})", payNotification.getTotal_fee(), payNotification.getOpenid());
                 paymentLogger.info(payNotification.toString());
-                boolean isSuccess = topupCoins(payNotification.getOut_trade_no(), 1); // TODO: calculate the topup amount
+                boolean isSuccess = topupCoins(payNotification.getOut_trade_no(), getChargeCoinNum(payNotification)); // TODO: calculate the topup amount
                 globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
                 globalPaymentBean.getSettledPayments().put(payNotification.getOut_trade_no(), payNotification);
                 replayWechatForPayNotification(isSuccess);
@@ -86,6 +89,11 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
             }
         }
         return null;
+    }
+
+    private int getChargeCoinNum(PayNotification payNotification) {
+        return Integer.valueOf(payNotification.getTotal_fee());
+//        return Integer.valueOf(payNotification.getTotal_fee()) / 1000;
     }
 
     protected boolean isPaymentProcessed(PayNotification payNotification) {
@@ -128,8 +136,14 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
                         "/test/fronter.php", param, null))
                 .build();
 
-//        LocalHttpClient.execute(httpUriRequest);
-
+        HttpResponse response = LocalHttpClient.execute(httpUriRequest);
+        String json = null;
+        try {
+            json = EntityUtils.toString(response.getEntity());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.err.println(json);
         return true;
     }
 

@@ -22,7 +22,7 @@
                 <bean id="tokenManager" class="gamecenter.core.processors.tasks.WechatTokenManager">
                     <constructor-arg name="profileManager" ref="profileManager"/>
                 </bean>
-                <bean id="cloudServerLoader" class="gamecenter.core.processors.tasks.CloudServerLoader"/>
+                <!--<bean id="cloudServerLoader" class="gamecenter.core.processors.tasks.CloudServerLoader"/>-->
             </list>
         </property>
         <property name="scheduledTasks">

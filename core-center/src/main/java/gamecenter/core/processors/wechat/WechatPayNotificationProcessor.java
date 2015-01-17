@@ -81,8 +81,11 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
                 logger.info("Received success payment with amount {} for user({})", payNotification.getTotal_fee(), payNotification.getOpenid());
                 paymentLogger.info(payNotification.toString());
                 boolean isSuccess = topupCoins(payNotification.getOut_trade_no(), getChargeCoinNum(payNotification)); // TODO: calculate the topup amount
-                globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
-                globalPaymentBean.getSettledPayments().put(payNotification.getOut_trade_no(), payNotification);
+
+                if (isSuccess) {
+                    globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
+                    globalPaymentBean.getSettledPayments().put(payNotification.getOut_trade_no(), payNotification);
+                }
                 replayWechatForPayNotification(isSuccess);
             } else {
                 replayWechatForPayNotification(isValidMsg);
@@ -97,7 +100,9 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
     }
 
     protected boolean isPaymentProcessed(PayNotification payNotification) {
-        return globalPaymentBean.getSettledPayments().keySet().contains(payNotification.getOut_trade_no());
+        String payNotificationId = payNotification.getOut_trade_no();
+        return !globalPaymentBean.getUnSettlementPayments().keySet().contains(payNotificationId) &&
+                globalPaymentBean.getSettledPayments().keySet().contains(payNotificationId);
     }
 
     private void replayWechatForPayNotification(boolean isSuccess) {
@@ -125,7 +130,7 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
         params.add(new BasicNameValuePair("DATA_TYPE", "JSON"));
         params.add(new BasicNameValuePair("REQ_TYPE", "TOP_UP"));
         params.add(new BasicNameValuePair("MAC", "accf233b95f6"));
-        params.add(new BasicNameValuePair("TOP_UP_REFERENCE_ID", tradeNum));
+        params.add(new BasicNameValuePair("TOP_UP_REFERENCE_ID", "ABCDEF3456"));
         params.add(new BasicNameValuePair("TOP_UP_COIN_QTY", String.valueOf(coins)));
         String param = URLEncodedUtils.format(params, "UTF-8");
 

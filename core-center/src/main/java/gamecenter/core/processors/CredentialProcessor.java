@@ -2,13 +2,10 @@ package gamecenter.core.processors;
 
 
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 import gamecenter.core.beans.AccessChannel;
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.processors.wechat.ProfileManager;
 import org.apache.struts2.StrutsStatics;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import weixin.popular.bean.Token;
 import weixin.popular.util.JsonUtil;
 
@@ -19,9 +16,8 @@ import java.io.PrintWriter;
 /**
  * Created by Chevis on 2015/1/7.
  */
-public class CredentialProcessor extends ActionSupport {
+public class CredentialProcessor extends GeneralProcessor {
     ProfileManager profileManager;
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public String execute() throws Exception {

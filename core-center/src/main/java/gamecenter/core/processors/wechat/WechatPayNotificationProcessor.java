@@ -1,12 +1,12 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 import gamecenter.core.beans.GlobalPaymentBean;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.PayNotification;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.constants.CommonConstants;
+import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.utils.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,9 +39,9 @@ import java.util.Map;
 /**
  * Created by Chevis on 2014/12/25.
  */
-public class WechatPayNotificationProcessor extends ActionSupport {
+public class WechatPayNotificationProcessor extends GeneralProcessor {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    Logger paymentLogger = LoggerFactory.getLogger("wechatPaymentLogger");
     ProfileManager profileManager;
     GlobalPaymentBean globalPaymentBean;
     WechatProfile wechatProfile;
@@ -64,7 +64,10 @@ public class WechatPayNotificationProcessor extends ActionSupport {
                 if (payNotification.getResult_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
                     isValidMsg = verifySign(payNotification) && !isPaymentProcessed(payNotification);
                 } else {
-                    logger.warn("Payment notification with error: ({}={}) \n Error Details: {}", payNotification.getErr_code(), payNotification.getErr_code_des(), payNotification);
+                    logger.warn("Payment notification with error: ({}={}) \n Error Details: {}",
+                            payNotification.getErr_code(),
+                            payNotification.getErr_code_des(),
+                            payNotification.toString());
                 }
 
             } else {
@@ -73,6 +76,7 @@ public class WechatPayNotificationProcessor extends ActionSupport {
 
             if (isValidMsg) {
                 logger.info("Received success payment with amount {} for user({})", payNotification.getTotal_fee(), payNotification.getOpenid());
+                paymentLogger.info(payNotification.toString());
                 boolean isSuccess = topupCoins(payNotification.getOut_trade_no(), 1); // TODO: calculate the topup amount
                 globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
                 globalPaymentBean.getSettledPayments().put(payNotification.getOut_trade_no(), payNotification);

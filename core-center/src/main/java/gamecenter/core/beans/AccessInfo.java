@@ -31,4 +31,13 @@ public class AccessInfo {
     public void setAppProfile(AppProfile appProfile) {
         this.appProfile = appProfile;
     }
+
+    public String getChargeURL() {
+        switch (accessChannel) {
+            case WECHAT:
+                return CoreCenterHost.getHttpURL(CoreCenterHost.WECHAT_ORDER_URL);
+            default:
+                return null;
+        }
+    }
 }

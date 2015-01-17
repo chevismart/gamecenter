@@ -50,8 +50,6 @@
         <property name="userProfile" ref="userProfile"/>
     </bean>
 
-    <bean id="loginProcessor" class="gamecenter.core.processors.LoginProcessor"/>
-
     <bean id="wechatPayNotificationProcessor" class="gamecenter.core.processors.wechat.WechatPayNotificationProcessor">
         <property name="profileManager" ref="profileManager"/>
         <property name="userProfile" ref="userProfile"/>

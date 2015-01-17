@@ -1,13 +1,12 @@
 package gamecenter.core.processors;
 
 import com.opensymphony.xwork2.Action;
-import com.opensymphony.xwork2.ActionSupport;
 import gamecenter.core.processors.wechat.ProfileManager;
 
 /**
  * Created by Chevis on 2014/12/7.
  */
-public class DemoAction extends ActionSupport {
+public class DemoAction extends GeneralProcessor {
 
     private ProfileManager profileManager;
 

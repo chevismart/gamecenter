@@ -2,9 +2,10 @@ package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 import gamecenter.core.beans.AppProfile;
+import gamecenter.core.beans.CoreCenterHost;
 import gamecenter.core.constants.CommonConstants;
+import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.utils.ParameterUtil;
 import gamecenter.core.utils.ProfileUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -17,14 +18,14 @@ import java.util.Map;
 /**
  * Created by Chevis on 2014/12/16.
  */
-public class WechatOAuthProcessor extends ActionSupport {
+public class WechatOAuthProcessor extends GeneralProcessor {
 
     ProfileManager profileManager;
 
     private String oauthUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
             "appid=%s" +
             "&" +
-            "redirect_uri=http://alcock.gicp.net:8888/corecenter/auth" +
+            "redirect_uri=%s" +
             "&" +
             "response_type=code" +
             "&" +
@@ -58,7 +59,7 @@ public class WechatOAuthProcessor extends ActionSupport {
         AppProfile appProfile = profileManager.getAppProfile(appId);
         if (ProfileUtil.verifyAppProfile(appProfile) && appProfile.isWechatProfileValid()) {
             String applicationId = profileManager.getAppProfile(appId).getWechatProfile().getWechatAppId();
-            result = String.format(oauthUrl, applicationId, state);
+            result = String.format(oauthUrl, applicationId, CoreCenterHost.getHttpURL(CoreCenterHost.AUTH_URL), state);
         }
         return result;
     }

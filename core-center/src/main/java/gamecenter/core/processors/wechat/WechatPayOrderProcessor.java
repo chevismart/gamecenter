@@ -1,18 +1,16 @@
 package gamecenter.core.processors.wechat;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import gamecenter.core.beans.AppProfile;
+import gamecenter.core.beans.CoreCenterHost;
 import gamecenter.core.beans.GlobalPaymentBean;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.WechatProfile;
+import gamecenter.core.processors.AbstractTopupProcessor;
 import gamecenter.core.utils.ProfileUtil;
 import gamecenter.core.utils.TimeUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.struts2.StrutsStatics;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import weixin.popular.api.PayMchAPI;
 import weixin.popular.bean.paymch.Unifiedorder;
 import weixin.popular.bean.paymch.UnifiedorderResult;
@@ -21,14 +19,12 @@ import weixin.popular.util.PayUtil;
 import weixin.popular.util.SignatureUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by Chevis on 2014/12/25.
  */
-public class WechatPayOrderProcessor extends ActionSupport {
+public class WechatPayOrderProcessor extends AbstractTopupProcessor {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
     ProfileManager profileManager;
     GlobalPaymentBean globalPaymentBean;
     private UserProfile userProfile;
@@ -39,8 +35,7 @@ public class WechatPayOrderProcessor extends ActionSupport {
 
         logger.info("Received payment order request");
         String wechatOpenId = ProfileUtil.getUserOriginalId(userProfile.getInternalId());
-        HttpServletRequest request = getHttpRequest();
-        int chargeAmount = Integer.valueOf(request.getParameter("chargeAmount"));
+
 
         PayMchAPI payMchAPI = new PayMchAPI();
         Unifiedorder unifiedorder = new Unifiedorder();
@@ -52,9 +47,9 @@ public class WechatPayOrderProcessor extends ActionSupport {
             unifiedorder.setNonce_str(RandomStringUtils.random(32, true, true));
             unifiedorder.setBody("Testing for" + wechatOpenId);
             unifiedorder.setOut_trade_no("trade_" + TimeUtil.getCurrentDateTime().getTime());
-            unifiedorder.setTotal_fee(String.valueOf(chargeAmount));
+            unifiedorder.setTotal_fee(String.valueOf(getChargeAmount()));
             unifiedorder.setSpbill_create_ip(getRemoteAddress(getHttpRequest()));
-            unifiedorder.setNotify_url("alcock.gicp.net:8888/corecenter/wechatNotice");
+            unifiedorder.setNotify_url(CoreCenterHost.WECHAT_PAYMENT_NOTIFICATION_CALLBACK_URL);
             unifiedorder.setTrade_type("NATIVE");
             unifiedorder.setOpenid(wechatOpenId);
             unifiedorder.setAttach(appProfile.getAppId());
@@ -74,14 +69,6 @@ public class WechatPayOrderProcessor extends ActionSupport {
         logger.info("Order info: {}", tempJsonStr);
 
         return ActionSupport.SUCCESS;
-    }
-
-    protected HttpServletRequest getHttpRequest() {
-        return (HttpServletRequest) ActionContext.getContext().get(org.apache.struts2.StrutsStatics.HTTP_REQUEST);
-    }
-
-    protected HttpServletResponse getHttpResponse() {
-        return (HttpServletResponse) ActionContext.getContext().get(StrutsStatics.HTTP_RESPONSE);
     }
 
     public ProfileManager getProfileManager() {

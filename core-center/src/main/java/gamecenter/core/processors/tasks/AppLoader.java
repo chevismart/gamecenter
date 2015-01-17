@@ -5,8 +5,6 @@ import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.listeners.AbstractRunnable;
 import gamecenter.core.processors.wechat.ProfileManager;
 import gamecenter.core.utils.XMLMessageConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -16,7 +14,7 @@ import java.util.List;
 public class AppLoader extends AbstractRunnable {
 
     private final static String ROOT_NODE = "applications";
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     ProfileManager profileManager;
 
     public void setProfileManager(ProfileManager profileManager) {

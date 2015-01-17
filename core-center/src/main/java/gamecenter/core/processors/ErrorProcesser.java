@@ -1,12 +1,11 @@
 package gamecenter.core.processors;
 
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * Created by Chevis on 2014/12/8.
  */
-public class ErrorProcesser extends ActionSupport{
+public class ErrorProcesser extends GeneralProcessor {
     private Exception exception;
 
     public Exception getException() {

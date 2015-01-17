@@ -1,68 +1,60 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.Action;
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.util.logging.Logger;
-import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import gamecenter.core.beans.AccessChannel;
 import gamecenter.core.beans.AccessInfo;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.constants.CommonConstants;
+import gamecenter.core.processors.GeneralLoginInterface;
+import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.utils.ParameterUtil;
 import gamecenter.core.utils.ProfileUtil;
 import org.apache.commons.lang3.StringUtils;
 import weixin.popular.bean.User;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
  * Created by Chevis on 14/12/20.
  */
-public class WechatLoginProcessor extends ActionSupport {
+public class WechatLoginProcessor extends GeneralProcessor implements GeneralLoginInterface {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
     ProfileManager profileManager;
     UserProfile userProfile;
+    User wechatUser;
+    String appId;
+    String code;
+    String state;
 
     @Override
     public String execute() throws Exception {
 
-        String code = getHttpRequest().getParameter(CommonConstants.WECHAT_AUTH_CODE);
-        String state = getHttpRequest().getParameter(CommonConstants.WECHAT_AUTH_STATE);
-        logger.info("code = {}, state = {}", code, state);
-
+        code = getHttpRequest().getParameter(CommonConstants.WECHAT_AUTH_CODE);
+        state = getHttpRequest().getParameter(CommonConstants.WECHAT_AUTH_STATE);
         Map<String, String> stateParam = ParameterUtil.extractParam(state);
-        String appId = stateParam.get(CommonConstants.WECHAT_STATE_PARAM_APPID);
+        appId = stateParam.get(CommonConstants.WECHAT_STATE_PARAM_APPID);
 
-        String result = Action.LOGIN;
+        logger.info("Login with code = {}, state = {}", code, state);
+
+        String result;
 
         try {
-            if (StringUtils.isNotEmpty(appId) &&
-                    ProfileUtil.verifyAppProfile(profileManager.getAppProfile(appId)) &&
-                    profileManager.getAppProfile(appId).isWechatProfileValid()) {
+            if (isValidLogin()) {
+                AccessInfo accessInfo = new AccessInfo();
+                accessInfo.setAccessChannel(AccessChannel.WECHAT);
+                accessInfo.setAppProfile(profileManager.getAppProfile(appId));
 
-                User user = profileManager.getUserInfo(appId, code, getHttpRequest().getLocale());
-
-                if (StringUtils.isEmpty(user.getOpenid())) {
-                    result = CommonConstants.ACCESS_ROUTER_WECHAT_OAUTH;
-                } else {
-                    AccessInfo accessInfo = new AccessInfo();
-                    accessInfo.setAccessChannel(AccessChannel.WECHAT);
-                    accessInfo.setAppProfile(profileManager.getAppProfile(appId));
-
-                    // TODO: to retrieve the user from DB by openId, or create profile
-                    userProfile.setAccessInfo(accessInfo);
-                    userProfile.setDisplayName(user.getNickname());
-                    userProfile.setInternalId(ProfileUtil.getUserUnifyId(AccessChannel.WECHAT, user.getOpenid()));
-                    userProfile.setUserImgUrl(user.getHeadimgurl());
-                    userProfile.setIsFollowed(null != user.getSubscribe() && user.getSubscribe() != 0);
-                    userProfile.setDeviceId(stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID));
-                    profileManager.getAppProfile(appId).getWechatProfile().getActiveUserList().put(user.getOpenid(), user);
-
-                    result = Action.SUCCESS;
-                }
+                // TODO: to retrieve the user from DB by openId, or create profile
+                userProfile.setAccessInfo(accessInfo);
+                userProfile.setDisplayName(wechatUser.getNickname());
+                userProfile.setInternalId(ProfileUtil.getUserUnifyId(AccessChannel.WECHAT, wechatUser.getOpenid()));
+                userProfile.setUserImgUrl(wechatUser.getHeadimgurl());
+                userProfile.setIsFollowed(null != wechatUser.getSubscribe() && wechatUser.getSubscribe() != 0);
+                userProfile.setDeviceId(stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID));
+                profileManager.getAppProfile(appId).getWechatProfile().getActiveUserList().put(wechatUser.getOpenid(), wechatUser);
+                result = Action.SUCCESS;
+            } else {
+                result = CommonConstants.ACCESS_ROUTER_WECHAT_OAUTH;
             }
 
         } catch (Exception e) {
@@ -70,10 +62,6 @@ public class WechatLoginProcessor extends ActionSupport {
             return Action.ERROR;
         }
         return result;
-    }
-
-    protected HttpServletRequest getHttpRequest() {
-        return (HttpServletRequest) ActionContext.getContext().get(org.apache.struts2.StrutsStatics.HTTP_REQUEST);
     }
 
     public void setProfileManager(ProfileManager profileManager) {
@@ -86,5 +74,15 @@ public class WechatLoginProcessor extends ActionSupport {
 
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
+    }
+
+    @Override
+    public boolean isValidLogin() {
+        if (StringUtils.isNotEmpty(appId) &&
+                ProfileUtil.verifyAppProfile(profileManager.getAppProfile(appId)) &&
+                profileManager.getAppProfile(appId).isWechatProfileValid()) {
+            wechatUser = profileManager.getUserInfo(appId, code, getHttpRequest().getLocale());
+        }
+        return StringUtils.isNotEmpty(wechatUser.getOpenid());
     }
 }

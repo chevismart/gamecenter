@@ -4,15 +4,11 @@ import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.listeners.AbstractRunnable;
 import gamecenter.core.processors.wechat.ProfileManager;
 import gamecenter.core.utils.TimeUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Chevis on 2014/12/11.
  */
 public class WechatTokenManager extends AbstractRunnable {
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private ProfileManager profileManager;
 

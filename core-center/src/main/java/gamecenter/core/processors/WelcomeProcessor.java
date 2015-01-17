@@ -2,7 +2,6 @@ package gamecenter.core.processors;
 
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 import gamecenter.core.beans.UserProfile;
 
 import java.util.Map;
@@ -10,7 +9,7 @@ import java.util.Map;
 /**
  * Created by Chevis on 14/12/20.
  */
-public class WelcomeProcessor extends ActionSupport {
+public class WelcomeProcessor extends GeneralProcessor {
 
     UserProfile userProfile;
 

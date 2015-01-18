@@ -2,9 +2,9 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <typeAlias alias="user" type="com.pdsu.edu.domain.User"/>
+        <typeAlias alias="user" type="gamecenter.core.beans.Trade"/>
     </typeAliases>
     <mappers>
-        <mapper resource="com/pdsu/edu/domain/sqlMappers/user.xml"/>
+        <mapper resource="mapper/tradeMapper.xml"/>
     </mappers>
 </configuration>

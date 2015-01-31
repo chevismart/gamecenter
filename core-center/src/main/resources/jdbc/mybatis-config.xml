@@ -5,6 +5,6 @@
         <typeAlias alias="user" type="gamecenter.core.beans.Trade"/>
     </typeAliases>
     <mappers>
-        <mapper resource="mapper/tradeMapper.xml"/>
+        <mapper resource="mapper/AccessChannelDaoMapper.xml"/>
     </mappers>
 </configuration>

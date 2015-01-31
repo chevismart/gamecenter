@@ -4,7 +4,7 @@
     <typeAliases>
         <typeAlias alias="user" type="gamecenter.core.beans.Trade"/>
     </typeAliases>
-    <mappers>
-        <mapper resource="mapper/AccessChannelDaoMapper.xml"/>
-    </mappers>
+    <!--<mappers>-->
+    <!--<mapper resource="mapper/AccessChannelDaoMapper.xml"/>-->
+    <!--</mappers>-->
 </configuration>

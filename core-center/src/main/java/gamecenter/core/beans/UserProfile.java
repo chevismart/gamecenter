@@ -4,6 +4,7 @@ package gamecenter.core.beans;
  * Created by Chevis on 2014/12/16.
  */
 public class UserProfile {
+	private String openId;
     private String displayName;
     private String internalId; //channel+id
     private AccessInfo accessInfo;
@@ -22,8 +23,16 @@ public class UserProfile {
                 ", deviceId='" + deviceId + '\'' +
                 '}';
     }
+    
+    public String getOpenId() {
+		return openId;
+	}
 
-    public String getDeviceId() {
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+	
+	public String getDeviceId() {
         return deviceId;
     }
 

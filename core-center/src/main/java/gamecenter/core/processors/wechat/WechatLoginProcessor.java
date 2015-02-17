@@ -1,15 +1,19 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.Action;
+
 import gamecenter.core.beans.AccessChannel;
 import gamecenter.core.beans.AccessInfo;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.processors.GeneralLoginInterface;
 import gamecenter.core.processors.GeneralProcessor;
+import gamecenter.core.services.wechat.SubscribeService;
 import gamecenter.core.utils.ParameterUtil;
 import gamecenter.core.utils.ProfileUtil;
+
 import org.apache.commons.lang3.StringUtils;
+
 import weixin.popular.bean.User;
 
 import java.util.Map;
@@ -18,13 +22,17 @@ import java.util.Map;
  * Created by Chevis on 14/12/20.
  */
 public class WechatLoginProcessor extends GeneralProcessor implements GeneralLoginInterface {
-
+	//services
     ProfileManager profileManager;
+    SubscribeService subscribeService;
+    //beans
     UserProfile userProfile;
     User wechatUser;
+    //请求参数
     String appId;
     String code;
     String state;
+    
 
     @Override
     public String execute() throws Exception {
@@ -34,7 +42,7 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
         Map<String, String> stateParam = ParameterUtil.extractParam(state);
         appId = stateParam.get(CommonConstants.WECHAT_STATE_PARAM_APPID);
 
-        logger.info("Login with code = {}, state = {}", code, state);
+		logger.info("Login with code = {}, state = {}", code, state);
 
         String result;
 
@@ -46,12 +54,20 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
 
                 // TODO: to retrieve the user from DB by openId, or create profile
                 userProfile.setAccessInfo(accessInfo);
+                userProfile.setOpenId(wechatUser.getOpenid());
                 userProfile.setDisplayName(wechatUser.getNickname());
                 userProfile.setInternalId(ProfileUtil.getUserUnifyId(AccessChannel.WECHAT, wechatUser.getOpenid()));
                 userProfile.setUserImgUrl(wechatUser.getHeadimgurl());
                 userProfile.setIsFollowed(null != wechatUser.getSubscribe() && wechatUser.getSubscribe() != 0);
                 userProfile.setDeviceId(stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID));
                 profileManager.getAppProfile(appId).getWechatProfile().getActiveUserList().put(wechatUser.getOpenid(), wechatUser);
+                //welcome
+                boolean hasSubscribed = subscribeService.getHasSubscibed(userProfile.getOpenId());
+                boolean isSubcribing = subscribeService.getIsSubscibing(wechatUser);
+                boolean hasSubscribeBonus = subscribeService.getHasSubscribeBonus(userProfile.getOpenId());
+                getHttpRequest().setAttribute("hasSubscribed", hasSubscribed);
+                getHttpRequest().setAttribute("isSubcribing", isSubcribing);
+                getHttpRequest().setAttribute("hasSubscribeBonus", hasSubscribeBonus);         
                 result = Action.SUCCESS;
             } else {
                 result = CommonConstants.ACCESS_ROUTER_WECHAT_OAUTH;
@@ -75,8 +91,12 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
     }
+    
+    public void setSubscribeService(SubscribeService subscribeService) {
+		this.subscribeService = subscribeService;
+	}
 
-    @Override
+	@Override
     public boolean isValidLogin() {
         if (StringUtils.isNotEmpty(appId) &&
                 ProfileUtil.verifyAppProfile(profileManager.getAppProfile(appId)) &&

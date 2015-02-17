@@ -38,6 +38,8 @@ public class AppLoader extends AbstractRunnable {
                         wechatProfile.getPayKey());
                 profileManager.requestWechatAccessToken(appProfile.getAppId());
                 logger.info("Wechat access token is successfully obtained!");
+                profileManager.requestWechatJsapiTicket(appProfile.getAppId());
+                logger.info("Wechat jsapi ticket is successfully obtained!");
             }
             logger.info("{}({}) is successfully loaded!", appProfile.getAppName(), appProfile.getAppId());
         }

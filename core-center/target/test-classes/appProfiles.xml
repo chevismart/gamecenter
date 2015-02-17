@@ -1,0 +1,12 @@
+<applications>
+    <application>
+        <appName>荔园新天地</appName>
+        <appId>liyuanapp</appId>
+        <wechatProfile>
+            <wechatAppId>wxe89a9d2fa17df80f</wechatAppId>
+            <wechatAppSecret>71d8fc7778571e6b54712953b68084e4</wechatAppSecret>
+            <mchid>1221231234905202</mchid>
+            <payKey>wawadfadfadfaelly</payKey>
+        </wechatProfile>
+    </application>
+</applications>

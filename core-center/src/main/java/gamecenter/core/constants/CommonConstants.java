@@ -15,6 +15,7 @@ public class CommonConstants {
     public static final String WECHAT_STATE_PARAM_APPID = "appid";
     public static final String WECHAT_STATE_PARAM_DEVICEID = "deviceid";
 
+    public static final int DEFAULT_WECHAT_JSAPI_TICKET_EXPIRY_TIME_IN_SECOND = 7000;
 
     public static final int DEFAULT_WECHAT_ACCESS_TOKEN_EXPIRY_TIME_IN_SECOND = 5400;
     public static final int EXPIRY_SHIFT_PERIOD_IN_SECOND = 120;

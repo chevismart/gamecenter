@@ -1,6 +1,5 @@
 package gamecenter.core.processors.wechat;
 
-import com.opensymphony.xwork2.ActionSupport;
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.beans.CoreCenterHost;
 import gamecenter.core.beans.GlobalPaymentBean;
@@ -49,7 +48,7 @@ public class WechatPayOrderProcessor extends AbstractTopupProcessor {
             unifiedorder.setOut_trade_no("trade_" + TimeUtil.getCurrentDateTime().getTime());
             unifiedorder.setTotal_fee(String.valueOf(getChargeAmount()));
             unifiedorder.setSpbill_create_ip(getRemoteAddress(getHttpRequest()));
-            unifiedorder.setNotify_url(CoreCenterHost.WECHAT_PAYMENT_NOTIFICATION_CALLBACK_URL);
+            unifiedorder.setNotify_url(CoreCenterHost.getHttpURL(CoreCenterHost.WECHAT_PAYMENT_NOTIFICATION_CALLBACK_URL));
             unifiedorder.setTrade_type("NATIVE");
             unifiedorder.setOpenid(wechatOpenId);
             unifiedorder.setAttach(appProfile.getAppId());

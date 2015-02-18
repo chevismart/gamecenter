@@ -6,8 +6,8 @@ import org.apache.commons.lang3.StringUtils;
  * Created by Chevis on 2015/1/17.
  */
 public class CoreCenterHost {
-    public static final String CORECENTER_HOST = "alcock.gicp.net";
-    public static final int CORECENTER_PORT = 8888;
+    public static final String CORECENTER_HOST = "wawaonline.net";
+    public static final int CORECENTER_PORT = 8080;
     public static final String CONTEXT_NAME = "corecenter";
     public static final String SEPEARTOR = "/";
     public static final String COLON = ":";

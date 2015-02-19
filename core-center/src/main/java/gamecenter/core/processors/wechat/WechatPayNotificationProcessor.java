@@ -1,19 +1,15 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.ActionContext;
-import gamecenter.core.beans.CoreCenterHost;
-import gamecenter.core.beans.Figure;
-import gamecenter.core.beans.GlobalPaymentBean;
-import gamecenter.core.beans.UserProfile;
+import gamecenter.core.beans.*;
 import gamecenter.core.beans.wechat.PayNotification;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.processors.GeneralProcessor;
+import gamecenter.core.services.wechat.NativePrePayOrderService;
 import gamecenter.core.utils.CollectionUtils;
 import gamecenter.core.utils.ParameterUtil;
-import gamecenter.core.utils.TimeUtil;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -29,9 +25,6 @@ import org.apache.http.util.EntityUtils;
 import org.apache.struts2.StrutsStatics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import weixin.popular.api.PayMchAPI;
-import weixin.popular.bean.paymch.Unifiedorder;
-import weixin.popular.bean.paymch.UnifiedorderResult;
 import weixin.popular.client.LocalHttpClient;
 import weixin.popular.util.MapUtil;
 import weixin.popular.util.SignatureUtil;
@@ -41,7 +34,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,21 +48,22 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
     ProfileManager profileManager;
     GlobalPaymentBean globalPaymentBean;
     WechatProfile wechatProfile;
+    NativePrePayOrderService nativePrePayOrderService = new NativePrePayOrderService();
     private UserProfile userProfile;
 
     @Override
     public String execute() throws Exception {
-        HttpServletRequest request = getHttpRequest();
-        InputStream inputStream = request.getInputStream();
-        String xml = IOUtils.toString(inputStream);
+        String xml = IOUtils.toString(getHttpRequest().getInputStream());
         logger.debug("Received pay notification xml: {}", xml);
         PayNotification payNotification = XMLConverUtil.convertToObject(PayNotification.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
         logger.info("Converted payment notification is: {}", payNotification.toString());
         if (verifySign(payNotification)) {
             if (StringUtils.isNotEmpty(payNotification.getAttach())) {
+                // Handle the request for the common paid notification.
                 handlePaidNotification(payNotification);
             } else if (StringUtils.isNotEmpty(payNotification.getProduct_id())) {
-                handleNativePrePay(payNotification);
+                // Handle the request for the native pre-pay order
+                handleNativePrePayOrder(payNotification);
             }
         } else {
             logger.warn("The payment notification is invalid to be processed.");
@@ -78,50 +71,43 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
         return null;
     }
 
-    private void handleNativePrePay(PayNotification payNotification) {
-        String coins = getTotalPaidInCents(payNotification);
-        PayMchAPI payMchAPI = new PayMchAPI();
-        Unifiedorder unifiedorder = new Unifiedorder();
-        unifiedorder.setAppid(payNotification.getAppid());
-        unifiedorder.setMch_id(payNotification.getMch_id());
-        unifiedorder.setNonce_str(RandomStringUtils.random(32, true, true));
-        unifiedorder.setBody("荔园娃娃机代币【" + coins + "】个");
-        unifiedorder.setAttach("liyuanapp");
-        unifiedorder.setOut_trade_no("trade_" + TimeUtil.getCurrentDateTime().getTime());
-        unifiedorder.setTotal_fee(Figure.COIN_TO_MONEY.calculate(Integer.valueOf(coins)).toString());
-        unifiedorder.setNotify_url(CoreCenterHost.getHttpURL(CoreCenterHost.WECHAT_PAYMENT_NOTIFICATION_CALLBACK_URL));
-        unifiedorder.setOpenid(payNotification.getOpenid());
-        unifiedorder.setTrade_type("NATIVE");
-        unifiedorder.setDevice_info("ATM001");
-        unifiedorder.setSign(SignatureUtil.generateSign(MapUtil.order(MapUtil.objectToMap(unifiedorder)), "wawaonline20150101wechatpaybilly"));
+    private void handleNativePrePayOrder(PayNotification payNotification) {
+        if (NativePrePayOrderService.isParamEnough(payNotification)) {
 
-        UnifiedorderResult result = payMchAPI.payUnifiedorder(unifiedorder);
+            // Convert the parameters in qr code to the fields, the following fields could not be empty.
+            Map<String, String> product = ParameterUtil.extractParam(payNotification.getProduct_id());
+            String appId = ParameterUtil.NativePrePayOrder.extractAppId(product);
+            String coins = ParameterUtil.NativePrePayOrder.extractCoins(product);
+            String deviceId = ParameterUtil.NativePrePayOrder.extractDeviceId(product);
+            String money = ParameterUtil.NativePrePayOrder.extractMoney(product);
 
-        PayNotification returnInfo = new PayNotification();
-        returnInfo.setReturn_code("SUCCESS");
-        returnInfo.setAppid(result.getAppid());
-        returnInfo.setMch_id(result.getMch_id());
-        returnInfo.setNonce_str(result.getNonce_str());
-        returnInfo.setPrepay_id(result.getPrepay_id());
-        returnInfo.setResult_code("SUCCESS");
+            if (!ParameterUtil.hasEmptyParam(appId, coins, deviceId, money)) {
+                // Supply the field into payNotification object for further request
+                payNotification.setDevice_info(deviceId);
+                payNotification.setAttach(appId);
+                payNotification.setTotal_fee(String.valueOf(Figure.COIN_TO_MONEY.calculate(Integer.valueOf(money))));
+                AppProfile appProfile = profileManager.getAppProfile(appId);
+                // Request the native pre-pay order response content(xml)
+                String content = nativePrePayOrderService.requestPrePayOrder(payNotification, appProfile, Integer.valueOf(coins));
+                // return the pre-pay order result to the requester
+                returnWechatResponse(content);
 
-        Map map = MapUtil.order(MapUtil.objectToMap(returnInfo));
-        returnInfo.setSign(SignatureUtil.generateSign(map, "wawaonline20150101wechatpaybilly"));
-
-        String responseXML = XMLConverUtil.convertToXML(returnInfo);
-        returnWechatResponse(responseXML);
-    }
-
-    private String getTotalPaidInCents(PayNotification payNotification) {
-        String amount = ParameterUtil.extractParam(payNotification.getProduct_id()).get(CommonConstants.Payment.AMOUNT_IN_CENT);
-        return StringUtils.isNotEmpty(amount) ? amount : payNotification.getProduct_id().substring(payNotification.getProduct_id().length() - 1);
+            } else {
+                logger.warn("Insufficiency info for the native prepay order. appId = {}, coins = {}, deviceId = {}, money={}",
+                        appId, coins, deviceId, money);
+            }
+        }
     }
 
     private void handlePaidNotification(PayNotification payNotification) throws URISyntaxException {
-        String appId = payNotification.getAttach();
+        // Get the appId from the attach field of payNotification
+        Map attachMap = ParameterUtil.extractParam(payNotification.getAttach());
+        String appId = ParameterUtil.NativePrePayOrder.extractAppId(attachMap);
+        int coins = Integer.valueOf(ParameterUtil.NativePrePayOrder.extractCoins(attachMap));
         wechatProfile = profileManager.getAppProfile(appId).getWechatProfile();
         boolean isValidMsg = false;
 
+        // Verify the response is successful or not
         if (payNotification.getReturn_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
             if (payNotification.getResult_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
                 isValidMsg = !isPaymentProcessed(payNotification);
@@ -139,7 +125,7 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
         if (isValidMsg) {
             logger.info("Received success payment with amount {} for user({})", payNotification.getTotal_fee(), payNotification.getOpenid());
             paymentLogger.info(payNotification.toString());
-            boolean isSuccess = topupCoins(payNotification.getOut_trade_no(), getChargeCoinNum(payNotification, Figure.MONEY_TO_COIN, Figure.BUY_1_GET_1_FREE));
+            boolean isSuccess = topupCoins(payNotification.getOut_trade_no(), coins);
             logger.info("Top up result is: {}", isSuccess);
             if (isSuccess) {
                 globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());

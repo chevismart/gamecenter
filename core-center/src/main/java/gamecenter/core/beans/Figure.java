@@ -5,6 +5,8 @@ package gamecenter.core.beans;
  */
 public interface Figure {
 
+    public static Figure[] EMPTY_FIGURE = new Figure[]{};
+
     public static Figure MONEY_TO_COIN = new Figure() {
         @Override
         public Integer calculate(int base) {

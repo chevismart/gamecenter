@@ -1,11 +1,10 @@
 package gamecenter.core.processors.wechat;
 
-import gamecenter.core.beans.AppProfile;
-import gamecenter.core.beans.CoreCenterHost;
-import gamecenter.core.beans.GlobalPaymentBean;
-import gamecenter.core.beans.UserProfile;
+import com.opensymphony.xwork2.ActionSupport;
+import gamecenter.core.beans.*;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.processors.AbstractTopupProcessor;
+import gamecenter.core.utils.ParameterUtil;
 import gamecenter.core.utils.ProfileUtil;
 import gamecenter.core.utils.TimeUtil;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -18,6 +17,8 @@ import weixin.popular.util.PayUtil;
 import weixin.popular.util.SignatureUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Chevis on 2014/12/25.
@@ -51,7 +52,13 @@ public class WechatPayOrderProcessor extends AbstractTopupProcessor {
             unifiedorder.setNotify_url(CoreCenterHost.getHttpURL(CoreCenterHost.WECHAT_PAYMENT_NOTIFICATION_CALLBACK_URL));
             unifiedorder.setTrade_type("NATIVE");
             unifiedorder.setOpenid(wechatOpenId);
-            unifiedorder.setAttach(appProfile.getAppId());
+
+            Map attachMap = new HashMap();
+            attachMap.put(ParameterUtil.NativePrePayOrder.COINS, Figure.MONEY_TO_COIN.calculate(getChargeAmount()));
+            attachMap.put(ParameterUtil.NativePrePayOrder.APPID, appProfile.getAppId());
+            String attach = ParameterUtil.zipParam(attachMap);
+
+            unifiedorder.setAttach(attach);
             unifiedorder.setDevice_info("ATM001");
             unifiedorder.setSign(SignatureUtil.generateSign(MapUtil.order(MapUtil.objectToMap(unifiedorder, StringUtils.EMPTY)), wechatProfile.getPayKey()));
 

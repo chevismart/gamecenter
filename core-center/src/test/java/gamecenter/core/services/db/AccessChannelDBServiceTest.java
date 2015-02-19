@@ -33,7 +33,7 @@ public class AccessChannelDBServiceTest {
 
     @Test
     public void retrieveAccessChannelIdSuccessfully() throws Exception {
-        String channelId = "WECHAT";
+        String channelId = "1";
         String channel = accessChannelDBService.getAccessChannel(channelId);
         System.err.println(channel);
         assertNotNull(channel);

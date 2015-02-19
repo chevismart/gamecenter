@@ -26,4 +26,8 @@ public class CommonConstants {
     public static final String SUCCESS = "SUCCESS";
     public static final String FAIL = "FAIL";
 
+    public static class Payment {
+        public static final String AMOUNT_IN_CENT = "amount";
+    }
+
 }

@@ -65,6 +65,11 @@
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
     </bean>
 
+    <bean id="appProfileDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="gamecenter.core.dao.AppProfileDao"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
     <bean id="accessChannelDBService" class="gamecenter.core.services.db.AccessChannelDBService">
         <property name="accessChannelDao" ref="accessChannelDao"/>
     </bean>

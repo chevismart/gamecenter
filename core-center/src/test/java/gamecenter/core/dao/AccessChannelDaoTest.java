@@ -5,18 +5,16 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.Reader;
-import java.util.List;
 
 public class AccessChannelDaoTest {
 
     private AccessChannelDBService accessChannelDBService;
 
-    @Test
+    //    @Test
     public void retrieveAllAccessChannelFromDB() throws Exception {
 
         //这里获取spring总配置文件
@@ -32,7 +30,7 @@ public class AccessChannelDaoTest {
         SqlSession session = factory.openSession();
         AccessChannelDao accessChannelDao = session.getMapper(AccessChannelDao.class);
 
-        List<String> users = accessChannelDao.selectAll();
+//        List<String> users = accessChannelDao.selectAll();
 
 
     }

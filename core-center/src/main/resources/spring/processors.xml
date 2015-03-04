@@ -73,6 +73,10 @@
         <property name="profileManager" ref="profileManager"/>
     </bean>
 
+    <bean id="deviceRegistryProcessor" class="gamecenter.core.processors.devices.DeviceRegistryProcessor">
+
+    </bean>
+
     <!-- Intercepters -->
     <bean id="accessControl" class="gamecenter.core.intercepters.AccessControlIntercepter">
         <property name="userProfile" ref="userProfile"/>

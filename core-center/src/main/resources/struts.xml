@@ -37,7 +37,9 @@
     </package>
 
     <package name="authenticPackage" extends="authentic">
-
+        <action name="" class="deviceRegistryProcessor">
+            <result name="success" type="dispatcher">/jsp/center/deviceRegistry.jsp</result>
+        </action>
     </package>
 
     <package name="authPackage" extends="common-global">
@@ -80,7 +82,6 @@
         <action name="paidNotifyProcessor" class="paidNotifyProcessor">
             <result name="success" type="dispatcher">/jsp/payment/charge.jsp</result>
         </action>
-
 
         <action name="wechatOrder" class="wechatPayOrderProcessor">
             <result name="success" type="dispatcher">/jsp/payment/charge.jsp</result>

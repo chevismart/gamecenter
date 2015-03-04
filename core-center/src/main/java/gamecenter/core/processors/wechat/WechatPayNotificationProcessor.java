@@ -1,8 +1,7 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.ActionContext;
-import gamecenter.core.beans.GlobalPaymentBean;
-import gamecenter.core.beans.UserProfile;
+import gamecenter.core.beans.CoreCenterHost;
 import gamecenter.core.beans.wechat.PayNotification;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.constants.CommonConstants;
@@ -33,7 +32,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,83 +44,61 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
 
     Logger paymentLogger = LoggerFactory.getLogger("wechatPaymentLogger");
     ProfileManager profileManager;
-    GlobalPaymentBean globalPaymentBean;
     WechatProfile wechatProfile;
-    private UserProfile userProfile;
 
     @Override
     public String execute() throws Exception {
-        HttpServletRequest request = getHttpRequest();
-        InputStream inputStream = request.getInputStream();
-        String xml = IOUtils.toString(inputStream);
-        logger.debug("Received pay notification xml: {}", xml);
-        PayNotification payNotification = XMLConverUtil.convertToObject(PayNotification.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
-// TODO: handle the duplicate notification case
-        if (StringUtils.isNotEmpty(payNotification.getAttach())) {
-            String appId = payNotification.getAttach();
-            wechatProfile = profileManager.getAppProfile(appId).getWechatProfile();
-            boolean isValidMsg = false;
-
-            if (payNotification.getReturn_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
-                if (payNotification.getResult_code().toUpperCase().equals(CommonConstants.SUCCESS.toUpperCase())) {
-                    isValidMsg = verifySign(payNotification) && !isPaymentProcessed(payNotification);
-                } else {
-                    logger.warn("Payment notification with error: ({}={}) \n Error Details: {}",
-                            payNotification.getErr_code(),
-                            payNotification.getErr_code_des(),
-                            payNotification.toString());
-                }
-
-            } else {
-                logger.warn("Received a failure payment notification with the error: {}", payNotification.getReturn_msg());
+        String nextStep = StringUtils.EMPTY;
+        PayNotification payNotification = getPayNotification();
+        if (verifySign(payNotification)) {
+            if (StringUtils.isNotEmpty(payNotification.getAttach())) {
+                // Handle the request for the common paid notification.
+                nextStep = CommonConstants.ACCESS_ROUTER_PAID_NOTIFY;
+            } else if (StringUtils.isNotEmpty(payNotification.getProduct_id())) {
+                // Handle the request for the native pre-pay order
+                nextStep = CommonConstants.ACCESS_ROUTER_PREPAY_ORDER;
             }
-
-            if (isValidMsg) {
-                logger.info("Received success payment with amount {} for user({})", payNotification.getTotal_fee(), payNotification.getOpenid());
-                paymentLogger.info(payNotification.toString());
-                boolean isSuccess = topupCoins(payNotification.getOut_trade_no(), getChargeCoinNum(payNotification)); // TODO: calculate the topup amount
-
-                if (isSuccess) {
-                    globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
-                    globalPaymentBean.getSettledPayments().put(payNotification.getOut_trade_no(), payNotification);
-                }
-                replayWechatForPayNotification(isSuccess);
-            } else {
-                replayWechatForPayNotification(isValidMsg);
-            }
+        } else {
+            logger.warn("The payment notification is invalid to be processed.");
         }
-        return null;
+        logger.info("The next step is {}", nextStep);
+        return nextStep;
     }
 
-    private int getChargeCoinNum(PayNotification payNotification) {
-        return Integer.valueOf(payNotification.getTotal_fee());
-//        return Integer.valueOf(payNotification.getTotal_fee()) / 1000;
+    protected PayNotification getPayNotification() throws IOException {
+        String xml = IOUtils.toString(getHttpRequest().getInputStream());
+        PayNotification payNotification;
+        if (StringUtils.isNotEmpty(xml)) {
+            logger.debug("Received pay notification xml: {}", xml);
+            payNotification = XMLConverUtil.convertToObject(PayNotification.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
+            logger.info("Converted payment notification is: {}", payNotification.toString());
+            getHttpRequest().setAttribute("Paynotification", payNotification);
+        } else {
+            payNotification = (PayNotification) getHttpRequest().getAttribute("Paynotification");
+            logger.info("Retrieve the pay notification from http request.");
+        }
+        return payNotification;
     }
 
-    protected boolean isPaymentProcessed(PayNotification payNotification) {
-        String payNotificationId = payNotification.getOut_trade_no();
-        return !globalPaymentBean.getUnSettlementPayments().keySet().contains(payNotificationId) &&
-                globalPaymentBean.getSettledPayments().keySet().contains(payNotificationId);
-    }
 
-    private void replayWechatForPayNotification(boolean isSuccess) {
-        PayNotification payNotification = new PayNotification();
-        payNotification.setReturn_code(isSuccess ? CommonConstants.SUCCESS : CommonConstants.FAIL);
+    protected void returnWechatResponse(String content) {
         try {
             ServletOutputStream os = getHttpResponse().getOutputStream();
-            String responseXML = XMLConverUtil.convertToXML(payNotification);
-            logger.info("Payment notification response: {}", responseXML);
-            os.write(responseXML.getBytes());
+            getHttpResponse().setStatus(HttpServletResponse.SC_OK);
+            logger.info("Return notification response: {}", content);
+            os.write(content.getBytes());
             os.flush();
             os.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Return wechat response with error: {}", e.getMessage());
         }
     }
 
     protected boolean topupCoins(String tradeNum, int coins) throws URISyntaxException {
 
         // TODO: Enhance the dynamic way to construct the parameter...
+
+        logger.info("Ready to top up coin.");
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("CENTER_ID", "00000000"));
@@ -137,8 +113,8 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
 
         HttpUriRequest httpUriRequest = RequestBuilder.get()
                 .setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString()))
-                .setUri(URIUtils.createURI("http", "www.ruijunhao.com", 80,
-                        "/test/fronter.php", param, null))
+                .setUri(URIUtils.createURI("http", CoreCenterHost.CORECENTER_HOST, 8003,
+                        "/", param, null))
                 .build();
 
         HttpResponse response = LocalHttpClient.execute(httpUriRequest);
@@ -147,22 +123,25 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
             json = EntityUtils.toString(response.getEntity());
         } catch (IOException e) {
             e.printStackTrace();
+            logger.error(e.getMessage());
         }
-        System.err.println(json);
+        logger.info("Topup result is: {}", json);
         return true;
     }
 
     private boolean verifySign(PayNotification payNotification) {
         String sign = payNotification.getSign();
+        logger.info("Sign is {}", sign);
         Map<String, String> valueableMap = MapUtil.order(MapUtil.objectToMap(payNotification));
+        logger.info("valuable map is {}", valueableMap);
         String validationSign = SignatureUtil.generateSign(MapUtil.order(CollectionUtils.removeEmptyValueEntry(valueableMap)),
-                wechatProfile.getPayKey());
-        return sign.equals(validationSign);
+                profileManager.findAppProfileByWechatId(payNotification.getAppid()).getWechatProfile().getPayKey());
+        logger.info("Generated sign is {}", validationSign);
+        return StringUtils.isNotEmpty(sign) && sign.equals(validationSign);
     }
 
     protected HttpServletRequest getHttpRequest() {
         return (HttpServletRequest) ActionContext.getContext().get(StrutsStatics.HTTP_REQUEST);
-
     }
 
     protected HttpServletResponse getHttpResponse() {
@@ -175,22 +154,6 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
 
     public void setProfileManager(ProfileManager profileManager) {
         this.profileManager = profileManager;
-    }
-
-    public UserProfile getUserProfile() {
-        return userProfile;
-    }
-
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
-
-    public GlobalPaymentBean getGlobalPaymentBean() {
-        return globalPaymentBean;
-    }
-
-    public void setGlobalPaymentBean(GlobalPaymentBean globalPaymentBean) {
-        this.globalPaymentBean = globalPaymentBean;
     }
 }
 

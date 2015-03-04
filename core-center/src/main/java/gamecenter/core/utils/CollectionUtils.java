@@ -10,6 +10,8 @@ import java.util.Map;
  */
 public class CollectionUtils {
 
+    public static Map<String, String> EMPTY_MAP = new HashMap<String, String>();
+
     public static Map<String, String> removeEmptyValueEntry(Map<String, String> oriMap) {
         Map<String, String> newMap = new HashMap<String, String>();
         for (Map.Entry<String, String> entry : oriMap.entrySet()) {

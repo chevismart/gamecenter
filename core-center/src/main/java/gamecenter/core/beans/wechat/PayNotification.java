@@ -76,6 +76,49 @@ public class PayNotification {
     @XmlElement(name = "time_end")
     private String time_end;
 
+    @XmlElement(name = "prepay_id")
+    private String prepay_id;
+
+    @XmlElement(name = "product_id")
+    private String product_id;
+
+    @Override
+    public String toString() {
+        return "PayNotification{" +
+                "return_code='" + return_code + '\'' +
+                ", return_msg='" + return_msg + '\'' +
+                ", appid='" + appid + '\'' +
+                ", mch_id='" + mch_id + '\'' +
+                ", device_info='" + device_info + '\'' +
+                ", nonce_str='" + nonce_str + '\'' +
+                ", sign='" + sign + '\'' +
+                ", result_code='" + result_code + '\'' +
+                ", err_code='" + err_code + '\'' +
+                ", err_code_des='" + err_code_des + '\'' +
+                ", openid='" + openid + '\'' +
+                ", is_subscribe='" + is_subscribe + '\'' +
+                ", trade_type='" + trade_type + '\'' +
+                ", bank_type='" + bank_type + '\'' +
+                ", total_fee='" + total_fee + '\'' +
+                ", cash_fee='" + cash_fee + '\'' +
+                ", fee_type='" + fee_type + '\'' +
+                ", transaction_id='" + transaction_id + '\'' +
+                ", out_trade_no='" + out_trade_no + '\'' +
+                ", attach='" + attach + '\'' +
+                ", time_end='" + time_end + '\'' +
+                ", prepay_id='" + prepay_id + '\'' +
+                ", product_id='" + product_id + '\'' +
+                '}';
+    }
+
+    public String getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(String product_id) {
+        this.product_id = product_id;
+    }
+
     public String getReturn_code() {
         return return_code;
     }
@@ -196,33 +239,6 @@ public class PayNotification {
         this.total_fee = total_fee;
     }
 
-    @Override
-    public String toString() {
-        return "PayNotification{" +
-                "return_code='" + return_code + '\'' +
-                ", return_msg='" + return_msg + '\'' +
-                ", appid='" + appid + '\'' +
-                ", mch_id='" + mch_id + '\'' +
-                ", device_info='" + device_info + '\'' +
-                ", nonce_str='" + nonce_str + '\'' +
-                ", sign='" + sign + '\'' +
-                ", result_code='" + result_code + '\'' +
-                ", err_code='" + err_code + '\'' +
-                ", err_code_des='" + err_code_des + '\'' +
-                ", openid='" + openid + '\'' +
-                ", isSubscribe='" + is_subscribe + '\'' +
-                ", trade_type='" + trade_type + '\'' +
-                ", bank_type='" + bank_type + '\'' +
-                ", total_fee=" + total_fee +
-                ", cash_fee='" + cash_fee + '\'' +
-                ", fee_type='" + fee_type + '\'' +
-                ", transaction_id='" + transaction_id + '\'' +
-                ", out_trade_no='" + out_trade_no + '\'' +
-                ", attach='" + attach + '\'' +
-                ", time_end='" + time_end + '\'' +
-                '}';
-    }
-
     public String getCash_fee() {
         return cash_fee;
     }
@@ -269,5 +285,13 @@ public class PayNotification {
 
     public void setTime_end(String time_end) {
         this.time_end = time_end;
+    }
+
+    public String getPrepay_id() {
+        return prepay_id;
+    }
+
+    public void setPrepay_id(String prepay_id) {
+        this.prepay_id = prepay_id;
     }
 }

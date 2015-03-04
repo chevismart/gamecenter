@@ -10,6 +10,7 @@ import weixin.popular.util.MapUtil;
 import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.XMLConverUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
@@ -90,5 +91,33 @@ public class WechatPayNotificationProcessorTest {
         payNotification.setReturn_code(true ? CommonConstants.SUCCESS : CommonConstants.FAIL);
         String xml = XMLConverUtil.convertToXML(payNotification);
         assertEquals(excepted, xml);
+    }
+
+    @Test
+    public void testName() throws Exception {
+
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("appid", "wxe89a9d2fa17df80f");
+        map.put("nonce_str", "cb4e85bf-5997-4a44-8121-63882d197ffa");
+        map.put("mch_id", "1224905202");
+        map.put("product_id", "A:liyuanapp,C:10,D:ATM001,M:5");
+        map.put("time_stamp", "1424238603");
+
+        String sign = SignatureUtil.generateSign(MapUtil.order(map), "wawaonline20150101wechatpaybilly");
+        System.err.println(sign);
+        String str = "adsafa1";
+        System.err.println(str.substring(str.length() - 1));
+
+        String xml = "<xml><appid><![CDATA[wxe89a9d2fa17df80f]]></appid>\n" +
+                "<openid><![CDATA[oJpyYuBcMmRKmVCt6AaAKN9EDGac]]></openid>\n" +
+                "<mch_id><![CDATA[1224905202]]></mch_id>\n" +
+                "<is_subscribe><![CDATA[Y]]></is_subscribe>\n" +
+                "<nonce_str><![CDATA[9wFN4fBogvLPKC3s]]></nonce_str>\n" +
+                "<product_id><![CDATA[liyuan1]]></product_id>\n" +
+                "<sign><![CDATA[ED1193A049D55D4482A18764CCEF44AD]]></sign>\n" +
+                "</xml>";
+        PayNotification payNotification = XMLConverUtil.convertToObject(PayNotification.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
+
+        System.err.println(payNotification.getProduct_id());
     }
 }

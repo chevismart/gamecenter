@@ -48,6 +48,16 @@ public class ProfileManager {
         return appProfile;
     }
 
+    public AppProfile findAppProfileByWechatId(String appId) {
+        for (Map.Entry<String, AppProfile> entry : profiles.entrySet()) {
+            AppProfile appProfile = entry.getValue();
+            if (appProfile.isWechatProfileValid() &&
+                    appProfile.getWechatProfile().getWechatAppId().equals(appId))
+                return appProfile;
+        }
+        return null;
+    }
+
     public void addWechatProfile(String appId, String wechatAppId, String wechatAppSecret, String mchid, String payKey) {
 
         WechatProfile wechatProfile = WechatProfileBuilder.newBuilder()

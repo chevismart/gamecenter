@@ -2,9 +2,8 @@ package gamecenter.core.services.wechat;
 
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.beans.wechat.WechatProfile;
+import gamecenter.core.services.Service;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import weixin.popular.api.SnsAPI;
 import weixin.popular.api.UserAPI;
 import weixin.popular.bean.SnsToken;
@@ -13,9 +12,8 @@ import weixin.popular.bean.User;
 /**
  * Created by Chevis on 2014/12/15.
  */
-public class SnsAuthService {
+public class SnsAuthService extends Service {
     private static boolean IS_USER_INFO_CACHED = false;
-    Logger logger = LoggerFactory.getLogger(this.getClass());
     private SnsAPI wechatSnsApi;
     private UserAPI userAPI;
 

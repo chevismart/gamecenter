@@ -9,6 +9,7 @@ import gamecenter.core.services.wechat.SnsAuthService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.slf4j.Logger;
@@ -20,7 +21,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -202,5 +202,12 @@ public class ProfileManagerTest {
         User user = profileManager.getUserInfo(appId, code, Locale.CHINA);
 
         verify(logger, only()).warn(contains("not found"), eq(appId));
+    }
+
+    @Test
+    @Ignore
+    public void findAppProfileByWechatAppId() throws Exception {
+        //TODO implement here
+
     }
 }

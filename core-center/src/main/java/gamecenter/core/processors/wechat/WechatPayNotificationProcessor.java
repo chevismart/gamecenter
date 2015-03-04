@@ -61,14 +61,22 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
         } else {
             logger.warn("The payment notification is invalid to be processed.");
         }
+        logger.info("The next step is {}", nextStep);
         return nextStep;
     }
 
     protected PayNotification getPayNotification() throws IOException {
         String xml = IOUtils.toString(getHttpRequest().getInputStream());
-        logger.debug("Received pay notification xml: {}", xml);
-        PayNotification payNotification = XMLConverUtil.convertToObject(PayNotification.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
-        logger.info("Converted payment notification is: {}", payNotification.toString());
+        PayNotification payNotification;
+        if (StringUtils.isNotEmpty(xml)) {
+            logger.debug("Received pay notification xml: {}", xml);
+            payNotification = XMLConverUtil.convertToObject(PayNotification.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
+            logger.info("Converted payment notification is: {}", payNotification.toString());
+            getHttpRequest().setAttribute("Paynotification", payNotification);
+        } else {
+            payNotification = (PayNotification) getHttpRequest().getAttribute("Paynotification");
+            logger.info("Retrieve the pay notification from http request.");
+        }
         return payNotification;
     }
 
@@ -123,9 +131,12 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
 
     private boolean verifySign(PayNotification payNotification) {
         String sign = payNotification.getSign();
+        logger.info("Sign is {}", sign);
         Map<String, String> valueableMap = MapUtil.order(MapUtil.objectToMap(payNotification));
+        logger.info("valuable map is {}", valueableMap);
         String validationSign = SignatureUtil.generateSign(MapUtil.order(CollectionUtils.removeEmptyValueEntry(valueableMap)),
-                wechatProfile.getPayKey());
+                profileManager.findAppProfileByWechatId(payNotification.getAppid()).getWechatProfile().getPayKey());
+        logger.info("Generated sign is {}", validationSign);
         return StringUtils.isNotEmpty(sign) && sign.equals(validationSign);
     }
 

@@ -1,6 +1,8 @@
 package gamecenter.core.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,7 @@ public class ParameterUtil {
 
     public static final String SEPERATOR = ",";
     public static final String COLON = ":";
+    private static Logger logger = LoggerFactory.getLogger(ParameterUtil.class);
 
     public static Map<String, String> extractParam(String paramStr) {
         String params[] = paramStr.split(SEPERATOR);
@@ -26,7 +29,7 @@ public class ParameterUtil {
     public static String zipParam(Map<String, String> map) {
         String result = StringUtils.EMPTY;
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            String keyValuePair = StringUtils.join(new String[]{entry.getKey(), entry.getValue()}, COLON);
+            String keyValuePair = StringUtils.join(new String[]{entry.getKey(), String.valueOf(entry.getValue())}, COLON);
 
             result = StringUtils.isEmpty(result) ? keyValuePair :
                     StringUtils.join(new String[]{result, keyValuePair}, SEPERATOR);
@@ -38,17 +41,20 @@ public class ParameterUtil {
 
     public static boolean hasEmptyParam(String... params) {
         for (String param : params) {
-            if (StringUtils.isEmpty(param)) return true;
+            if (StringUtils.isEmpty(param)) {
+                logger.warn("There is empty param for checking: {}", params);
+                return true;
+            }
         }
         return false;
     }
 
     public static class NativePrePayOrder {
 
-        public static String APPID = "APPID";
-        public static String COINS = "COINS";
-        public static String DEVICE = "DEVICE";
-        public static String MONEY = "MONEY";
+        public static String APPID = "A"; // APPID
+        public static String COINS = "C"; // COINS
+        public static String DEVICE = "D"; // DEVICE
+        public static String MONEY = "M"; // MONEY
 
         public static String extractAppId(Map<String, String> map) {
             return map.get(APPID);

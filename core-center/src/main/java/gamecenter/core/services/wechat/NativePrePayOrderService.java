@@ -48,22 +48,24 @@ public class NativePrePayOrderService extends Service {
 
         String result = StringUtils.EMPTY;
 
+        logger.info("Requesting pre-pay order.");
+
         if (isParamEnough(payNotification)) {
 
-            String payKey = appProfile.getWechatProfile().getPayKey();
+            logger.info("Parameters are enough for the order");
 
+            Map attachMap = new HashMap();
+            attachMap.put(ParameterUtil.NativePrePayOrder.COINS, String.valueOf(coins));
+            attachMap.put(ParameterUtil.NativePrePayOrder.APPID, appProfile.getAppId());
+            String attach = ParameterUtil.zipParam(attachMap);
+            logger.info("The attach value is {}", attach);
+
+            String payKey = appProfile.getWechatProfile().getPayKey();
             Unifiedorder unifiedorder = new Unifiedorder();
             unifiedorder.setAppid(payNotification.getAppid());
             unifiedorder.setMch_id(payNotification.getMch_id());
             unifiedorder.setNonce_str(RandomStringUtils.random(32, true, true));
             unifiedorder.setBody(appProfile.getAppName() + "娃娃机代币【" + coins + "】个");
-
-            Map attachMap = new HashMap();
-            attachMap.put(ParameterUtil.NativePrePayOrder.COINS, coins);
-            attachMap.put(ParameterUtil.NativePrePayOrder.APPID, appProfile.getAppId());
-            String attach = ParameterUtil.zipParam(attachMap);
-
-
             unifiedorder.setAttach(attach);
             unifiedorder.setOut_trade_no("trade_" + TimeUtil.getCurrentDateTime().getTime());
             unifiedorder.setTotal_fee(payNotification.getTotal_fee());
@@ -74,7 +76,7 @@ public class NativePrePayOrderService extends Service {
             unifiedorder.setSign(SignatureUtil.generateSign(MapUtil.order(MapUtil.objectToMap(unifiedorder)), payKey));
 
             UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder);
-
+            logger.info("the pre-pay id is", unifiedorderResult.getPrepay_id());
             PayNotification returnInfo = new PayNotification();
             returnInfo.setReturn_code(CommonConstants.SUCCESS);
             returnInfo.setAppid(unifiedorderResult.getAppid());
@@ -85,7 +87,7 @@ public class NativePrePayOrderService extends Service {
             Map map = MapUtil.order(MapUtil.objectToMap(returnInfo));
 
             returnInfo.setSign(SignatureUtil.generateSign(map, payKey));
-
+            logger.info("Final return pay notification is {}", payNotification);
             result = XMLConverUtil.convertToXML(returnInfo);
 
         } else {

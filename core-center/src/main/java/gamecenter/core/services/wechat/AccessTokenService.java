@@ -85,7 +85,7 @@ public class AccessTokenService extends Service {
             // TODO: enhance here for the hard code host and port
             httpUriRequest = RequestBuilder.get()
                     .setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString()))
-                    .setUri(URIUtils.createURI("http", "localhost", 8080,
+                    .setUri(URIUtils.createURI("http", "wawaonline.net", 8080,
                             "/credential", param, null))
                     .build();
         } catch (URISyntaxException e) {

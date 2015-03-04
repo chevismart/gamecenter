@@ -18,6 +18,8 @@ public class NativePrePayProcessor extends WechatPayNotificationProcessor {
     @Override
     public String execute() throws Exception {
 
+        logger.info("{} start!", this.getClass().getSimpleName());
+
         PayNotification payNotification = getPayNotification();
 
         if (NativePrePayOrderService.isParamEnough(payNotification)) {
@@ -29,13 +31,17 @@ public class NativePrePayProcessor extends WechatPayNotificationProcessor {
             String deviceId = ParameterUtil.NativePrePayOrder.extractDeviceId(product);
             String money = ParameterUtil.NativePrePayOrder.extractMoney(product);
 
+            logger.info("Extracted params are: appId = {}, coins = {}, deviceId = {}, money = {}",
+                    appId, coins, deviceId, money);
+
             if (!ParameterUtil.hasEmptyParam(appId, coins, deviceId, money)) {
                 // Supply the field into payNotification object for further request
                 payNotification.setDevice_info(deviceId);
                 payNotification.setAttach(appId);
                 payNotification.setTotal_fee(String.valueOf(Figure.COIN_TO_MONEY.calculate(Integer.valueOf(money))));
-                AppProfile appProfile = profileManager.getAppProfile(appId);
+                AppProfile appProfile = profileManager.findAppProfileByWechatId(payNotification.getAppid());
                 // Request the native pre-pay order response content(xml)
+                logger.info("Prepared pay notification object is: {}", payNotification);
                 String content = nativePrePayOrderService.requestPrePayOrder(payNotification, appProfile, Integer.valueOf(coins));
                 // return the pre-pay order result to the requester
                 returnWechatResponse(content);
@@ -46,6 +52,7 @@ public class NativePrePayProcessor extends WechatPayNotificationProcessor {
             }
         }
 
+        logger.info("{} end!", this.getClass().getSimpleName());
 
         return null;
     }

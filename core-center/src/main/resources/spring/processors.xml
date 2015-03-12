@@ -41,6 +41,10 @@
         <property name="profileManager" ref="profileManager"/>
     </bean>
 
+    <bean id="webLoginProcessor" class="gamecenter.core.processors.web.WebLoginProcessor">
+        <property name="userProfile" ref="userProfile"/>
+    </bean>
+
     <bean id="wechatLoginProcessor" class="gamecenter.core.processors.wechat.WechatLoginProcessor">
         <property name="profileManager" ref="profileManager"/>
         <property name="userProfile" ref="userProfile"/>

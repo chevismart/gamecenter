@@ -56,6 +56,10 @@
             <result name="success" type="chain">welcome</result>
         </action>
 
+        <action name="login" class="webLoginProcessor">
+            <result name="success" type="chain">welcome</result>
+        </action>
+
         <action name="welcome" class="welcomeProcessor">
             <result name="success" type="dispatcher">/jsp/center/userProfile.jsp</result>
         </action>

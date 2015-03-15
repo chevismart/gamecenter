@@ -3,6 +3,7 @@ package gamecenter.core.processors.wechat;
 import gamecenter.core.beans.GlobalPaymentBean;
 import gamecenter.core.beans.wechat.PayNotification;
 import gamecenter.core.constants.CommonConstants;
+import gamecenter.core.services.CoinTopUpService;
 import gamecenter.core.utils.ParameterUtil;
 import weixin.popular.util.XMLConverUtil;
 
@@ -15,6 +16,8 @@ public class PaidNotificationProcessor extends WechatPayNotificationProcessor {
 
 
     GlobalPaymentBean globalPaymentBean;
+
+    CoinTopUpService coinTopUpService = new CoinTopUpService();
 
     @Override
     public String execute() throws Exception {
@@ -46,7 +49,7 @@ public class PaidNotificationProcessor extends WechatPayNotificationProcessor {
         if (isValidMsg) {
             logger.info("Received success payment with amount {} for user({})", payNotification.getTotal_fee(), payNotification.getOpenid());
             paymentLogger.info(payNotification.toString());
-            boolean isSuccess = topupCoins(payNotification.getOut_trade_no(), coins);
+            boolean isSuccess = coinTopUpService.topupCoins(coins);
             logger.info("Top up result is: {}", isSuccess);
             if (isSuccess) {
                 globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
@@ -54,16 +57,16 @@ public class PaidNotificationProcessor extends WechatPayNotificationProcessor {
                 logger.info(globalPaymentBean.getSettledPayments().toString());
                 logger.info(globalPaymentBean.getUnSettlementPayments().toString());
             }
-            replayWechatForPayNotification(isSuccess);
+            replyWechatForPayNotification(isSuccess);
         } else {
-            replayWechatForPayNotification(isValidMsg);
+            replyWechatForPayNotification(isValidMsg);
         }
 
 
         return super.execute();
     }
 
-    private void replayWechatForPayNotification(boolean isSuccess) {
+    private void replyWechatForPayNotification(boolean isSuccess) {
         PayNotification payNotification = new PayNotification();
         payNotification.setReturn_code(isSuccess ? CommonConstants.SUCCESS : CommonConstants.FAIL);
         String responseXML = XMLConverUtil.convertToXML(payNotification);

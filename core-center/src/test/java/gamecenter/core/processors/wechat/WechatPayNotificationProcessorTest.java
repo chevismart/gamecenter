@@ -100,7 +100,7 @@ public class WechatPayNotificationProcessorTest {
         map.put("appid", "wxe89a9d2fa17df80f");
         map.put("nonce_str", "cb4e85bf-5997-4a44-8121-63882d197ffa");
         map.put("mch_id", "1224905202");
-        map.put("product_id", "A:liyuanapp,C:10,D:ATM001,M:5");
+        map.put("product_id", "A:liyuanapp,C:2,D:ATM001,M:1");
         map.put("time_stamp", "1424238603");
 
         String sign = SignatureUtil.generateSign(MapUtil.order(map), "wawaonline20150101wechatpaybilly");

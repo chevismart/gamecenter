@@ -1,7 +1,6 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.ActionContext;
-import gamecenter.core.beans.CoreCenterHost;
 import gamecenter.core.beans.wechat.PayNotification;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.constants.CommonConstants;
@@ -9,21 +8,9 @@ import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.utils.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.entity.ContentType;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.apache.struts2.StrutsStatics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import weixin.popular.client.LocalHttpClient;
 import weixin.popular.util.MapUtil;
 import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.XMLConverUtil;
@@ -32,9 +19,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -92,41 +76,6 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
         } catch (IOException e) {
             logger.error("Return wechat response with error: {}", e.getMessage());
         }
-    }
-
-    protected boolean topupCoins(String tradeNum, int coins) throws URISyntaxException {
-
-        // TODO: Enhance the dynamic way to construct the parameter...
-
-        logger.info("Ready to top up coin.");
-
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("CENTER_ID", "00000000"));
-        params.add(new BasicNameValuePair("TOKEN", "tokenStr"));
-        params.add(new BasicNameValuePair("DATA_TYPE", "JSON"));
-        params.add(new BasicNameValuePair("REQ_TYPE", "TOP_UP"));
-        params.add(new BasicNameValuePair("MAC", "accf233b95f6"));
-        params.add(new BasicNameValuePair("TOP_UP_REFERENCE_ID", "ABCDEF3456"));
-        params.add(new BasicNameValuePair("TOP_UP_COIN_QTY", String.valueOf(coins)));
-        String param = URLEncodedUtils.format(params, "UTF-8");
-
-
-        HttpUriRequest httpUriRequest = RequestBuilder.get()
-                .setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString()))
-                .setUri(URIUtils.createURI("http", CoreCenterHost.CORECENTER_HOST, 8003,
-                        "/", param, null))
-                .build();
-
-        HttpResponse response = LocalHttpClient.execute(httpUriRequest);
-        String json = null;
-        try {
-            json = EntityUtils.toString(response.getEntity());
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-        }
-        logger.info("Topup result is: {}", json);
-        return true;
     }
 
     private boolean verifySign(PayNotification payNotification) {

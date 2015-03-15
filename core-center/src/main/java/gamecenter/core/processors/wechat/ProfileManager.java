@@ -6,12 +6,15 @@ import gamecenter.core.beans.builders.WechatProfileBuilder;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.services.wechat.AccessTokenService;
+import gamecenter.core.services.wechat.JsApiTicketService;
 import gamecenter.core.services.wechat.SnsAuthService;
 import gamecenter.core.utils.ProfileUtil;
 import gamecenter.core.utils.TimeUtil;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import weixin.popular.api.SnsAPI;
 import weixin.popular.api.TokenAPI;
 import weixin.popular.api.UserAPI;
@@ -29,6 +32,7 @@ public class ProfileManager {
     Logger logger = LoggerFactory.getLogger(this.getClass());
     AccessTokenService accessTokenService;
     SnsAuthService snsAuthService;
+    JsApiTicketService jsApiTicketService;
     private Map<String, AppProfile> profiles;
     private Boolean isHost;
 
@@ -36,6 +40,7 @@ public class ProfileManager {
         this.profiles = profiles;
         accessTokenService = new AccessTokenService(new TokenAPI());
         snsAuthService = new SnsAuthService(new SnsAPI(), new UserAPI());
+        jsApiTicketService = new JsApiTicketService();
     }
 
     public Map<String, AppProfile> getProfiles() {
@@ -91,6 +96,19 @@ public class ProfileManager {
                 accessTokenService.requestWechatAccessToken(appProfile) :
                 accessTokenService.requestWechatAccessTokenFromHost(appProfile);
     }
+    
+    public String requestWechatJsapiTicket(String appId) {
+        AppProfile appProfile = profiles.get(appId);
+        if (ProfileUtil.verifyAppProfile(appProfile)) {
+        	String jsApiTicket = jsApiTicketService.requestWechatJsApiTicket(appProfile);
+            appProfile.getWechatProfile().setWechatJsapiTicket(jsApiTicket);
+        } else {
+            logger.warn("AppId {} is invalid to be requested!", appId);
+            return null;
+        }
+        return appProfile.getWechatProfile().getWechatJsapiTicket();
+    }
+
 
     public User getUserInfo(String appId, String code, Locale locale) {
         User user = null;
@@ -106,7 +124,7 @@ public class ProfileManager {
 
     public void checkAndUpdateAllAccessToken() {
         for (AppProfile appProfile : profiles.values()) {
-            chevkWechatProfile(appProfile);
+			chevkWechatProfile(appProfile);
         }
     }
 
@@ -127,6 +145,18 @@ public class ProfileManager {
             String appId = appProfile.getAppId();
             logger.info("Updating wechat access token for appId {}", appId);
             requestWechatAccessToken(appId);
+        }
+        //检查jsapiticket是否过时
+        if (ProfileUtil.verifyAppProfile(appProfile) &&
+                appProfile.isWechatProfileValid() && (null == wechatProfile.getWechatAccessToken() ||
+                TimeUtil.isExpiry(TimeUtil.getCurrentDateTime(),
+                        TimeUtil.getExpiryDateTime(wechatProfile.getWechatJsapiTicketUpdateTime(),
+                        		CommonConstants.DEFAULT_WECHAT_JSAPI_TICKET_EXPIRY_TIME_IN_SECOND,
+                                CommonConstants.EXPIRY_SHIFT_PERIOD_IN_SECOND
+                        )))) {
+            String appId = appProfile.getAppId();
+            logger.info("Updating wechat jsapiTicket for appId {}", appId);
+            requestWechatJsapiTicket(appId);
         }
     }
 

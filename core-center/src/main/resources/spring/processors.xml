@@ -46,8 +46,20 @@
     </bean>
 
     <bean id="wechatLoginProcessor" class="gamecenter.core.processors.wechat.WechatLoginProcessor">
+        <property name="subscribeService" ref="subscribeService"/>
         <property name="profileManager" ref="profileManager"/>
         <property name="userProfile" ref="userProfile"/>
+    </bean>
+    
+    <bean id="wechatTryPlayProcessor" class="gamecenter.core.processors.wechat.WechatTryPlayProcessor">
+        <property name="subscribeService" ref="subscribeService"/>
+        <property name="userProfile" ref="userProfile"/>
+    </bean>
+    
+    <bean id="wechatScanProcessor" class="gamecenter.core.processors.wechat.WechatScanProcessor">
+        <property name="wechatJsConfigService" ref="wechatJsConfigService"/>
+        <property name="userProfile" ref="userProfile"/>
+        <property name="profileManager" ref="profileManager"/>
     </bean>
 
     <bean id="welcomeProcessor" class="gamecenter.core.processors.WelcomeProcessor">
@@ -88,5 +100,6 @@
 
     <!-- Task runner -->
     <bean id="cloudServer" class="gamecenter.core.processors.tasks.CloudServerLoader"/>
-
+	
+	
 </beans>

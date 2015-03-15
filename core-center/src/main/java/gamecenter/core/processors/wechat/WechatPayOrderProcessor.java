@@ -67,7 +67,7 @@ public class WechatPayOrderProcessor extends AbstractTopupProcessor {
             globalPaymentBean.getUnSettlementPayments().put(unifiedorder.getOut_trade_no(), unifiedorder.getOut_trade_no());
             getHttpResponse().sendRedirect(result.getCode_url());
 
-            tempJsonStr = PayUtil.generateMchPayJsRequestJson(result.getPrepay_id(), result.getAppid(), appProfile.getWechatProfile().getPayKey());
+            //tempJsonStr = PayUtil.generateMchPayJsRequestJson(result.getPrepay_id(), result.getAppid(), appProfile.getWechatProfile().getPayKey());
         } else {
             tempJsonStr = "Null String";
         }

@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-<<<<<<< HEAD
+    <
+    <
+    <
+    <
+    <
+    <
+    < HEAD
 
-=======
+    =======
     <typeAliases>
         <typeAlias alias="Center" type="gamecenter.core.domain.Center"/>
         <typeAlias alias="Customer" type="gamecenter.core.domain.Customer"/>
@@ -17,5 +23,5 @@
     <!--<mappers>-->
     <!--<mapper resource="mapper/AccessChannelDaoMapper.xml"/>-->
     <!--</mappers>-->
->>>>>>> dev
+    >>>>>>> dev
 </configuration>

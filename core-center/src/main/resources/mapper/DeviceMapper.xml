@@ -1,149 +1,149 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="gamecenter.core.dao.DeviceMapper" >
-  <resultMap id="BaseResultMap" type="Device" >
-    <id column="deviceId" property="deviceid" jdbcType="INTEGER" />
-    <result column="centerId" property="centerid" jdbcType="INTEGER" />
-    <result column="deviceName" property="devicename" jdbcType="VARCHAR" />
-    <result column="macAddr" property="macaddr" jdbcType="VARCHAR" />
-    <result column="powerStatus" property="powerstatus" jdbcType="VARCHAR" />
-    <result column="connectionStatus" property="connectionstatus" jdbcType="VARCHAR" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="domain.Device" extends="BaseResultMap" >
-    <result column="deviceDesc" property="devicedesc" jdbcType="LONGVARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    deviceId, centerId, deviceName, macAddr, powerStatus, connectionStatus, remark
-  </sql>
-  <sql id="Blob_Column_List" >
-    deviceDesc
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from device
-    where deviceId = #{deviceid,jdbcType=INTEGER}
-  </select>
-  <select id="selectByMacAddr" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from device
-    where macAddr = #{macAddr,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from device
-    where deviceId = #{deviceid,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="Device" >
-    insert into device (deviceId, centerId, deviceName, 
-      macAddr, powerStatus, connectionStatus, 
-      remark, deviceDesc)
-    values (#{deviceid,jdbcType=INTEGER}, #{centerid,jdbcType=INTEGER}, #{devicename,jdbcType=VARCHAR}, 
-      #{macaddr,jdbcType=VARCHAR}, #{powerstatus,jdbcType=VARCHAR}, #{connectionstatus,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{devicedesc,jdbcType=LONGVARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="Device" >
-    insert into device
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="deviceid != null" >
-        deviceId,
-      </if>
-      <if test="centerid != null" >
-        centerId,
-      </if>
-      <if test="devicename != null" >
-        deviceName,
-      </if>
-      <if test="macaddr != null" >
-        macAddr,
-      </if>
-      <if test="powerstatus != null" >
-        powerStatus,
-      </if>
-      <if test="connectionstatus != null" >
-        connectionStatus,
-      </if>
-      <if test="remark != null" >
-        remark,
-      </if>
-      <if test="devicedesc != null" >
-        deviceDesc,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="deviceid != null" >
-        #{deviceid,jdbcType=INTEGER},
-      </if>
-      <if test="centerid != null" >
-        #{centerid,jdbcType=INTEGER},
-      </if>
-      <if test="devicename != null" >
-        #{devicename,jdbcType=VARCHAR},
-      </if>
-      <if test="macaddr != null" >
-        #{macaddr,jdbcType=VARCHAR},
-      </if>
-      <if test="powerstatus != null" >
-        #{powerstatus,jdbcType=VARCHAR},
-      </if>
-      <if test="connectionstatus != null" >
-        #{connectionstatus,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="devicedesc != null" >
-        #{devicedesc,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="Device" >
-    update device
-    <set >
-      <if test="centerid != null" >
-        centerId = #{centerid,jdbcType=INTEGER},
-      </if>
-      <if test="devicename != null" >
+<mapper namespace="gamecenter.core.dao.DeviceMapper">
+    <resultMap id="BaseResultMap" type="Device">
+        <id column="deviceId" property="deviceid" jdbcType="INTEGER"/>
+        <result column="centerId" property="centerid" jdbcType="INTEGER"/>
+        <result column="deviceName" property="devicename" jdbcType="VARCHAR"/>
+        <result column="macAddr" property="macaddr" jdbcType="VARCHAR"/>
+        <result column="powerStatus" property="powerstatus" jdbcType="VARCHAR"/>
+        <result column="connectionStatus" property="connectionstatus" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="domain.Device" extends="BaseResultMap">
+        <result column="deviceDesc" property="devicedesc" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        deviceId, centerId, deviceName, macAddr, powerStatus, connectionStatus, remark
+    </sql>
+    <sql id="Blob_Column_List">
+        deviceDesc
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from device
+        where deviceId = #{deviceid,jdbcType=INTEGER}
+    </select>
+    <select id="selectByMacAddr" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from device
+        where macAddr = #{macAddr,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from device
+        where deviceId = #{deviceid,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="Device">
+        insert into device (deviceId, centerId, deviceName,
+        macAddr, powerStatus, connectionStatus,
+        remark, deviceDesc)
+        values (#{deviceid,jdbcType=INTEGER}, #{centerid,jdbcType=INTEGER}, #{devicename,jdbcType=VARCHAR},
+        #{macaddr,jdbcType=VARCHAR}, #{powerstatus,jdbcType=VARCHAR}, #{connectionstatus,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR}, #{devicedesc,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="Device">
+        insert into device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deviceid != null">
+                deviceId,
+            </if>
+            <if test="centerid != null">
+                centerId,
+            </if>
+            <if test="devicename != null">
+                deviceName,
+            </if>
+            <if test="macaddr != null">
+                macAddr,
+            </if>
+            <if test="powerstatus != null">
+                powerStatus,
+            </if>
+            <if test="connectionstatus != null">
+                connectionStatus,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="devicedesc != null">
+                deviceDesc,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deviceid != null">
+                #{deviceid,jdbcType=INTEGER},
+            </if>
+            <if test="centerid != null">
+                #{centerid,jdbcType=INTEGER},
+            </if>
+            <if test="devicename != null">
+                #{devicename,jdbcType=VARCHAR},
+            </if>
+            <if test="macaddr != null">
+                #{macaddr,jdbcType=VARCHAR},
+            </if>
+            <if test="powerstatus != null">
+                #{powerstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="connectionstatus != null">
+                #{connectionstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="devicedesc != null">
+                #{devicedesc,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="Device">
+        update device
+        <set>
+            <if test="centerid != null">
+                centerId = #{centerid,jdbcType=INTEGER},
+            </if>
+            <if test="devicename != null">
+                deviceName = #{devicename,jdbcType=VARCHAR},
+            </if>
+            <if test="macaddr != null">
+                macAddr = #{macaddr,jdbcType=VARCHAR},
+            </if>
+            <if test="powerstatus != null">
+                powerStatus = #{powerstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="connectionstatus != null">
+                connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="devicedesc != null">
+                deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where deviceId = #{deviceid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="Device">
+        update device
+        set centerId = #{centerid,jdbcType=INTEGER},
         deviceName = #{devicename,jdbcType=VARCHAR},
-      </if>
-      <if test="macaddr != null" >
         macAddr = #{macaddr,jdbcType=VARCHAR},
-      </if>
-      <if test="powerstatus != null" >
         powerStatus = #{powerstatus,jdbcType=VARCHAR},
-      </if>
-      <if test="connectionstatus != null" >
         connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="devicedesc != null" >
-        deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where deviceId = #{deviceid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="Device" >
-    update device
-    set centerId = #{centerid,jdbcType=INTEGER},
-      deviceName = #{devicename,jdbcType=VARCHAR},
-      macAddr = #{macaddr,jdbcType=VARCHAR},
-      powerStatus = #{powerstatus,jdbcType=VARCHAR},
-      connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR}
-    where deviceId = #{deviceid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="Device" >
-    update device
-    set centerId = #{centerid,jdbcType=INTEGER},
-      deviceName = #{devicename,jdbcType=VARCHAR},
-      macAddr = #{macaddr,jdbcType=VARCHAR},
-      powerStatus = #{powerstatus,jdbcType=VARCHAR},
-      connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
-    where deviceId = #{deviceid,jdbcType=INTEGER}
-  </update>
+        deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR}
+        where deviceId = #{deviceid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="Device">
+        update device
+        set centerId = #{centerid,jdbcType=INTEGER},
+        deviceName = #{devicename,jdbcType=VARCHAR},
+        macAddr = #{macaddr,jdbcType=VARCHAR},
+        powerStatus = #{powerstatus,jdbcType=VARCHAR},
+        connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
+        remark = #{remark,jdbcType=VARCHAR}
+        where deviceId = #{deviceid,jdbcType=INTEGER}
+    </update>
 </mapper>

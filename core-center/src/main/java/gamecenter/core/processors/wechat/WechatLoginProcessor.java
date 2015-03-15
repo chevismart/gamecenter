@@ -1,7 +1,6 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.Action;
-
 import gamecenter.core.beans.AccessChannel;
 import gamecenter.core.beans.AccessInfo;
 import gamecenter.core.beans.UserProfile;
@@ -11,9 +10,7 @@ import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.services.wechat.SubscribeService;
 import gamecenter.core.utils.ParameterUtil;
 import gamecenter.core.utils.ProfileUtil;
-
 import org.apache.commons.lang3.StringUtils;
-
 import weixin.popular.bean.User;
 
 import java.util.Map;
@@ -22,7 +19,7 @@ import java.util.Map;
  * Created by Chevis on 14/12/20.
  */
 public class WechatLoginProcessor extends GeneralProcessor implements GeneralLoginInterface {
-	//services
+    //services
     ProfileManager profileManager;
     SubscribeService subscribeService;
     //beans
@@ -32,7 +29,7 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
     String appId;
     String code;
     String state;
-    
+
 
     @Override
     public String execute() throws Exception {
@@ -42,7 +39,7 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
         Map<String, String> stateParam = ParameterUtil.extractParam(state);
         appId = stateParam.get(CommonConstants.WECHAT_STATE_PARAM_APPID);
 
-		logger.info("Login with code = {}, state = {}", code, state);
+        logger.info("Login with code = {}, state = {}", code, state);
 
         String result;
 
@@ -91,12 +88,12 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
     }
-    
-    public void setSubscribeService(SubscribeService subscribeService) {
-		this.subscribeService = subscribeService;
-	}
 
-	@Override
+    public void setSubscribeService(SubscribeService subscribeService) {
+        this.subscribeService = subscribeService;
+    }
+
+    @Override
     public boolean isValidLogin() {
         if (StringUtils.isNotEmpty(appId) &&
                 ProfileUtil.verifyAppProfile(profileManager.getAppProfile(appId)) &&

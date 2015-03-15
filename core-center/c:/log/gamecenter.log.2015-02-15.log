@@ -1,3 +1,0 @@
-2015-02-15 17:23:33.968 [main] INFO  gamecenter.core.processors.tasks.AppLoader - Wechat access token is successfully obtained!
-2015-02-15 17:23:33.970 [main] INFO  gamecenter.core.processors.tasks.AppLoader - 荔园新天地(liyuanapp) is successfully loaded!
-2015-02-15 17:23:34.117 [main] INFO  gamecenter.core.processors.wechat.ProfileManager - testAppId appId is added successfully

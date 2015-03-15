@@ -96,8 +96,8 @@
         </action>
 
     </package>
-     <package name="mainPackage" extends="common-global">
-     	<action name="tryPlay" class="wechatTryPlayProcessor">
+    <package name="mainPackage" extends="common-global">
+        <action name="tryPlay" class="wechatTryPlayProcessor">
             <result name="success" type="dispatcher">/jsp/play.jsp</result>
         </action>
         <action name="scan" class="wechatScanProcessor">
@@ -106,6 +106,6 @@
         <action name="sendMessage" class="wechatSendMessageProcessor">
             <result name="success" type="dispatcher"></result>
         </action>
-     </package>
+    </package>
 
 </struts>

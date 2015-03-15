@@ -13,7 +13,6 @@ import weixin.popular.api.PayMchAPI;
 import weixin.popular.bean.paymch.Unifiedorder;
 import weixin.popular.bean.paymch.UnifiedorderResult;
 import weixin.popular.util.MapUtil;
-import weixin.popular.util.PayUtil;
 import weixin.popular.util.SignatureUtil;
 
 import javax.servlet.http.HttpServletRequest;

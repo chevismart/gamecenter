@@ -42,20 +42,20 @@
     </bean>
 
     <!-- 配置mybitasSqlSessionFactoryBean -->
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> 
-	   <!--dataSource属性指定要用到的连接池--> 
-	   <property name="dataSource" ref="dataSource"/> 
-	   <!--configLocation属性指定mybatis的核心配置文件--> 
-	   <property name="configLocation" value="classpath:config/mybatis-config.xml" /> 
-	   <!-- 所有配置的mapper文件 -->
-	    <property name="mapperLocations" value="classpath*:mapper/*.xml" />
-	 </bean> 
-	 
-	 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="gamecenter.core.dao" />
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />  
-	 </bean>
-  
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--dataSource属性指定要用到的连接池-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--configLocation属性指定mybatis的核心配置文件-->
+        <property name="configLocation" value="classpath:config/mybatis-config.xml"/>
+        <!-- 所有配置的mapper文件 -->
+        <property name="mapperLocations" value="classpath*:mapper/*.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="gamecenter.core.dao"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
     <!-- 配置SqlSessionTemplate -->
     <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
@@ -68,8 +68,31 @@
 
     <!-- 使用annotation注解方式配置事务 -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
-	
-	
+    <
+    <
+    <
+    <
+    <
+    <
+    < HEAD
+
+    <!--<bean id="accessChannelDao" class="org.mybatis.spring.mapper.MapperFactoryBean">-->
+    <!--<property name="mapperInterface" value="gamecenter.core.dao.AccessChannelDao"/>-->
+    <!--<property name="sqlSessionFactory" ref="sqlSessionFactory"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="appProfileDao" class="org.mybatis.spring.mapper.MapperFactoryBean">-->
+    <!--<property name="mapperInterface" value="gamecenter.core.dao.AppProfileDao"/>-->
+    <!--<property name="sqlSessionFactory" ref="sqlSessionFactory"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="accessChannelDBService" class="gamecenter.core.services.db.AccessChannelDBService">-->
+    <!--<property name="accessChannelDao" ref="accessChannelDao"/>-->
+    <!--</bean>-->
+
+    =======
+
+
     <!-- <bean id="accessChannelDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
         <property name="mapperInterface" value="gamecenter.core.dao.AccessChannelDao"/>
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
@@ -78,5 +101,6 @@
     <bean id="accessChannelDBService" class="gamecenter.core.services.db.AccessChannelDBService">
         <property name="accessChannelDao" ref="accessChannelDao"/>
     </bean> -->
-	
+
+    >>>>>>> dev
 </beans>

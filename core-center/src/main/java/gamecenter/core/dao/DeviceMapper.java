@@ -10,6 +10,7 @@ public interface DeviceMapper {
     int insertSelective(Device record);
 
     Device selectByPrimaryKey(Integer deviceid);
+
     Device selectByMacAddr(String macAddr);
 
     int updateByPrimaryKeySelective(Device record);

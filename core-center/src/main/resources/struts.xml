@@ -37,7 +37,9 @@
     </package>
 
     <package name="authenticPackage" extends="authentic">
-
+        <action name="" class="deviceRegistryProcessor">
+            <result name="success" type="dispatcher">/jsp/center/deviceRegistry.jsp</result>
+        </action>
     </package>
 
     <package name="authPackage" extends="common-global">
@@ -51,6 +53,10 @@
         <action name="wechatOAuth" class="wechatOAuthProcessor"/>
 
         <action name="commonLogin" class="loginProcessor">
+            <result name="success" type="chain">welcome</result>
+        </action>
+
+        <action name="login" class="webLoginProcessor">
             <result name="success" type="chain">welcome</result>
         </action>
 
@@ -69,7 +75,16 @@
         </action>
 
         <action name="wechatNotice" class="wechatPayNotificationProcessor">
-            <result name="success">/jsp/demo.jsp</result>
+            <result name="prePayOrder" type="chain">prePayOrderProcessor</result>
+            <result name="paidNotify" type="chain">paidNotifyProcessor</result>
+        </action>
+
+        <action name="prePayOrderProcessor" class="prePayOrderProcessor">
+            <result name="success" type="dispatcher">/jsp/payment/charge.jsp</result>
+        </action>
+
+        <action name="paidNotifyProcessor" class="paidNotifyProcessor">
+            <result name="success" type="dispatcher">/jsp/payment/charge.jsp</result>
         </action>
 
         <action name="wechatOrder" class="wechatPayOrderProcessor">
@@ -81,8 +96,8 @@
         </action>
 
     </package>
-     <package name="mainPackage" extends="common-global">
-     	<action name="tryPlay" class="wechatTryPlayProcessor">
+    <package name="mainPackage" extends="common-global">
+        <action name="tryPlay" class="wechatTryPlayProcessor">
             <result name="success" type="dispatcher">/jsp/play.jsp</result>
         </action>
         <action name="scan" class="wechatScanProcessor">
@@ -91,6 +106,6 @@
         <action name="sendMessage" class="wechatSendMessageProcessor">
             <result name="success" type="dispatcher"></result>
         </action>
-     </package>
+    </package>
 
 </struts>

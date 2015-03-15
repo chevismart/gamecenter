@@ -29,7 +29,7 @@
             <artifactId>cloud-server</artifactId>
             <version>${cloudServer.version}</version>
         </dependency>
-		<!-- jstl dependency-->
+        <!-- jstl dependency-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>

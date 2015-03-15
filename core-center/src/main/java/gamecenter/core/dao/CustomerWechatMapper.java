@@ -11,6 +11,7 @@ public interface CustomerWechatMapper {
     int insertSelective(CustomerWechat record);
 
     CustomerWechat selectByPrimaryKey(CustomerWechatKey key);
+
     //根据openId选择
     CustomerWechat selectByOpenId(String openId);
 

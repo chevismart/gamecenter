@@ -3,6 +3,7 @@ package gamecenter.core.services.wechat;
 import gamecenter.core.beans.AccessChannel;
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.beans.wechat.WechatProfile;
+import gamecenter.core.services.Service;
 import gamecenter.core.utils.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
@@ -16,8 +17,6 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import weixin.popular.api.TokenAPI;
 import weixin.popular.bean.Token;
 import weixin.popular.client.LocalHttpClient;
@@ -31,9 +30,8 @@ import java.util.List;
 /**
  * Created by Chevis on 14/12/15.
  */
-public class AccessTokenService {
+public class AccessTokenService extends Service {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
     TokenAPI wechatAccessTokenApi = new TokenAPI();
 
     public AccessTokenService(TokenAPI wechatAccessTokenApi) {
@@ -87,7 +85,7 @@ public class AccessTokenService {
             // TODO: enhance here for the hard code host and port
             httpUriRequest = RequestBuilder.get()
                     .setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString()))
-                    .setUri(URIUtils.createURI("http", "localhost", 8080,
+                    .setUri(URIUtils.createURI("http", "wawaonline.net", 80,
                             "/credential", param, null))
                     .build();
         } catch (URISyntaxException e) {

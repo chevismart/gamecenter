@@ -41,17 +41,21 @@
         <property name="profileManager" ref="profileManager"/>
     </bean>
 
+    <bean id="webLoginProcessor" class="gamecenter.core.processors.web.WebLoginProcessor">
+        <property name="userProfile" ref="userProfile"/>
+    </bean>
+
     <bean id="wechatLoginProcessor" class="gamecenter.core.processors.wechat.WechatLoginProcessor">
         <property name="subscribeService" ref="subscribeService"/>
         <property name="profileManager" ref="profileManager"/>
         <property name="userProfile" ref="userProfile"/>
     </bean>
-    
+
     <bean id="wechatTryPlayProcessor" class="gamecenter.core.processors.wechat.WechatTryPlayProcessor">
         <property name="subscribeService" ref="subscribeService"/>
         <property name="userProfile" ref="userProfile"/>
     </bean>
-    
+
     <bean id="wechatScanProcessor" class="gamecenter.core.processors.wechat.WechatScanProcessor">
         <property name="wechatJsConfigService" ref="wechatJsConfigService"/>
         <property name="userProfile" ref="userProfile"/>
@@ -64,8 +68,6 @@
 
     <bean id="wechatPayNotificationProcessor" class="gamecenter.core.processors.wechat.WechatPayNotificationProcessor">
         <property name="profileManager" ref="profileManager"/>
-        <property name="userProfile" ref="userProfile"/>
-        <property name="globalPaymentBean" ref="globalPaymentBean"/>
     </bean>
 
     <bean id="wechatPayOrderProcessor" class="gamecenter.core.processors.wechat.WechatPayOrderProcessor">
@@ -78,6 +80,19 @@
         <property name="profileManager" ref="profileManager"/>
     </bean>
 
+    <bean id="paidNotifyProcessor" class="gamecenter.core.processors.wechat.PaidNotificationProcessor">
+        <property name="profileManager" ref="profileManager"/>
+        <property name="globalPaymentBean" ref="globalPaymentBean"/>
+    </bean>
+
+    <bean id="prePayOrderProcessor" class="gamecenter.core.processors.wechat.NativePrePayProcessor">
+        <property name="profileManager" ref="profileManager"/>
+    </bean>
+
+    <bean id="deviceRegistryProcessor" class="gamecenter.core.processors.devices.DeviceRegistryProcessor">
+
+    </bean>
+
     <!-- Intercepters -->
     <bean id="accessControl" class="gamecenter.core.intercepters.AccessControlIntercepter">
         <property name="userProfile" ref="userProfile"/>
@@ -85,6 +100,6 @@
 
     <!-- Task runner -->
     <bean id="cloudServer" class="gamecenter.core.processors.tasks.CloudServerLoader"/>
-	
-	
+
+
 </beans>

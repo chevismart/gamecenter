@@ -1,8 +1,5 @@
 package gamecenter.core.services.db;
 
-import java.util.Date;
-
-import weixin.popular.bean.User;
 import gamecenter.core.dao.CustomerWechatMapper;
 import gamecenter.core.dao.DeviceMapper;
 import gamecenter.core.dao.PlayrecordMapper;
@@ -11,6 +8,10 @@ import gamecenter.core.domain.CustomerWechat;
 import gamecenter.core.domain.Device;
 import gamecenter.core.domain.Playrecord;
 import gamecenter.core.domain.Trade;
+import weixin.popular.bean.User;
+
+import java.util.Date;
+
 /**
  * Created by Frank on 15/02/14.
  */
@@ -96,6 +97,7 @@ public class SubscribeService {
 		customerWechat.setSubscribebonus(null);
 		customerWechat.setSubscribetime(null);
 		customerWechatMapper.updateByPrimaryKey(customerWechat);
+		
 		return true;
 	}
 	//getter attr
@@ -130,6 +132,4 @@ public class SubscribeService {
 	public void setDeviceMapper(DeviceMapper deviceMapper) {
 		this.deviceMapper = deviceMapper;
 	}
-	
-	
 }

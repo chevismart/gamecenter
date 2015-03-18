@@ -1,22 +1,20 @@
 package gamecenter.core.services.wechat;
 
-import java.util.Date;
-
+import gamecenter.core.beans.AppProfile;
+import gamecenter.core.beans.wechat.WechatProfile;
+import gamecenter.core.utils.HttpUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gamecenter.core.beans.AppProfile;
-import gamecenter.core.beans.wechat.WechatProfile;
-import gamecenter.core.utils.HttpUtil;
-import weixin.popular.bean.Token;
+import java.util.Date;
 
 public class JsApiTicketService {
-	Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	public String requestWechatJsApiTicket(final AppProfile appProfile) {
-		String jsApiTicket = "";
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public String requestWechatJsApiTicket(final AppProfile appProfile) {
+        String jsApiTicket = "";
         String appId = appProfile.getAppId();
         if (appProfile.isWechatProfileValid()) {
             WechatProfile wechatProfile = appProfile.getWechatProfile();
@@ -44,4 +42,5 @@ public class JsApiTicketService {
 			}
 		return ticket;	
 	}
+
 }

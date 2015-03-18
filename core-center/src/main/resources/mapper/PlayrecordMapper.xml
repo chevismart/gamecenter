@@ -1,82 +1,82 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="gamecenter.core.dao.PlayrecordMapper" >
-  <resultMap id="BaseResultMap" type="Playrecord" >
-    <id column="playrecordId" property="playrecordid" jdbcType="INTEGER" />
-    <result column="customerId" property="customerid" jdbcType="INTEGER" />
-    <result column="deviceId" property="deviceid" jdbcType="INTEGER" />
-    <result column="time" property="time" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    playrecordId, customerId, deviceId, time
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from playrecord
-    where playrecordId = #{playrecordid,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from playrecord
-    where playrecordId = #{playrecordid,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="Playrecord" >
-    insert into playrecord (playrecordId, customerId, deviceId, 
-      time)
-    values (#{playrecordid,jdbcType=INTEGER}, #{customerid,jdbcType=INTEGER}, #{deviceid,jdbcType=INTEGER}, 
-      #{time,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="Playrecord" >
-    insert into playrecord
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="playrecordid != null" >
-        playrecordId,
-      </if>
-      <if test="customerid != null" >
-        customerId,
-      </if>
-      <if test="deviceid != null" >
-        deviceId,
-      </if>
-      <if test="time != null" >
-        time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="playrecordid != null" >
-        #{playrecordid,jdbcType=INTEGER},
-      </if>
-      <if test="customerid != null" >
-        #{customerid,jdbcType=INTEGER},
-      </if>
-      <if test="deviceid != null" >
-        #{deviceid,jdbcType=INTEGER},
-      </if>
-      <if test="time != null" >
-        #{time,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="Playrecord" >
-    update playrecord
-    <set >
-      <if test="customerid != null" >
-        customerId = #{customerid,jdbcType=INTEGER},
-      </if>
-      <if test="deviceid != null" >
+<mapper namespace="gamecenter.core.dao.PlayrecordMapper">
+    <resultMap id="BaseResultMap" type="Playrecord">
+        <id column="playrecordId" property="playrecordid" jdbcType="INTEGER"/>
+        <result column="customerId" property="customerid" jdbcType="INTEGER"/>
+        <result column="deviceId" property="deviceid" jdbcType="INTEGER"/>
+        <result column="time" property="time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        playrecordId, customerId, deviceId, time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from playrecord
+        where playrecordId = #{playrecordid,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from playrecord
+        where playrecordId = #{playrecordid,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="Playrecord">
+        insert into playrecord (playrecordId, customerId, deviceId,
+        time)
+        values (#{playrecordid,jdbcType=INTEGER}, #{customerid,jdbcType=INTEGER}, #{deviceid,jdbcType=INTEGER},
+        #{time,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="Playrecord">
+        insert into playrecord
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="playrecordid != null">
+                playrecordId,
+            </if>
+            <if test="customerid != null">
+                customerId,
+            </if>
+            <if test="deviceid != null">
+                deviceId,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="playrecordid != null">
+                #{playrecordid,jdbcType=INTEGER},
+            </if>
+            <if test="customerid != null">
+                #{customerid,jdbcType=INTEGER},
+            </if>
+            <if test="deviceid != null">
+                #{deviceid,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="Playrecord">
+        update playrecord
+        <set>
+            <if test="customerid != null">
+                customerId = #{customerid,jdbcType=INTEGER},
+            </if>
+            <if test="deviceid != null">
+                deviceId = #{deviceid,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                time = #{time,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where playrecordId = #{playrecordid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="Playrecord">
+        update playrecord
+        set customerId = #{customerid,jdbcType=INTEGER},
         deviceId = #{deviceid,jdbcType=INTEGER},
-      </if>
-      <if test="time != null" >
-        time = #{time,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where playrecordId = #{playrecordid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="Playrecord" >
-    update playrecord
-    set customerId = #{customerid,jdbcType=INTEGER},
-      deviceId = #{deviceid,jdbcType=INTEGER},
-      time = #{time,jdbcType=TIMESTAMP}
-    where playrecordId = #{playrecordid,jdbcType=INTEGER}
-  </update>
+        time = #{time,jdbcType=TIMESTAMP}
+        where playrecordId = #{playrecordid,jdbcType=INTEGER}
+    </update>
 </mapper>

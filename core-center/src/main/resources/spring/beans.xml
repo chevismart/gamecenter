@@ -22,7 +22,7 @@
     <bean id="userProfile" class="gamecenter.core.beans.UserProfile" scope="session">
         <aop:scoped-proxy/>
     </bean>
-    
+
     <bean id="globalPaymentBean" class="gamecenter.core.beans.GlobalPaymentBean" scope="singleton"></bean>
 
 	<bean id="subscribeService" class="gamecenter.core.services.db.SubscribeService">

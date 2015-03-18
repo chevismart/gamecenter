@@ -98,52 +98,53 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="Device" >
-    update device
-    <set >
-      <if test="centerid != null" >
-        centerId = #{centerid,jdbcType=INTEGER},
-      </if>
-      <if test="devicename != null" >
+  
+    <update id="updateByPrimaryKeySelective" parameterType="Device">
+        update device
+        <set>
+            <if test="centerid != null">
+                centerId = #{centerid,jdbcType=INTEGER},
+            </if>
+            <if test="devicename != null">
+                deviceName = #{devicename,jdbcType=VARCHAR},
+            </if>
+            <if test="macaddr != null">
+                macAddr = #{macaddr,jdbcType=VARCHAR},
+            </if>
+            <if test="powerstatus != null">
+                powerStatus = #{powerstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="connectionstatus != null">
+                connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="devicedesc != null">
+                deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where deviceId = #{deviceid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="Device">
+        update device
+        set centerId = #{centerid,jdbcType=INTEGER},
         deviceName = #{devicename,jdbcType=VARCHAR},
-      </if>
-      <if test="macaddr != null" >
         macAddr = #{macaddr,jdbcType=VARCHAR},
-      </if>
-      <if test="powerstatus != null" >
         powerStatus = #{powerstatus,jdbcType=VARCHAR},
-      </if>
-      <if test="connectionstatus != null" >
         connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="devicedesc != null" >
-        deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where deviceId = #{deviceid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="Device" >
-    update device
-    set centerId = #{centerid,jdbcType=INTEGER},
-      deviceName = #{devicename,jdbcType=VARCHAR},
-      macAddr = #{macaddr,jdbcType=VARCHAR},
-      powerStatus = #{powerstatus,jdbcType=VARCHAR},
-      connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR}
-    where deviceId = #{deviceid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="Device" >
-    update device
-    set centerId = #{centerid,jdbcType=INTEGER},
-      deviceName = #{devicename,jdbcType=VARCHAR},
-      macAddr = #{macaddr,jdbcType=VARCHAR},
-      powerStatus = #{powerstatus,jdbcType=VARCHAR},
-      connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
-    where deviceId = #{deviceid,jdbcType=INTEGER}
-  </update>
+        deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR}
+        where deviceId = #{deviceid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="Device">
+        update device
+        set centerId = #{centerid,jdbcType=INTEGER},
+        deviceName = #{devicename,jdbcType=VARCHAR},
+        macAddr = #{macaddr,jdbcType=VARCHAR},
+        powerStatus = #{powerstatus,jdbcType=VARCHAR},
+        connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
+        remark = #{remark,jdbcType=VARCHAR}
+        where deviceId = #{deviceid,jdbcType=INTEGER}
+    </update>
 </mapper>

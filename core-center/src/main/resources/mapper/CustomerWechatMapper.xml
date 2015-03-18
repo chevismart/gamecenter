@@ -76,28 +76,29 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="CustomerWechat">
-    update customer_wechat
-    <set>
-      <if test="openid != null">
-        openId = #{openid,jdbcType=VARCHAR},
-      </if>
-      <if test="subscribebonus != null">
+
+    <update id="updateByPrimaryKeySelective" parameterType="CustomerWechat">
+        update customer_wechat
+        <set>
+            <if test="openid != null">
+                openId = #{openid,jdbcType=VARCHAR},
+            </if>
+            <if test="subscribebonus != null">
+                subscribeBonus = #{subscribebonus,jdbcType=BIT},
+            </if>
+            <if test="subscribetime != null">
+                subscribeTime = #{subscribetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where customerId = #{customerid,jdbcType=INTEGER}
+        and wechatId = #{wechatid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="CustomerWechat">
+        update customer_wechat
+        set openId = #{openid,jdbcType=VARCHAR},
         subscribeBonus = #{subscribebonus,jdbcType=BIT},
-      </if>
-      <if test="subscribetime != null">
-        subscribeTime = #{subscribetime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where customerId = #{customerid,jdbcType=INTEGER}
-      and wechatId = #{wechatid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="CustomerWechat">
-    update customer_wechat
-    set openId = #{openid,jdbcType=VARCHAR},
-      subscribeBonus = #{subscribebonus,jdbcType=BIT},
-      subscribeTime = #{subscribetime,jdbcType=TIMESTAMP}
-    where customerId = #{customerid,jdbcType=INTEGER}
-      and wechatId = #{wechatid,jdbcType=INTEGER}
-  </update>
+        subscribeTime = #{subscribetime,jdbcType=TIMESTAMP}
+        where customerId = #{customerid,jdbcType=INTEGER}
+        and wechatId = #{wechatid,jdbcType=INTEGER}
+    </update>
 </mapper>

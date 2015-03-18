@@ -74,34 +74,35 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="Customer">
-    update customer
-    <set>
-      <if test="userid != null">
-        userId = #{userid,jdbcType=INTEGER},
-      </if>
-      <if test="registerdatetime != null">
+
+    <update id="updateByPrimaryKeySelective" parameterType="Customer">
+        update customer
+        <set>
+            <if test="userid != null">
+                userId = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="registerdatetime != null">
+                registerDateTime = #{registerdatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="wallet != null">
+                wallet = #{wallet,jdbcType=REAL},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="active != null">
+                active = #{active,jdbcType=BIT},
+            </if>
+        </set>
+        where customerId = #{customerid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="Customer">
+        update customer
+        set userId = #{userid,jdbcType=INTEGER},
         registerDateTime = #{registerdatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="wallet != null">
         wallet = #{wallet,jdbcType=REAL},
-      </if>
-      <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="active != null">
-        active = #{active,jdbcType=BIT},
-      </if>
-    </set>
-    where customerId = #{customerid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="Customer">
-    update customer
-    set userId = #{userid,jdbcType=INTEGER},
-      registerDateTime = #{registerdatetime,jdbcType=TIMESTAMP},
-      wallet = #{wallet,jdbcType=REAL},
-      name = #{name,jdbcType=VARCHAR},
-      active = #{active,jdbcType=BIT}
-    where customerId = #{customerid,jdbcType=INTEGER}
-  </update>
+        active = #{active,jdbcType=BIT}
+        where customerId = #{customerid,jdbcType=INTEGER}
+    </update>
 </mapper>

@@ -48,25 +48,25 @@ public class WechatProfile {
                 ", activeUserList=" + activeUserList +
                 '}';
     }
-    
-    
+
+
     public Date getWechatJsapiTicketUpdateTime() {
-		return wechatJsapiTicketUpdateTime;
-	}
+        return wechatJsapiTicketUpdateTime;
+    }
 
-	public void setWechatJsapiTicketUpdateTime(Date wechatJsapiTicketUpdateTime) {
-		this.wechatJsapiTicketUpdateTime = wechatJsapiTicketUpdateTime;
-	}
+    public void setWechatJsapiTicketUpdateTime(Date wechatJsapiTicketUpdateTime) {
+        this.wechatJsapiTicketUpdateTime = wechatJsapiTicketUpdateTime;
+    }
 
-	public String getWechatJsapiTicket() {
-		return wechatJsapiTicket;
-	}
+    public String getWechatJsapiTicket() {
+        return wechatJsapiTicket;
+    }
 
-	public void setWechatJsapiTicket(String wechatJsapiTicket) {
-		this.wechatJsapiTicket = wechatJsapiTicket;
-	}
+    public void setWechatJsapiTicket(String wechatJsapiTicket) {
+        this.wechatJsapiTicket = wechatJsapiTicket;
+    }
 
-	public Map<String, User> getActiveUserList() {
+    public Map<String, User> getActiveUserList() {
         return activeUserList;
     }
 

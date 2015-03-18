@@ -27,8 +27,8 @@
     <!-- 配置dbcp数据源 -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://alcock.gicp.net:3306/gamecenter"/>
-        <property name="username" value="gamecenter"/>
+        <property name="url" value="jdbc:mysql://wawaonline.net/gamecenter"/>
+        <property name="username" value="root"/>
         <property name="password" value="wawa20140601"/>
         <!-- 队列中的最小等待数 -->
         <property name="minIdle" value="1"></property>
@@ -55,7 +55,6 @@
 		<property name="basePackage" value="gamecenter.core.dao" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />  
 	 </bean>
-  
     <!-- 配置SqlSessionTemplate -->
     <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
@@ -68,8 +67,21 @@
 
     <!-- 使用annotation注解方式配置事务 -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
-	
-	
+
+    <!--<bean id="accessChannelDao" class="org.mybatis.spring.mapper.MapperFactoryBean">-->
+    <!--<property name="mapperInterface" value="gamecenter.core.dao.AccessChannelDao"/>-->
+    <!--<property name="sqlSessionFactory" ref="sqlSessionFactory"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="appProfileDao" class="org.mybatis.spring.mapper.MapperFactoryBean">-->
+    <!--<property name="mapperInterface" value="gamecenter.core.dao.AppProfileDao"/>-->
+    <!--<property name="sqlSessionFactory" ref="sqlSessionFactory"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="accessChannelDBService" class="gamecenter.core.services.db.AccessChannelDBService">-->
+    <!--<property name="accessChannelDao" ref="accessChannelDao"/>-->
+    <!--</bean>-->
+
     <!-- <bean id="accessChannelDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
         <property name="mapperInterface" value="gamecenter.core.dao.AccessChannelDao"/>
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
@@ -78,5 +90,5 @@
     <bean id="accessChannelDBService" class="gamecenter.core.services.db.AccessChannelDBService">
         <property name="accessChannelDao" ref="accessChannelDao"/>
     </bean> -->
-	
+
 </beans>

@@ -87,38 +87,39 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="Wechat" >
-    update wechat
-    <set >
-      <if test="channelname != null" >
-        channelName = #{channelname,jdbcType=VARCHAR},
-      </if>
-      <if test="wechatappname != null" >
+  
+    <update id="updateByPrimaryKeySelective" parameterType="Wechat">
+        update wechat
+        <set>
+            <if test="channelname != null">
+                channelName = #{channelname,jdbcType=VARCHAR},
+            </if>
+            <if test="wechatappname != null">
+                wechatAppName = #{wechatappname,jdbcType=VARCHAR},
+            </if>
+            <if test="wechatappid != null">
+                wechatAppId = #{wechatappid,jdbcType=VARCHAR},
+            </if>
+            <if test="wechatappsecret != null">
+                wechatAppSecret = #{wechatappsecret,jdbcType=VARCHAR},
+            </if>
+            <if test="wechatmchid != null">
+                wechatMchId = #{wechatmchid,jdbcType=VARCHAR},
+            </if>
+            <if test="wechatpaykey != null">
+                wechatPayKey = #{wechatpaykey,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where wechatId = #{wechatid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="Wechat">
+        update wechat
+        set channelName = #{channelname,jdbcType=VARCHAR},
         wechatAppName = #{wechatappname,jdbcType=VARCHAR},
-      </if>
-      <if test="wechatappid != null" >
         wechatAppId = #{wechatappid,jdbcType=VARCHAR},
-      </if>
-      <if test="wechatappsecret != null" >
         wechatAppSecret = #{wechatappsecret,jdbcType=VARCHAR},
-      </if>
-      <if test="wechatmchid != null" >
         wechatMchId = #{wechatmchid,jdbcType=VARCHAR},
-      </if>
-      <if test="wechatpaykey != null" >
-        wechatPayKey = #{wechatpaykey,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where wechatId = #{wechatid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="Wechat" >
-    update wechat
-    set channelName = #{channelname,jdbcType=VARCHAR},
-      wechatAppName = #{wechatappname,jdbcType=VARCHAR},
-      wechatAppId = #{wechatappid,jdbcType=VARCHAR},
-      wechatAppSecret = #{wechatappsecret,jdbcType=VARCHAR},
-      wechatMchId = #{wechatmchid,jdbcType=VARCHAR},
-      wechatPayKey = #{wechatpaykey,jdbcType=VARCHAR}
-    where wechatId = #{wechatid,jdbcType=INTEGER}
-  </update>
+        wechatPayKey = #{wechatpaykey,jdbcType=VARCHAR}
+        where wechatId = #{wechatid,jdbcType=INTEGER}
+    </update>
 </mapper>

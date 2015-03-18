@@ -1,7 +1,6 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.Action;
-
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.WechatJsConfig;
 import gamecenter.core.processors.GeneralProcessor;
@@ -33,5 +32,5 @@ public class WechatScanProcessor extends GeneralProcessor{
 	public void setProfileManager(ProfileManager profileManager) {
 		this.profileManager = profileManager;
 	}
-	
+
 }

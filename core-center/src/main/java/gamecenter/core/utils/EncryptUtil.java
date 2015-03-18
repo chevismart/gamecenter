@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class EncryptUtil {
-	public static String SHA1(String decript) {
+    public static String SHA1(String decript) {
         try {
             MessageDigest digest = java.security.MessageDigest
                     .getInstance("SHA-1");
@@ -21,13 +21,13 @@ public class EncryptUtil {
                 hexString.append(shaHex);
             }
             return hexString.toString();
- 
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return "";
     }
- 
+
     public static String SHA(String decript) {
         try {
             MessageDigest digest = java.security.MessageDigest
@@ -45,13 +45,13 @@ public class EncryptUtil {
                 hexString.append(shaHex);
             }
             return hexString.toString();
- 
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return "";
     }
- 
+
     public static String MD5(String input) {
         try {
             // 获得MD5摘要算法的 MessageDigest 对象

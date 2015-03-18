@@ -75,7 +75,7 @@ public class WechatPayNotificationProcessorTest {
 
         PayNotification notification = XMLConverUtil.convertToObject(PayNotification.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
 
-        String validationSign = SignatureUtil.generateSign(MapUtil.order(MapUtil.objectToMap(notification,"device_info","err_code","err_code_des","return_msg")), "wawaonline20150101wechatpaybilly");
+        String validationSign = SignatureUtil.generateSign(MapUtil.order(MapUtil.objectToMap(notification, "device_info", "err_code", "err_code_des", "return_msg")), "wawaonline20150101wechatpaybilly");
 
         assertEquals(notification.getSign(), validationSign);
 

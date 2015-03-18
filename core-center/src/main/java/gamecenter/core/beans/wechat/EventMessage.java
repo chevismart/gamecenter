@@ -8,61 +8,61 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "xml")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class EventMessage {
-	
-	 	@XmlElement(name = "FromUserName")
-	    private String fromUserName;
 
-	    @XmlElement(name = "ToUserName")
-	    private String toUserName;
+    @XmlElement(name = "FromUserName")
+    private String fromUserName;
 
-	    @XmlElement(name = "MsgType")
-	    private String msgType;
+    @XmlElement(name = "ToUserName")
+    private String toUserName;
 
-	    @XmlElement(name = "CreateTime")
-	    private String createTime ;
-	    
-	    @XmlElement(name = "Event")
-	    private String event ;
+    @XmlElement(name = "MsgType")
+    private String msgType;
 
-		public String getFromUserName() {
-			return fromUserName;
-		}
+    @XmlElement(name = "CreateTime")
+    private String createTime;
 
-		public void setFromUserName(String fromUserName) {
-			this.fromUserName = fromUserName;
-		}
+    @XmlElement(name = "Event")
+    private String event;
 
-		public String getToUserName() {
-			return toUserName;
-		}
+    public String getFromUserName() {
+        return fromUserName;
+    }
 
-		public void setToUserName(String toUserName) {
-			this.toUserName = toUserName;
-		}
+    public void setFromUserName(String fromUserName) {
+        this.fromUserName = fromUserName;
+    }
 
-		public String getMsgType() {
-			return msgType;
-		}
+    public String getToUserName() {
+        return toUserName;
+    }
 
-		public void setMsgType(String msgType) {
-			this.msgType = msgType;
-		}
+    public void setToUserName(String toUserName) {
+        this.toUserName = toUserName;
+    }
 
-		public String getCreateTime() {
-			return createTime;
-		}
+    public String getMsgType() {
+        return msgType;
+    }
 
-		public void setCreateTime(String createTime) {
-			this.createTime = createTime;
-		}
+    public void setMsgType(String msgType) {
+        this.msgType = msgType;
+    }
 
-		public String getEvent() {
-			return event;
-		}
+    public String getCreateTime() {
+        return createTime;
+    }
 
-		public void setEvent(String event) {
-			this.event = event;
-		}
-	    
-	    
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
+
 }

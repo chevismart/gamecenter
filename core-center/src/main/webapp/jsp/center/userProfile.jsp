@@ -192,6 +192,7 @@
             <option value="10">10元 - 送1币</option>
             <option value="20">20元 - 送2币</option>
         </select>
+
         <h1>
             荔园3楼 - <b> <s:text name="userProfile.deviceId"/></b>号机...
         </h1>

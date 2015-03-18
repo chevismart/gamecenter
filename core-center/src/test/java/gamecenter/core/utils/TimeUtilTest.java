@@ -17,7 +17,7 @@ public class TimeUtilTest {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(current);
         calendar.add(Calendar.SECOND, 1);
-        Date oneSecondDelayDate = TimeUtil.getExpiryDateTime(current, onesecond,0);
+        Date oneSecondDelayDate = TimeUtil.getExpiryDateTime(current, onesecond, 0);
         assertEquals(calendar.getTime().getTime(), oneSecondDelayDate.getTime());
     }
 }

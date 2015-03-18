@@ -7,8 +7,8 @@ import gamecenter.core.beans.UserProfile;
 import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.processors.GeneralLoginInterface;
 import gamecenter.core.processors.GeneralProcessor;
-import gamecenter.core.services.db.UserService;
 import gamecenter.core.services.db.SubscribeService;
+import gamecenter.core.services.db.UserService;
 import gamecenter.core.utils.ParameterUtil;
 import gamecenter.core.utils.ProfileUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -61,9 +61,9 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
                 userProfile.setDeviceId(stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID));
                 profileManager.getAppProfile(appId).getWechatProfile().getActiveUserList().put(wechatUser.getOpenid(), wechatUser);
                 //纪录微信用户信息
-                if(!userService.hasWechatCustomer(userProfile.getOpenId())){
-                	userService.addWechatCustomer(userProfile.getDisplayName(), userProfile.getOpenId(), 
-                			profileManager.getAppProfile(appId).getWechatProfile().getWechatAppId());
+                if (!userService.hasWechatCustomer(userProfile.getOpenId())) {
+                    userService.addWechatCustomer(userProfile.getDisplayName(), userProfile.getOpenId(),
+                            profileManager.getAppProfile(appId).getWechatProfile().getWechatAppId());
                 }
                 //获取订阅相关信息
                 boolean hasSubscribed = subscribeService.getHasSubscibed(userProfile.getOpenId());
@@ -71,7 +71,7 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
                 boolean hasSubscribeBonus = subscribeService.getHasSubscribeBonus(userProfile.getOpenId());
                 getHttpRequest().setAttribute("hasSubscribed", hasSubscribed);
                 getHttpRequest().setAttribute("isSubcribing", isSubcribing);
-                getHttpRequest().setAttribute("hasSubscribeBonus", hasSubscribeBonus);         
+                getHttpRequest().setAttribute("hasSubscribeBonus", hasSubscribeBonus);
                 result = Action.SUCCESS;
             } else {
                 result = CommonConstants.ACCESS_ROUTER_WECHAT_OAUTH;
@@ -95,13 +95,14 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
     }
-    public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
 
-	public void setSubscribeService(SubscribeService subscribeService) {
-		this.subscribeService = subscribeService;
-	}
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public void setSubscribeService(SubscribeService subscribeService) {
+        this.subscribeService = subscribeService;
+    }
 
     @Override
     public boolean isValidLogin() {

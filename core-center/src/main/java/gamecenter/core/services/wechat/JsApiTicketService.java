@@ -27,20 +27,21 @@ public class JsApiTicketService {
         }
         return jsApiTicket;
     }
-	private String getTicket(String access_token){
-		String ticketUrl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi";
-		JSONObject jsonObject = HttpUtil.getJson(String.format(ticketUrl, access_token));
-		String ticket="";
-			try {
-				if(jsonObject.getString("errcode").equals("0") && jsonObject.getString("errmsg").equals("ok") )
-					ticket = jsonObject.getString("ticket");
-					logger.info("更新ticket："+ticket);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				logger.error("更新ticket失败：");
-				e.printStackTrace();
-			}
-		return ticket;	
-	}
+
+    private String getTicket(String access_token) {
+        String ticketUrl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi";
+        JSONObject jsonObject = HttpUtil.getJson(String.format(ticketUrl, access_token));
+        String ticket = "";
+        try {
+            if (jsonObject.getString("errcode").equals("0") && jsonObject.getString("errmsg").equals("ok"))
+                ticket = jsonObject.getString("ticket");
+            logger.info("更新ticket：" + ticket);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            logger.error("更新ticket失败：");
+            e.printStackTrace();
+        }
+        return ticket;
+    }
 
 }

@@ -15,9 +15,9 @@ public class ErrorProcesser extends GeneralProcessor {
     public void setException(Exception exception) {
         this.exception = exception;
     }
+
     @Override
-    public String execute()
-    {
+    public String execute() {
         ActionContext.getContext().getValueStack().push(this.exception.getMessage());//放到值栈顶
         return this.SUCCESS;
     }

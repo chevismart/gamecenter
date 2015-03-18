@@ -1,0 +1,12 @@
+.idea/*
+.DS_Store
+/core-center/corecenter.iml
+/core-center/.classpath
+/core-center/.project
+/core-center/.settings/*
+/core-center/c:/*
+/core-center/target/*
+
+!/core-center/src/main/
+!/core-center/src/test/
+!/core-center/pom.xml

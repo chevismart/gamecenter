@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="gamecenter.core.dao.CenterMapper" >
+  <resultMap id="BaseResultMap" type="Center" >
+    <id column="centerId" property="centerid" jdbcType="INTEGER" />
+    <result column="centerName" property="centername" jdbcType="VARCHAR" />
+    <result column="enabled" property="enabled" jdbcType="BIT" />
+    <result column="extraParam" property="extraparam" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    centerId, centerName, enabled, extraParam
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from center
+    where centerId = #{centerid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from center
+    where centerId = #{centerid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="Center" >
+    insert into center (centerId, centerName, enabled, 
+      extraParam)
+    values (#{centerid,jdbcType=INTEGER}, #{centername,jdbcType=VARCHAR}, #{enabled,jdbcType=BIT}, 
+      #{extraparam,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="Center" >
+    insert into center
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="centerid != null" >
+        centerId,
+      </if>
+      <if test="centername != null" >
+        centerName,
+      </if>
+      <if test="enabled != null" >
+        enabled,
+      </if>
+      <if test="extraparam != null" >
+        extraParam,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="centerid != null" >
+        #{centerid,jdbcType=INTEGER},
+      </if>
+      <if test="centername != null" >
+        #{centername,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null" >
+        #{enabled,jdbcType=BIT},
+      </if>
+      <if test="extraparam != null" >
+        #{extraparam,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="Center" >
+    update center
+    <set >
+      <if test="centername != null" >
+        centerName = #{centername,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null" >
+        enabled = #{enabled,jdbcType=BIT},
+      </if>
+      <if test="extraparam != null" >
+        extraParam = #{extraparam,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where centerId = #{centerid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="Center" >
+    update center
+    set centerName = #{centername,jdbcType=VARCHAR},
+      enabled = #{enabled,jdbcType=BIT},
+      extraParam = #{extraparam,jdbcType=VARCHAR}
+    where centerId = #{centerid,jdbcType=INTEGER}
+  </update>
+</mapper>

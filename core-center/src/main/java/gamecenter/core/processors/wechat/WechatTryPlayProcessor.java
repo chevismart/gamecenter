@@ -4,7 +4,7 @@ import com.opensymphony.xwork2.Action;
 
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.processors.GeneralProcessor;
-import gamecenter.core.services.wechat.SubscribeService;
+import gamecenter.core.services.db.SubscribeService;
 
 public class WechatTryPlayProcessor extends GeneralProcessor{
 	//services

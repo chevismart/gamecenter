@@ -5,6 +5,7 @@
         <typeAlias alias="Center" type="gamecenter.core.domain.Center"/>
         <typeAlias alias="Customer" type="gamecenter.core.domain.Customer"/>
         <typeAlias alias="CustomerWechat" type="gamecenter.core.domain.CustomerWechat"/>
+        <typeAlias alias="CustomerWechatKey" type="gamecenter.core.domain.CustomerWechatKey"/>
         <typeAlias alias="Device" type="gamecenter.core.domain.Device"/>
         <typeAlias alias="Playrecord" type="gamecenter.core.domain.Playrecord"/>
         <typeAlias alias="Trade" type="gamecenter.core.domain.Trade"/>

@@ -88,7 +88,7 @@
         <action name="scan" class="wechatScanProcessor">
             <result name="success" type="dispatcher">/jsp/scan.jsp</result>
         </action>
-        <action name="sendMessage" class="wechatSendMessageProcessor">
+        <action name="wechatMessage" class="wechatMessageProcessor">
             <result name="success" type="dispatcher"></result>
         </action>
      </package>

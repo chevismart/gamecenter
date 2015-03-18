@@ -21,7 +21,7 @@ public class JsApiTicketService {
         if (appProfile.isWechatProfileValid()) {
             WechatProfile wechatProfile = appProfile.getWechatProfile();
             String access_token = wechatProfile.getWechatAccessToken().getAccess_token();
-            jsApiTicket = getTicket(access_token).getString("ticket");
+            jsApiTicket = getTicket(access_token);
             //更新获取ticket时间
             wechatProfile.setWechatJsapiTicketUpdateTime(new Date(System.currentTimeMillis()));
         } else {
@@ -29,18 +29,19 @@ public class JsApiTicketService {
         }
         return jsApiTicket;
     }
-	private JSONObject getTicket(String access_token){
+	private String getTicket(String access_token){
 		String ticketUrl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi";
 		JSONObject jsonObject = HttpUtil.getJson(String.format(ticketUrl, access_token));
 		String ticket="";
 			try {
 				if(jsonObject.getString("errcode").equals("0") && jsonObject.getString("errmsg").equals("ok") )
+					ticket = jsonObject.getString("ticket");
 					logger.info("更新ticket："+ticket);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				logger.error("更新ticket失败：");
 				e.printStackTrace();
 			}
-		return jsonObject;	
+		return ticket;	
 	}
 }

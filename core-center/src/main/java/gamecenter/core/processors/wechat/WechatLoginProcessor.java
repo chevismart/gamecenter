@@ -8,7 +8,8 @@ import gamecenter.core.beans.UserProfile;
 import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.processors.GeneralLoginInterface;
 import gamecenter.core.processors.GeneralProcessor;
-import gamecenter.core.services.wechat.SubscribeService;
+import gamecenter.core.services.db.UserService;
+import gamecenter.core.services.db.SubscribeService;
 import gamecenter.core.utils.ParameterUtil;
 import gamecenter.core.utils.ProfileUtil;
 
@@ -25,6 +26,7 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
 	//services
     ProfileManager profileManager;
     SubscribeService subscribeService;
+    UserService userService;
     //beans
     UserProfile userProfile;
     User wechatUser;
@@ -61,7 +63,12 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
                 userProfile.setIsFollowed(null != wechatUser.getSubscribe() && wechatUser.getSubscribe() != 0);
                 userProfile.setDeviceId(stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID));
                 profileManager.getAppProfile(appId).getWechatProfile().getActiveUserList().put(wechatUser.getOpenid(), wechatUser);
-                //welcome
+                //纪录微信用户信息
+                if(!userService.hasWechatCustomer(userProfile.getOpenId())){
+                	userService.addWechatCustomer(userProfile.getDisplayName(), userProfile.getOpenId(), 
+                			profileManager.getAppProfile(appId).getWechatProfile().getWechatAppId());
+                }
+                //获取订阅相关信息
                 boolean hasSubscribed = subscribeService.getHasSubscibed(userProfile.getOpenId());
                 boolean isSubcribing = subscribeService.getIsSubscibing(wechatUser);
                 boolean hasSubscribeBonus = subscribeService.getHasSubscribeBonus(userProfile.getOpenId());
@@ -92,7 +99,11 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
         this.userProfile = userProfile;
     }
     
-    public void setSubscribeService(SubscribeService subscribeService) {
+    public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	public void setSubscribeService(SubscribeService subscribeService) {
 		this.subscribeService = subscribeService;
 	}
 

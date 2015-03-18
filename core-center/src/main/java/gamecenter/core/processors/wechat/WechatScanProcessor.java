@@ -5,7 +5,7 @@ import com.opensymphony.xwork2.Action;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.WechatJsConfig;
 import gamecenter.core.processors.GeneralProcessor;
-import gamecenter.core.services.wechat.SubscribeService;
+import gamecenter.core.services.db.SubscribeService;
 import gamecenter.core.services.wechat.WechatJsConfigService;
 
 public class WechatScanProcessor extends GeneralProcessor{
@@ -24,4 +24,14 @@ public class WechatScanProcessor extends GeneralProcessor{
 		getHttpRequest().setAttribute("wechatJsConfig", wechatJsConfig);
 		return Action.SUCCESS;
 	}
+	public void setWechatJsConfigService(WechatJsConfigService wechatJsConfigService) {
+		this.wechatJsConfigService = wechatJsConfigService;
+	}
+	public void setUserProfile(UserProfile userProfile) {
+		this.userProfile = userProfile;
+	}
+	public void setProfileManager(ProfileManager profileManager) {
+		this.profileManager = profileManager;
+	}
+	
 }

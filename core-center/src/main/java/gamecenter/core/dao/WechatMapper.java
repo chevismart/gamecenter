@@ -10,6 +10,7 @@ public interface WechatMapper {
     int insertSelective(Wechat record);
 
     Wechat selectByPrimaryKey(Integer wechatid);
+    Wechat selectByWechatAppId(String wechatappid);
 
     int updateByPrimaryKeySelective(Wechat record);
 

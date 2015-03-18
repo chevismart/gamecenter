@@ -18,18 +18,22 @@
     where customerId = #{customerid,jdbcType=INTEGER}
       and wechatId = #{wechatid,jdbcType=INTEGER}
   </select>
-  <select id="selectByMacAddr" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from customer
-    where openId = #{openId,jdbcType=INTEGER}
+    from customer_wechat
+    where openId = #{openid,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="CustomerWechatKey">
     delete from customer_wechat
     where customerId = #{customerid,jdbcType=INTEGER}
       and wechatId = #{wechatid,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="domain.CustomerWechat">
+  <delete id="deleteByOpenId" parameterType="java.lang.String">
+    delete from customer_wechat
+    where openId = #{openid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="CustomerWechat">
     insert into customer_wechat (customerId, wechatId, openId, 
       subscribeBonus, subscribeTime)
     values (#{customerid,jdbcType=INTEGER}, #{wechatid,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, 

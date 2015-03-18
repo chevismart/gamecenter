@@ -10,7 +10,7 @@
     <result column="connectionStatus" property="connectionstatus" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="domain.Device" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="Device" extends="BaseResultMap" >
     <result column="deviceDesc" property="devicedesc" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >

@@ -29,6 +29,12 @@
             <artifactId>cloud-server</artifactId>
             <version>${cloudServer.version}</version>
         </dependency>
+        <!-- easymock -->
+        <dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymockclassextension</artifactId>
+			<version>2.3</version>
+		</dependency>
 		<!-- jstl dependency-->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -44,7 +50,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20141113</version>
+            <version>20090211</version>
         </dependency>
         <!-- log dependency-->
         <dependency>

@@ -23,9 +23,12 @@
     where customerId = #{customerid,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="Customer">
-    insert into customer (customerId, userId, registerDateTime, 
+  <selectKey resultType="java.lang.Integer" keyProperty="customerid" order="AFTER" >
+    SELECT @@IDENTITY
+  </selectKey>
+    insert into customer (userId, registerDateTime, 
       wallet, name, active)
-    values (#{customerid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{registerdatetime,jdbcType=TIMESTAMP}, 
+    values (#{userid,jdbcType=INTEGER}, #{registerdatetime,jdbcType=TIMESTAMP}, 
       #{wallet,jdbcType=REAL}, #{name,jdbcType=VARCHAR}, #{active,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="Customer">

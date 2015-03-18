@@ -25,10 +25,21 @@
     
     <bean id="globalPaymentBean" class="gamecenter.core.beans.GlobalPaymentBean" scope="singleton"></bean>
 
-	<bean id="subscribeService" class="gamecenter.core.services.SubscribeService" scope="session">
-        <aop:scoped-proxy/>
+	<bean id="subscribeService" class="gamecenter.core.services.db.SubscribeService">
+        <property name="customerWechatMapper" ref="customerWechatMapper"/>
+        <property name="tradeMapper" ref="tradeMapper"/>
+        <property name="playrecordMapper" ref="playrecordMapper"/>
+        <property name="deviceMapper" ref="deviceMapper"/>
     </bean>
-    <bean id="wechatJsConfigService" class="gamecenter.core.services.WechatJsConfigService">
-        <aop:scoped-proxy/>
+    <bean id="wechatJsConfigService" class="gamecenter.core.services.wechat.WechatJsConfigService">
+    </bean>
+    <bean id="userService" class="gamecenter.core.services.db.UserService">
+        <property name="customerWechatMapper" ref="customerWechatMapper"/>
+        <property name="customerMapper" ref="customerMapper"/>
+        <property name="userMapper" ref="userMapper"/>
+        <property name="wechatMapper" ref="wechatMapper"/>
+    </bean>
+    <bean id="AppService" class="gamecenter.core.services.db.AppService">
+        <property name="wechatMapper" ref="wechatMapper"/>
     </bean>
 </beans>

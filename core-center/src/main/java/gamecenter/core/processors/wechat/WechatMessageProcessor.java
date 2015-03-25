@@ -1,12 +1,15 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.Action;
+
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.EventMessage;
 import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.services.db.SubscribeService;
 import gamecenter.core.utils.EncryptUtil;
+
 import org.apache.commons.io.IOUtils;
+
 import weixin.popular.api.MessageAPI;
 import weixin.popular.bean.BaseResult;
 import weixin.popular.bean.message.Message;
@@ -14,7 +17,9 @@ import weixin.popular.bean.message.TextMessage;
 import weixin.popular.util.XMLConverUtil;
 
 import javax.servlet.ServletOutputStream;
+
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 public class WechatMessageProcessor extends GeneralProcessor {
@@ -43,38 +48,41 @@ public class WechatMessageProcessor extends GeneralProcessor {
             String echostr = getHttpRequest().getParameter("echostr");
             //判断是否为第一次
             if (echostr != null) {
-                ServletOutputStream os = getHttpResponse().getOutputStream();
-                os.print(echostr);
-                os.flush();
-                os.close();
+            	PrintWriter pw = getHttpResponse().getWriter();
+				pw.print(echostr);
+				pw.close();
             }
-        }
-        //获取并解析xml
-        InputStream inputStream = getHttpRequest().getInputStream();
-        String xml = IOUtils.toString(inputStream);
-        logger.debug("Received message xml: {}", xml);
-        EventMessage eventMessage = XMLConverUtil.convertToObject(EventMessage.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
-        if (eventMessage != null) {
-            if (eventMessage.getMsgType().equals("event") && eventMessage.getEvent().equals("subscribe")) {
-                logger.debug("user subscribe");
-                //判断是否第一次关注
-                String content = "";
-                boolean hasSubscibed = subscribeService.getHasSubscibed(userProfile.getOpenId());
-                if (!hasSubscibed)
-                    content = "谢谢关注公众号!您可获得一次免费试玩机会";
-                else
-                    content = "谢谢关注公众号";
-                //发送消息
-                MessageAPI messageAPI = new MessageAPI();
-                Message message = new TextMessage(eventMessage.getFromUserName(), content);
-                BaseResult result = messageAPI.messageCustomSend(access_token, message);
-                //无错误信息返回
-                if (result.getErrmsg().equals(""))
-                    return Action.SUCCESS;
+            else{
+            	//获取并解析xml
+                InputStream inputStream = getHttpRequest().getInputStream();
+                String xml = IOUtils.toString(inputStream).trim();
+                logger.debug("Received message xml: {}", xml);
+                EventMessage eventMessage = XMLConverUtil.convertToObject(EventMessage.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
+                if (eventMessage != null) {
+                	//订阅事件
+                    if (eventMessage.getMsgType().equals("event") && eventMessage.getEvent().equals("subscribe")) {
+                        logger.info("user subscribe");
+                        //判断是否第一次关注
+                        String content = "";
+                        boolean hasSubscibed = subscribeService.getHasSubscibed(userProfile.getOpenId());
+                        if (!hasSubscibed)
+                            content = "谢谢关注公众号!您可获得一次免费试玩机会";
+                        else
+                            content = "谢谢关注公众号";
+                        //发送消息
+                        MessageAPI messageAPI = new MessageAPI();
+                        Message message = new TextMessage(eventMessage.getFromUserName(), content);
+                        BaseResult result = messageAPI.messageCustomSend(access_token, message);
+                        //无错误信息返回
+                        if (result.getErrmsg().equals(""))
+                        	logger.info("subscribe response success");                            
+                    }
+                    //其他信息
+                    
+                }
             }
-
-        }
-        return Action.ERROR;
+        } 
+        return Action.NONE;
     }
 
     public void setSubscribeService(SubscribeService subscribeService) {

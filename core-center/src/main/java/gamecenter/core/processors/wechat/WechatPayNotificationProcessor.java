@@ -29,6 +29,8 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
     Logger paymentLogger = LoggerFactory.getLogger("wechatPaymentLogger");
     ProfileManager profileManager;
     WechatProfile wechatProfile;
+    private String paynotification;
+    String paynotificationKey = "Paynotification";
 
     @Override
     public String execute() throws Exception {
@@ -46,7 +48,12 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
             logger.warn("The payment notification is invalid to be processed.");
         }
         logger.info("The next step is {}", nextStep);
+        storePaynotification(payNotification);
         return nextStep;
+    }
+
+    protected void storePaynotification(PayNotification payNotification) {
+        getHttpRequest().setAttribute(paynotificationKey, payNotification);
     }
 
     protected PayNotification getPayNotification() throws IOException {
@@ -58,8 +65,8 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
             logger.info("Converted payment notification is: {}", payNotification.toString());
             getHttpRequest().setAttribute("Paynotification", payNotification);
         } else {
-            payNotification = (PayNotification) getHttpRequest().getAttribute("Paynotification");
-            logger.info("Retrieve the pay notification from http request.");
+            payNotification = (PayNotification) getHttpRequest().getAttribute(paynotificationKey);
+            logger.info("Retrieve the pay notification from http request: {}", payNotification.toString());
         }
         return payNotification;
     }

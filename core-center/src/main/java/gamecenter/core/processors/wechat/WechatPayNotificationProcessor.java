@@ -29,8 +29,8 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
     Logger paymentLogger = LoggerFactory.getLogger("wechatPaymentLogger");
     ProfileManager profileManager;
     WechatProfile wechatProfile;
-    private String paynotification;
     String paynotificationKey = "Paynotification";
+    private String paynotification;
 
     @Override
     public String execute() throws Exception {
@@ -74,13 +74,16 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
 
     protected void returnWechatResponse(String content) {
         try {
+            logger.info("Response is null? = {}", getHttpResponse());
+
+
             ServletOutputStream os = getHttpResponse().getOutputStream();
             getHttpResponse().setStatus(HttpServletResponse.SC_OK);
             logger.info("Return notification response: {}", content);
             os.write(content.getBytes());
             os.flush();
             os.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("Return wechat response with error: {}", e.getMessage());
         }
     }

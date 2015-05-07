@@ -1,28 +1,34 @@
 package gamecenter.core.processors.wechat;
 
+import gamecenter.core.beans.CoreCenterHost;
 import gamecenter.core.beans.GlobalPaymentBean;
 import gamecenter.core.beans.wechat.PayNotification;
 import gamecenter.core.constants.CommonConstants;
+import gamecenter.core.processors.HttpResponseHandler;
 import gamecenter.core.services.CoinTopUpService;
 import gamecenter.core.utils.ParameterUtil;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 import weixin.popular.util.XMLConverUtil;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
  * Created by Chevis on 15/2/20.
  */
-public class PaidNotificationProcessor extends WechatPayNotificationProcessor {
+public class PaidNotificationResponseHandler extends WechatPayNotificationProcessor implements HttpResponseHandler {
 
 
     GlobalPaymentBean globalPaymentBean;
 
-    CoinTopUpService coinTopUpService = new CoinTopUpService();
+    CoinTopUpService coinTopUpService = new CoinTopUpService(CoreCenterHost.CORECENTER_HOST, this);
+    private PayNotification payNotification;
 
     @Override
     public String execute() throws Exception {
 
-        PayNotification payNotification = getPayNotification();
+        payNotification = getPayNotification();
 
         logger.info("PayNotification object is {} obtained.", payNotification == null ? "" : "not");
 
@@ -52,20 +58,23 @@ public class PaidNotificationProcessor extends WechatPayNotificationProcessor {
         if (isValidMsg) {
             logger.info("Received success payment with amount {} for user({})", payNotification.getTotal_fee(), payNotification.getOpenid());
             paymentLogger.info(payNotification.toString());
-            boolean topupResult = false;
-            try {
-                topupResult = coinTopUpService.topupCoins(coins);
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-            }
-            logger.info("Top up result is: {}", topupResult);
+
+            logger.info("Requesting device to topup coins");
+            HttpResponse response = coinTopUpService.submit(coins).get();
+            String json = EntityUtils.toString(response.getEntity());
+            logger.info("Topup response got {}", json);
+            boolean topupResult = CoinTopUpService.verifyTopupResult(json);
+
             if (topupResult) {
                 globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
                 globalPaymentBean.getSettledPayments().put(payNotification.getOut_trade_no(), payNotification);
-                logger.info(globalPaymentBean.getSettledPayments().toString());
-                logger.info(globalPaymentBean.getUnSettlementPayments().toString());
+                logger.info("Settled Payment: {}", globalPaymentBean.getSettledPayments().toString());
+                logger.info("Unsettled Payment: {}", globalPaymentBean.getUnSettlementPayments().toString());
             }
             replyWechatForPayNotification(topupResult);
+            logger.info("Response sent!");
+
+
         } else {
             logger.warn("Invalid message for top up notification or top up has been processed.");
             replyWechatForPayNotification(isValidMsg);
@@ -80,6 +89,7 @@ public class PaidNotificationProcessor extends WechatPayNotificationProcessor {
         payNotification.setReturn_code(isSuccess ? CommonConstants.SUCCESS : CommonConstants.FAIL);
         String responseXML = XMLConverUtil.convertToXML(payNotification);
         returnWechatResponse(responseXML);
+        logger.debug("Response xml is returned: {}", responseXML);
     }
 
 
@@ -87,7 +97,7 @@ public class PaidNotificationProcessor extends WechatPayNotificationProcessor {
         String payNotificationId = payNotification.getOut_trade_no();
         boolean isProcessed = !globalPaymentBean.getUnSettlementPayments().keySet().contains(payNotificationId) &&
                 globalPaymentBean.getSettledPayments().keySet().contains(payNotificationId);
-        logger.info("Payment id() is {}", payNotificationId, isProcessed ? "processed" : "not processed");
+        logger.info("Payment id({}) is {}", payNotificationId, isProcessed ? "processed" : "not processed");
         return isProcessed;
     }
 
@@ -99,4 +109,39 @@ public class PaidNotificationProcessor extends WechatPayNotificationProcessor {
         this.globalPaymentBean = globalPaymentBean;
     }
 
+    @Override
+    public void completed(HttpResponse httpResponse) {
+
+//        boolean topupResult = false;
+//        if (httpResponse != null) {
+//            logger.info("Top up response obtained: {}", httpResponse.getEntity());
+        try {
+            String json = EntityUtils.toString(httpResponse.getEntity());
+//                topupResult = CoinTopUpService.verifyTopupResult(json);
+            logger.info("Receive response: {}", json);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+//        }
+
+//        logger.info("Top up result is: {}", topupResult);
+//        if (topupResult) {
+//            globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
+//            globalPaymentBean.getSettledPayments().put(payNotification.getOut_trade_no(), payNotification);
+//            logger.info("Settled Payment: {}", globalPaymentBean.getSettledPayments().toString());
+//            logger.info("Unsettled Payment: {}",globalPaymentBean.getUnSettlementPayments().toString());
+//        }
+//        replyWechatForPayNotification(topupResult);
+    }
+
+    @Override
+    public void failed(Exception e) {
+        logger.error("Topup failed due to: {}", e.getMessage());
+        replyWechatForPayNotification(false);
+    }
+
+    @Override
+    public void cancelled() {
+        logger.warn("Request is cancelled!");
+    }
 }

@@ -5,7 +5,7 @@ import gamecenter.core.beans.wechat.WechatProfile;
 /**
  * Created by Chevis on 14/12/15.
  */
-public class WechatProfileBuilder {
+public class WechatProfileBuilder implements Builder {
 
     public static WechatAppIdBuilder newBuilder() {
         return new WechatProfileBuilder.Builder();

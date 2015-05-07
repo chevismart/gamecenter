@@ -211,6 +211,12 @@
             <version>1.4.10</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient-cache</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>corecenter</finalName>

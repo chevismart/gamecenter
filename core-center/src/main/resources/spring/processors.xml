@@ -86,7 +86,7 @@
         <property name="profileManager" ref="profileManager"/>
     </bean>
 
-    <bean id="paidNotifyProcessor" class="gamecenter.core.processors.wechat.PaidNotificationProcessor">
+    <bean id="paidNotifyProcessor" class="gamecenter.core.processors.wechat.PaidNotificationResponseHandler">
         <property name="profileManager" ref="profileManager"/>
         <property name="globalPaymentBean" ref="globalPaymentBean"/>
     </bean>

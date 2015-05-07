@@ -17,6 +17,8 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import weixin.popular.api.TokenAPI;
 import weixin.popular.bean.Token;
 import weixin.popular.client.LocalHttpClient;
@@ -31,7 +33,7 @@ import java.util.List;
  * Created by Chevis on 14/12/15.
  */
 public class AccessTokenService extends Service {
-
+    Logger logger = LoggerFactory.getLogger(this.getClass());
     TokenAPI wechatAccessTokenApi = new TokenAPI();
 
     public AccessTokenService(TokenAPI wechatAccessTokenApi) {

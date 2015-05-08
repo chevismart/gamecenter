@@ -11,7 +11,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import weixin.popular.util.XMLConverUtil;
 
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -111,33 +110,13 @@ public class PaidNotificationResponseHandler extends WechatPayNotificationProces
 
     @Override
     public void completed(HttpResponse httpResponse) {
-
-//        boolean topupResult = false;
-//        if (httpResponse != null) {
-//            logger.info("Top up response obtained: {}", httpResponse.getEntity());
-        try {
-            String json = EntityUtils.toString(httpResponse.getEntity());
-//                topupResult = CoinTopUpService.verifyTopupResult(json);
-            logger.info("Receive response: {}", json);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-//        }
-
-//        logger.info("Top up result is: {}", topupResult);
-//        if (topupResult) {
-//            globalPaymentBean.getUnSettlementPayments().remove(payNotification.getOut_trade_no());
-//            globalPaymentBean.getSettledPayments().put(payNotification.getOut_trade_no(), payNotification);
-//            logger.info("Settled Payment: {}", globalPaymentBean.getSettledPayments().toString());
-//            logger.info("Unsettled Payment: {}",globalPaymentBean.getUnSettlementPayments().toString());
-//        }
-//        replyWechatForPayNotification(topupResult);
+        logger.info("Receive response in complete");
     }
 
     @Override
     public void failed(Exception e) {
         logger.error("Topup failed due to: {}", e.getMessage());
-        replyWechatForPayNotification(false);
+//        replyWechatForPayNotification(false);
     }
 
     @Override

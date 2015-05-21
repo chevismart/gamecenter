@@ -22,7 +22,7 @@
     <c:otherwise>
     </c:otherwise>
 </c:choose>
-<a href="scan.action">选择其他</a>
+<a href="scan.action">二维码扫一扫</a>
 
 </body>
 </html>

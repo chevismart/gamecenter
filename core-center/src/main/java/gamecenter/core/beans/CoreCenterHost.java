@@ -20,7 +20,7 @@ public class CoreCenterHost {
     public static final String WECHAT_ORDER_URL = StringUtils.join(StringJoiner(CORECENTER_HOST_AND_PORT, CONTEXT_NAME, WECHAT_ORDER), SEPEARTOR);
     private static final String AUTH = "auth";
     // Sample: alcock.gicp.net:8888/corecenter/auth
-    public static final String AUTH_URL = StringUtils.join(StringJoiner(CORECENTER_HOST_AND_PORT, CONTEXT_NAME, AUTH), SEPEARTOR);
+    public static final String AUTH_URL = StringUtils.join(StringJoiner(CORECENTER_HOST, CONTEXT_NAME, AUTH), SEPEARTOR);
 
     public static String getHttpURL(String val) {
         return "http://" + val;

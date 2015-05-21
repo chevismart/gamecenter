@@ -47,10 +47,12 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
 
         try {
             if (isValidLogin()) {
+
+                logger.debug("Login valid.");
                 AccessInfo accessInfo = new AccessInfo();
                 accessInfo.setAccessChannel(AccessChannel.WECHAT);
                 accessInfo.setAppProfile(profileManager.getAppProfile(appId));
-
+                logger.debug("Stored access info.");
                 // TODO: to retrieve the user from DB by openId, or create profile
                 userProfile.setAccessInfo(accessInfo);
                 userProfile.setOpenId(wechatUser.getOpenid());
@@ -60,17 +62,24 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
                 userProfile.setIsFollowed(null != wechatUser.getSubscribe() && wechatUser.getSubscribe() != 0);
                 userProfile.setDeviceId(stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID));
                 profileManager.getAppProfile(appId).getWechatProfile().getActiveUserList().put(wechatUser.getOpenid(), wechatUser);
-                //纪录微信用户信息
+                logger.debug("Construct user profile completely.");
+                //如果首次登陆，记录录微信用户信息
                 if (!userService.hasWechatCustomer(userProfile.getOpenId())) {
                     userService.addWechatCustomer(userProfile.getDisplayName(), userProfile.getOpenId(),
                             profileManager.getAppProfile(appId).getWechatProfile().getWechatAppId());
+                    logger.debug("Recorded user info successfully.");
                 }
                 //获取订阅相关信息
                 boolean hasSubscribed = subscribeService.getHasSubscibed(userProfile.getOpenId());
-                boolean isSubcribing = subscribeService.getIsSubscibing(wechatUser);
+                logger.error("wechat user is =", wechatUser);
+                logger.error("wechat subscribe is =", wechatUser.getSubscribe());
+
+                boolean isSubscribing = false; // subscribeService.getIsSubscibing(wechatUser);
                 boolean hasSubscribeBonus = subscribeService.getHasSubscribeBonus(userProfile.getOpenId());
+                logger.debug("Request the subscribe details from wechat: subscribed = {}, isSubscribing = {}, hasBonus = {}",
+                        hasSubscribed, isSubscribing, hasSubscribeBonus);
                 getHttpRequest().setAttribute("hasSubscribed", hasSubscribed);
-                getHttpRequest().setAttribute("isSubcribing", isSubcribing);
+                getHttpRequest().setAttribute("isSubscribing", isSubscribing);
                 getHttpRequest().setAttribute("hasSubscribeBonus", hasSubscribeBonus);
                 result = Action.SUCCESS;
             } else {
@@ -78,7 +87,7 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
             }
 
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("Login failed!", e);
             return Action.ERROR;
         }
         return result;
@@ -106,10 +115,19 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
 
     @Override
     public boolean isValidLogin() {
+        logger.debug("Profile size: {}", profileManager.getProfiles().size());
         if (StringUtils.isNotEmpty(appId) &&
                 ProfileUtil.verifyAppProfile(profileManager.getAppProfile(appId)) &&
                 profileManager.getAppProfile(appId).isWechatProfileValid()) {
+            logger.debug("Profile is = {}, wechatProfileValid = ",
+                    profileManager.getAppProfile(appId),
+                    profileManager.getAppProfile(appId).isWechatProfileValid());
             wechatUser = profileManager.getUserInfo(appId, code, getHttpRequest().getLocale());
+
+            if (wechatUser == null) return false;
+
+        } else {
+            return false;
         }
         return StringUtils.isNotEmpty(wechatUser.getOpenid());
     }

@@ -32,21 +32,36 @@ public class SnsAuthService extends Service {
             WechatProfile wechatProfile = appProfile.getWechatProfile();
             SnsToken snsToken = wechatSnsApi.oauth2AccessToken(wechatProfile.getWechatAppId(), wechatProfile.getWechatAppSecret(), code);
 
-            if (isUserInfoCached(appProfile.getWechatProfile(), snsToken.getOpenid())) {
-                userInfo = wechatProfile.getActiveUserList().get(snsToken.getOpenid());
-                logForUserInfoRetrieval("cache", userInfo);
-            } else {
-                userInfo = userAPI.userInfo(wechatProfile.getWechatAccessToken().getAccess_token(), snsToken.getOpenid());
-                if (!isUserValid(userInfo)) {
-                    userInfo = wechatSnsApi.userinfo(snsToken.getAccess_token(), snsToken.getOpenid(), local);
-                } else {
-                    wechatProfile.getActiveUserList().put(snsToken.getOpenid(), userInfo);
-                }
-                logForUserInfoRetrieval("wechat server", userInfo);
-            }
+            userInfo = getUser(appProfile, local, wechatProfile, snsToken.getOpenid(), snsToken.getAccess_token());
 
         }
         return userInfo;
+    }
+
+    protected User getUser(AppProfile appProfile, String local, WechatProfile wechatProfile, String openId, String accessToken) {
+        User userInfo;
+        if (isUserInfoCached(appProfile.getWechatProfile(), openId)) {
+            userInfo = wechatProfile.getActiveUserList().get(openId);
+            logForUserInfoRetrieval("cache", userInfo);
+        } else {
+            userInfo = userAPI.userInfo(wechatProfile.getWechatAccessToken().getAccess_token(), openId);
+            if (!isUserValid(userInfo)) {
+                userInfo = wechatSnsApi.userinfo(accessToken, openId, local);
+            } else {
+                wechatProfile.getActiveUserList().put(openId, userInfo);
+            }
+            logForUserInfoRetrieval("wechat server", userInfo);
+        }
+        return userInfo;
+    }
+
+    public User getUserInfo(String openId, AppProfile appProfile, String locale) {
+        User user = null;
+        if (null != appProfile && StringUtils.isNotEmpty(openId)) {
+            user = getUser(appProfile, locale, appProfile.getWechatProfile(), openId, "");
+        }
+        logger.debug("User is null? [{}]", user == null);
+        return user;
     }
 
     private void logForUserInfoRetrieval(String channel, User userInfo) {

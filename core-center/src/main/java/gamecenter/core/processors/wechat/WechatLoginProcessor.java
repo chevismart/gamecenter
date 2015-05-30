@@ -14,6 +14,7 @@ import gamecenter.core.utils.ProfileUtil;
 import org.apache.commons.lang3.StringUtils;
 import weixin.popular.bean.User;
 
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -31,17 +32,23 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
     String appId;
     String code;
     String state;
-
+    String openId;
 
     @Override
     public String execute() throws Exception {
 
-        code = getHttpRequest().getParameter(CommonConstants.WECHAT_AUTH_CODE);
-        state = getHttpRequest().getParameter(CommonConstants.WECHAT_AUTH_STATE);
-        Map<String, String> stateParam = ParameterUtil.extractParam(state);
-        appId = stateParam.get(CommonConstants.WECHAT_STATE_PARAM_APPID);
+        openId = getHttpRequest().getParameter("openId");
+        appId = getHttpRequest().getParameter("appId");
 
-        logger.info("Login with code = {}, state = {}", code, state);
+        if (StringUtils.isEmpty(openId) && StringUtils.isEmpty(appId)) {
+            code = getHttpRequest().getParameter(CommonConstants.WECHAT_AUTH_CODE);
+            state = getHttpRequest().getParameter(CommonConstants.WECHAT_AUTH_STATE);
+            Map<String, String> stateParam = ParameterUtil.extractParam(state);
+            appId = stateParam.get(CommonConstants.WECHAT_STATE_PARAM_APPID);
+            logger.info("Login with code = {}, state = {}", code, state);
+        } else {
+            logger.debug("Login with openId ={}, appId ={}", openId, appId);
+        }
 
         String result;
 
@@ -60,7 +67,7 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
                 userProfile.setInternalId(ProfileUtil.getUserUnifyId(AccessChannel.WECHAT, wechatUser.getOpenid()));
                 userProfile.setUserImgUrl(wechatUser.getHeadimgurl());
                 userProfile.setIsFollowed(null != wechatUser.getSubscribe() && wechatUser.getSubscribe() != 0);
-                userProfile.setDeviceId(stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID));
+//                userProfile.setDeviceId(stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID));
                 profileManager.getAppProfile(appId).getWechatProfile().getActiveUserList().put(wechatUser.getOpenid(), wechatUser);
                 logger.debug("Construct user profile completely.");
                 //如果首次登陆，记录录微信用户信息
@@ -116,19 +123,27 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
     @Override
     public boolean isValidLogin() {
         logger.debug("Profile size: {}", profileManager.getProfiles().size());
-        if (StringUtils.isNotEmpty(appId) &&
-                ProfileUtil.verifyAppProfile(profileManager.getAppProfile(appId)) &&
-                profileManager.getAppProfile(appId).isWechatProfileValid()) {
-            logger.debug("Profile is = {}, wechatProfileValid = ",
-                    profileManager.getAppProfile(appId),
-                    profileManager.getAppProfile(appId).isWechatProfileValid());
-            wechatUser = profileManager.getUserInfo(appId, code, getHttpRequest().getLocale());
+        if (StringUtils.isEmpty(openId)) {
+            if (StringUtils.isNotEmpty(appId) &&
+                    ProfileUtil.verifyAppProfile(profileManager.getAppProfile(appId)) &&
+                    profileManager.getAppProfile(appId).isWechatProfileValid()) {
+                logger.debug("Profile is = {}, wechatProfileValid = ",
+                        profileManager.getAppProfile(appId),
+                        profileManager.getAppProfile(appId).isWechatProfileValid());
+                wechatUser = profileManager.getUserInfo(appId, code, getLocale());
 
-            if (wechatUser == null) return false;
+                if (wechatUser == null) return false;
 
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            wechatUser = profileManager.getUserInfo(appId, getLocale(), openId);
         }
         return StringUtils.isNotEmpty(wechatUser.getOpenid());
+    }
+
+    public Locale getLocale() {
+        return getHttpRequest().getLocale();
     }
 }

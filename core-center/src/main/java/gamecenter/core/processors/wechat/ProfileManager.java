@@ -120,6 +120,15 @@ public class ProfileManager {
         return user;
     }
 
+    public User getUserInfo(String appId, Locale locale, String openId) {
+        User user = null;
+        AppProfile appProfile = profiles.get(appId);
+        if (ProfileUtil.verifyAppProfile(appProfile)) {
+            user = snsAuthService.getUserInfo(openId, appProfile, locale.getLanguage());
+        }
+        return user;
+    }
+
     public void checkAndUpdateAllAccessToken() {
         for (AppProfile appProfile : profiles.values()) {
             chevkWechatProfile(appProfile);

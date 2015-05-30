@@ -13,10 +13,12 @@ import org.slf4j.LoggerFactory;
 public class WechatJsConfigService {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public WechatJsConfig getConfig(String jsapi_ticket, String wechatAppId) {
+    public WechatJsConfig getConfig(String jsapi_ticket, String wechatAppId, String code) {
         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
         String nonceStr = RandomStringUtils.randomAlphabetic(6);
-        String url = "http://wawaonline.net/corecenter/scan.action";//当前页面的url
+//        String url = "http://wawaonline.net/corecenter/scan.action";//当前页面的url
+
+        String url = "http://wawaonline.net/corecenter/auth?code=" + code + "&state=appid%3Aliyuanapp%2Cdeviceid%3AATM0001";//当前页面的url
         String signature = getSignature(jsapi_ticket, nonceStr, timestamp, url);
 
         WechatJsConfig wechatJsConfig = new WechatJsConfig();

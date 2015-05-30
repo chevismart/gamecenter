@@ -38,7 +38,8 @@ public class AccessRouterProcessor extends GeneralProcessor {
     }
 
     private boolean isWechatAccess(HttpServletRequest httpRequest) {
-        return httpRequest.getParameterMap().keySet().contains(CommonConstants.WECHAT_AUTH_STATE) && httpRequest.getParameterMap().size() >= 2;
+        return httpRequest.getParameterMap().keySet().contains(CommonConstants.WECHAT_AUTH_STATE) && httpRequest.getParameterMap().size() >= 2
+                || httpRequest.getParameterMap().containsKey("openId");
     }
 
 }

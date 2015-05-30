@@ -48,16 +48,16 @@
         </action>
         <action name="wechatLogin" class="wechatLoginProcessor">
             <result name="wechatOAuth" type="chain">wechatOAuth</result>
-            <result name="success">/jsp/welcome.jsp</result>
+            <result name="success" type="chain">scan</result>
         </action>
         <action name="wechatOAuth" class="wechatOAuthProcessor"/>
 
         <action name="commonLogin" class="loginProcessor">
-            <result name="success" type="chain">welcome</result>
+            <result name="success" type="chain">scan</result>
         </action>
 
         <action name="login" class="webLoginProcessor">
-            <result name="success" type="chain">welcome</result>
+            <result name="success" type="chain">scan</result>
         </action>
 
         <action name="welcome" class="welcomeProcessor">
@@ -95,16 +95,18 @@
             <result name="success" type="dispatcher">/jsp/payment/charge.jsp</result>
         </action>
 
+        <action name="wechatMessage" class="wechatMessageProcessor">
+            <result name="success" type="dispatcher"></result>
+        </action>
+
     </package>
     <package name="mainPackage" extends="common-global">
         <action name="tryPlay" class="wechatTryPlayProcessor">
             <result name="success" type="dispatcher">/jsp/play.jsp</result>
         </action>
         <action name="scan" class="wechatScanProcessor">
-            <result name="success" type="dispatcher">/jsp/scan.jsp</result>
-        </action>
-        <action name="wechatMessage" class="wechatMessageProcessor">
-            <result name="success" type="dispatcher"></result>
+            <!--<result name="success" type="dispatcher">/jsp/scan.jsp</result>-->
+            <result name="success" type="chain">welcome</result>
         </action>
     </package>
 

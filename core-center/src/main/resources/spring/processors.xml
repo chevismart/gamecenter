@@ -64,9 +64,8 @@
     </bean>
     
     <bean id="wechatMessageProcessor" class="gamecenter.core.processors.wechat.WechatMessageProcessor">
-        <property name="subscribeService" ref="subscribeService"/>
-        <property name="userProfile" ref="userProfile"/>
-        <property name="profileManager" ref="profileManager"/>
+        <constructor-arg name="subscribeService" ref="subscribeService"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 
     <bean id="welcomeProcessor" class="gamecenter.core.processors.WelcomeProcessor">

@@ -6,7 +6,11 @@ import gamecenter.core.domain.Wechat;
 
 public class AppService {
     //dao
-    WechatMapper wechatMapper;
+    private final WechatMapper wechatMapper;
+
+    public AppService(WechatMapper wechatMapper) {
+        this.wechatMapper = wechatMapper;
+    }
 
     boolean addWechat(WechatProfile wechatprofile) {
         Wechat wechat = new Wechat();
@@ -18,9 +22,4 @@ public class AppService {
         wechatMapper.insert(wechat);
         return true;
     }
-
-    public void setWechatMapper(WechatMapper wechatMapper) {
-        this.wechatMapper = wechatMapper;
-    }
-
 }

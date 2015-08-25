@@ -1,8 +1,6 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.Action;
-import gamecenter.core.beans.AppProfile;
-import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.EventMessage;
 import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.services.db.SubscribeService;
@@ -24,38 +22,24 @@ import static java.util.Arrays.asList;
 
 public class WechatMessageProcessor extends GeneralProcessor {
     //services
-    SubscribeService subscribeService;
-    //beans
-    UserProfile userProfile;
+    private final SubscribeService subscribeService;
+    private final ProfileManager profileManager;
 
-    ProfileManager profileManager;
+    public WechatMessageProcessor(SubscribeService subscribeService, ProfileManager profileManager) {
+        this.subscribeService = subscribeService;
+        this.profileManager = profileManager;
+    }
 
     @Override
     public String execute() throws Exception {
         logger.debug("Received wechat message.");
-        //
+
         String signature = getHttpRequest().getParameter("signature");
         String timestamp = getHttpRequest().getParameter("timestamp");
-//        String echostr = getHttpRequest().getParameter("echostr");
+        String echostr = getHttpRequest().getParameter("echostr");
         String nonce = getHttpRequest().getParameter("nonce");
+        logger.debug("signature: {}, timestamp: {}, nonce: {}", signature, timestamp, nonce);
         String token = "wawa";
-        String encodingAESKey = "nrwKCEFHqQbCl2VLjiOlyEHfUqxGHpTx13BwgveEa5t";
-
-        logger.debug("signature({}), timestamp({}),  nonce({})", signature, timestamp, nonce);
-        AppProfile liyuanapp = profileManager.getAppProfile("liyuanapp");
-//
-//        logger.debug("Access Token({}), appId({})",liyuanapp.getWechatProfile().getWechatAccessToken().getAccess_token(),liyuanapp.getWechatProfile().getWechatAppId());
-//
-//        WXBizMsgCrypt wxBizMsgCrypt = new WXBizMsgCrypt(
-//                token,
-//                encodingAESKey,
-//                liyuanapp.getWechatProfile().getWechatAppId());
-//        try {
-//            logger.debug("Decrypted message: {}", wxBizMsgCrypt.verifyUrl(signature, timestamp, nonce, echostr));
-//        } catch (Exception e) {
-//            logger.error("Verify message failure with reason: ", e);
-//        }
-
         String[] array = new String[]{token, timestamp, nonce};
         Arrays.sort(array);
         logger.debug("Received parameters values after sorted: {}", ArrayUtils.toString(array));
@@ -63,10 +47,8 @@ public class WechatMessageProcessor extends GeneralProcessor {
         for (int i = 0; i < array.length; i++) {
             sb.append(array[i]);
         }
-        String str = sb.toString();
         //验证消息真实性(是否来自微信)
-        if (EncryptUtil.SHA1(str).equals(signature)) {
-            String echostr = getHttpRequest().getParameter("echostr");
+        if (EncryptUtil.SHA1(sb.toString()).equals(signature)) {
             //判断是否为第一次
             if (echostr != null) {
                 PrintWriter pw = getHttpResponse().getWriter();
@@ -81,11 +63,11 @@ public class WechatMessageProcessor extends GeneralProcessor {
                 if (eventMessage != null) {
                     //订阅事件
                     if (eventMessage.getMsgType().equals("event") && eventMessage.getEvent().equals("subscribe")) {
-                        String access_token = liyuanapp.getWechatProfile().getWechatAccessToken().getAccess_token();
-                        logger.info("user subscribe: {}", userProfile.getOpenId());
+                        String openId = eventMessage.getFromUserName();
+                        logger.info("User{} is subscribing.", openId);
                         //判断是否第一次关注
                         String content = "";
-                        boolean hasSubscibed = subscribeService.getHasSubscibed(userProfile.getOpenId());
+                        boolean hasSubscibed = subscribeService.getHasSubscibed(openId);
                         if (!hasSubscibed)
                             content = "谢谢关注公众号!您可获得一次免费试玩机会";
                         else
@@ -101,7 +83,7 @@ public class WechatMessageProcessor extends GeneralProcessor {
 
                         Message articleMsg = new NewsMessage(eventMessage.getFromUserName(), asList(article));
 
-                        BaseResult result = messageAPI.messageCustomSend(access_token, articleMsg);
+                        BaseResult result = messageAPI.messageCustomSend(profileManager.getAppProfile("liyuanapp").getWechatProfile().getWechatAccessToken().getAccess_token(), articleMsg);
                         //无错误信息返回
                         if (result.getErrmsg().equals(""))
                             logger.info("subscribe response success");
@@ -116,15 +98,4 @@ public class WechatMessageProcessor extends GeneralProcessor {
         return Action.NONE;
     }
 
-    public void setSubscribeService(SubscribeService subscribeService) {
-        this.subscribeService = subscribeService;
-    }
-
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
-
-    public void setProfileManager(ProfileManager profileManager) {
-        this.profileManager = profileManager;
-    }
 }

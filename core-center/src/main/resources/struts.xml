@@ -38,7 +38,7 @@
 
     <package name="authenticPackage" extends="authentic">
         <action name="" class="deviceRegistryProcessor">
-            <result name="success" type="dispatcher">/jsp/center/deviceRegistry.jsp</result>
+            <result name="success" type="dispatcher">/jsp/center/topupSuccess.jsp</result>
         </action>
     </package>
 
@@ -68,6 +68,9 @@
             <result>/jsp/error.jsp</result>
         </action>
 
+        <action name="topup" class="topupProcessor">
+            <result name="success" type="dispatcher">/jsp/center/topupSuccess.jsp</result>
+        </action>
 
         <action name="simpleAction" class="demoActionClass">
             <result name="success" type="chain">simpleAction</result>
@@ -93,6 +96,10 @@
 
         <action name="credential" class="credentialProcessor">
             <result name="success" type="dispatcher">/jsp/payment/charge.jsp</result>
+        </action>
+
+        <action name="wechatMessage" class="wechatMessageProcessor">
+            <result name="success" type="dispatcher"></result>
         </action>
 
         <action name="wechatMessage" class="wechatMessageProcessor">

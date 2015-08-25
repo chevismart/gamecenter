@@ -14,7 +14,8 @@ public class WechatTryPlayProcessor extends GeneralProcessor {
     @Override
     public String execute() {
         //进行试玩
-        boolean result = subscribeService.useSubscribeBonus(userProfile.getOpenId(), userProfile.getDeviceId());
+        //TODO: execute the topup action and record the data
+        boolean result = subscribeService.consumeBonus(userProfile.getOpenId(), userProfile.getDeviceId(), 1);
         if (result)
             return Action.SUCCESS;
         else

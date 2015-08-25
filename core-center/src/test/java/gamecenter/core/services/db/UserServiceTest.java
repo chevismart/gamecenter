@@ -1,9 +1,6 @@
 package gamecenter.core.services.db;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -31,6 +28,7 @@ public class UserServiceTest {
         userService.removeWechatCustomer(testOpenId);
     }
 
+    @Ignore
     @Test
     public void testAddWechatCustomer() {
         assertEquals(userService.hasWechatCustomer(testOpenId), false);

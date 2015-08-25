@@ -16,10 +16,17 @@ import java.util.Date;
 public class UserService {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     //dao
-    CustomerWechatMapper customerWechatMapper;
-    UserMapper userMapper;
-    CustomerMapper customerMapper;
-    WechatMapper wechatMapper;
+    private final CustomerWechatMapper customerWechatMapper;
+    private final UserMapper userMapper;
+    private final CustomerMapper customerMapper;
+    private final WechatMapper wechatMapper;
+
+    public UserService(CustomerWechatMapper customerWechatMapper, UserMapper userMapper, CustomerMapper customerMapper, WechatMapper wechatMapper) {
+        this.customerWechatMapper = customerWechatMapper;
+        this.userMapper = userMapper;
+        this.customerMapper = customerMapper;
+        this.wechatMapper = wechatMapper;
+    }
 
     public boolean hasWechatCustomer(String openId) {
         CustomerWechat customerWechat = customerWechatMapper.selectByOpenId(openId);
@@ -27,7 +34,6 @@ public class UserService {
             return false;
         else
             return true;
-
     }
 
     public boolean addWechatCustomer(String name, String openId, String appId) {
@@ -75,38 +81,6 @@ public class UserService {
         customerMapper.deleteByPrimaryKey(customer.getCustomerid());
         userMapper.deleteByPrimaryKey(user.getUserid());
         return true;
-    }
-
-    public CustomerWechatMapper getCustomerWechatMapper() {
-        return customerWechatMapper;
-    }
-
-    public void setCustomerWechatMapper(CustomerWechatMapper customerWechatMapper) {
-        this.customerWechatMapper = customerWechatMapper;
-    }
-
-    public UserMapper getUserMapper() {
-        return userMapper;
-    }
-
-    public void setUserMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
-
-    public CustomerMapper getCustomerMapper() {
-        return customerMapper;
-    }
-
-    public void setCustomerMapper(CustomerMapper customerMapper) {
-        this.customerMapper = customerMapper;
-    }
-
-    public WechatMapper getWechatMapper() {
-        return wechatMapper;
-    }
-
-    public void setWechatMapper(WechatMapper wechatMapper) {
-        this.wechatMapper = wechatMapper;
     }
 
 }

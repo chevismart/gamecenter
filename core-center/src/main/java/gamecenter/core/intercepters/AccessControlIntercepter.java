@@ -26,12 +26,18 @@ public class AccessControlIntercepter extends AbstractInterceptor {
         } else {
             result = ActionResults.LOGIN_REQUIRE;
         }
-
+        logger.debug("Auth result is : {}", result);
         return result;
 
     }
 
     private boolean isLoginValid() {
+
+        boolean isProfileNull = null == userProfile;
+        logger.debug("Is user profile null: {}", String.valueOf(isProfileNull));
+        if (isProfileNull) {
+            logger.debug("User profile details is: {}", userProfile.toString());
+        }
         return StringUtils.isNotEmpty(userProfile.getInternalId());
 
     }

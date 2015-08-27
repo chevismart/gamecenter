@@ -95,6 +95,11 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
                 getHttpRequest().setAttribute("hasSubscribed", hasSubscribed);
                 getHttpRequest().setAttribute("isSubscribing", isSubscribing);
                 getHttpRequest().setAttribute("hasSubscribeBonus", hasSubscribeBonus);
+
+                if (hasSubscribeBonus) {
+                    userProfile.setBonus(getBonus());
+                }
+
                 result = Action.SUCCESS;
             } else {
                 result = CommonConstants.ACCESS_ROUTER_WECHAT_OAUTH;
@@ -105,6 +110,14 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
             return Action.ERROR;
         }
         return result;
+    }
+
+    private int getBonus() {
+
+        int max_num = 4;
+        //随机生成币数
+        int coins = (int) (max_num * Math.random() + 1);
+        return coins;
     }
 
     public UserProfile getUserProfile() {

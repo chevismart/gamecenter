@@ -95,6 +95,11 @@
         <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 
+    <bean id="topupProcessor" class="gamecenter.core.processors.wechat.WechatTopupProcessor">
+        <property name="userProfile" ref="userProfile"/>
+        <property name="subscribeService" ref="subscribeService"/>
+    </bean>
+
     <bean id="deviceRegistryProcessor" class="gamecenter.core.processors.devices.DeviceRegistryProcessor">
 
     </bean>

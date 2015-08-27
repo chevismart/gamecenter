@@ -1,13 +1,12 @@
 package gamecenter.core.services.db;
-
-import com.opensymphony.xwork2.util.logging.Logger;
-import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import gamecenter.core.dao.CustomerWechatMapper;
 import gamecenter.core.dao.DeviceMapper;
 import gamecenter.core.dao.PlayrecordMapper;
 import gamecenter.core.domain.CustomerWechat;
 import gamecenter.core.domain.Device;
 import gamecenter.core.domain.Playrecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -25,16 +24,6 @@ public class SubscribeService extends DBService {
         this.customerWechatMapper = customerWechatMapper;
         this.playrecordMapper = playrecordMapper;
         this.deviceMapper = deviceMapper;
-    }
-
-    private static class SubscribeDetail {
-        private final boolean isSubscribed;
-        private final boolean hasBonus;
-
-        public SubscribeDetail(boolean hasBonus, boolean isSubscribed) {
-            this.hasBonus = hasBonus;
-            this.isSubscribed = isSubscribed;
-        }
     }
 
     private SubscribeDetail getSubscribeDetails(String openId) {
@@ -83,6 +72,7 @@ public class SubscribeService extends DBService {
         //获取Device对象
         Device device = deviceMapper.selectByMacAddr(deviceMacAddr);
         //获取CustomerWechat对象
+        logger.debug("Device is {} with device mac address [{}]", device, deviceMacAddr);
         CustomerWechat customerWechat = customerWechatMapper.selectByOpenId(openId);
         //生成Playrecord纪录
         Playrecord playrecord = new Playrecord();
@@ -90,17 +80,31 @@ public class SubscribeService extends DBService {
         playrecord.setDeviceid(device.getDeviceid());
         playrecord.setTime(new Date(System.currentTimeMillis()));
         playrecordMapper.insert(playrecord);
+        logger.debug("Update Playrecord Table successfully with play record: [{}]", playrecord);
         //完成试玩
         customerWechat.setSubscribebonus(false);
         customerWechatMapper.updateByPrimaryKey(customerWechat);
+        logger.debug("Update CustomerWechat table successfully with data [{}]", customerWechat);
+
         return true;
     }
 
+    //getter attr
     public boolean getHasSubscibed(String openId) {
         return getSubscribeDetails(openId).isSubscribed;
     }
 
     public boolean getHasSubscribeBonus(String openId) {
         return getSubscribeDetails(openId).hasBonus;
+    }
+
+    private static class SubscribeDetail {
+        private final boolean isSubscribed;
+        private final boolean hasBonus;
+
+        public SubscribeDetail(boolean hasBonus, boolean isSubscribed) {
+            this.hasBonus = hasBonus;
+            this.isSubscribed = isSubscribed;
+        }
     }
 }

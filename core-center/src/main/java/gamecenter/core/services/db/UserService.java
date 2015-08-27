@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 
 public class UserService {
-    protected Logger logger = LoggerFactory.getLogger(this.getClass());
     //dao
     private final CustomerWechatMapper customerWechatMapper;
     private final UserMapper userMapper;
     private final CustomerMapper customerMapper;
     private final WechatMapper wechatMapper;
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public UserService(CustomerWechatMapper customerWechatMapper, UserMapper userMapper, CustomerMapper customerMapper, WechatMapper wechatMapper) {
         this.customerWechatMapper = customerWechatMapper;
@@ -56,6 +56,8 @@ public class UserService {
         customerWechat.setOpenid(openId);
         Wechat wechat = wechatMapper.selectByWechatAppId(appId);
         customerWechat.setWechatid(wechat.getWechatid());
+        customerWechat.setSubscribebonus(true);
+        customerWechat.setSubscribetime(new Date());
         customerWechatMapper.insert(customerWechat);
         return true;
     }

@@ -11,6 +11,7 @@ public class UserProfile {
     private String userImgUrl;
     private Boolean isFollowed;
     private String deviceId;
+    private int bonus = 0;
 
     @Override
     public String toString() {
@@ -79,5 +80,13 @@ public class UserProfile {
 
     public void setAccessInfo(AccessInfo accessInfo) {
         this.accessInfo = accessInfo;
+    }
+
+    public int getBonus() {
+        return bonus;
+    }
+
+    public void setBonus(int bonus) {
+        this.bonus = bonus;
     }
 }

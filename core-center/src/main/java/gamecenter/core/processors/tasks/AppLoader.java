@@ -15,9 +15,9 @@ public class AppLoader extends AbstractRunnable {
 
     private final static String ROOT_NODE = "applications";
 
-    ProfileManager profileManager;
+    private final ProfileManager profileManager;
 
-    public void setProfileManager(ProfileManager profileManager) {
+    public AppLoader(ProfileManager profileManager) {
         this.profileManager = profileManager;
     }
 

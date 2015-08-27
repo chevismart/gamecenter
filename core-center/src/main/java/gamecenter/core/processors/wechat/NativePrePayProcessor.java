@@ -15,6 +15,10 @@ public class NativePrePayProcessor extends WechatPayNotificationProcessor {
 
     NativePrePayOrderService nativePrePayOrderService = new NativePrePayOrderService();
 
+    public NativePrePayProcessor(ProfileManager profileManager) {
+        super(profileManager);
+    }
+
     @Override
     public String execute() throws Exception {
 

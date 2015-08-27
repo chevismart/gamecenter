@@ -17,12 +17,14 @@ import java.util.Map;
  * Created by Chevis on 15/2/20.
  */
 public class PaidNotificationResponseHandler extends WechatPayNotificationProcessor implements HttpResponseHandler {
-
-
-    GlobalPaymentBean globalPaymentBean;
-
+    private final GlobalPaymentBean globalPaymentBean;
     CoinTopUpService coinTopUpService = new CoinTopUpService(CoreCenterHost.CORECENTER_HOST, this);
     private PayNotification payNotification;
+
+    public PaidNotificationResponseHandler(ProfileManager profileManager, GlobalPaymentBean globalPaymentBean) {
+        super(profileManager);
+        this.globalPaymentBean = globalPaymentBean;
+    }
 
     @Override
     public String execute() throws Exception {
@@ -35,7 +37,7 @@ public class PaidNotificationResponseHandler extends WechatPayNotificationProces
         Map attachMap = ParameterUtil.extractParam(payNotification.getAttach());
         String appId = ParameterUtil.NativePrePayOrder.extractAppId(attachMap);
         int coins = Integer.valueOf(ParameterUtil.NativePrePayOrder.extractCoins(attachMap));
-        wechatProfile = profileManager.getAppProfile(appId).getWechatProfile();
+        profileManager.getAppProfile(appId).getWechatProfile();
         boolean isValidMsg = false;
 
         // Verify the response is successful or not
@@ -102,10 +104,6 @@ public class PaidNotificationResponseHandler extends WechatPayNotificationProces
 
     public GlobalPaymentBean getGlobalPaymentBean() {
         return globalPaymentBean;
-    }
-
-    public void setGlobalPaymentBean(GlobalPaymentBean globalPaymentBean) {
-        this.globalPaymentBean = globalPaymentBean;
     }
 
     @Override

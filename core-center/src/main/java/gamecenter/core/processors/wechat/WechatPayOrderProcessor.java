@@ -1,7 +1,10 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.ActionSupport;
-import gamecenter.core.beans.*;
+import gamecenter.core.beans.AppProfile;
+import gamecenter.core.beans.CoreCenterHost;
+import gamecenter.core.beans.GlobalPaymentBean;
+import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.processors.AbstractTopupProcessor;
 import gamecenter.core.utils.ParameterUtil;
@@ -19,15 +22,23 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Chevis on 2014/12/25.
- */
+import static gamecenter.core.beans.CoreCenterHost.WECHAT_PAYMENT_NOTIFICATION_CALLBACK_URL;
+import static gamecenter.core.beans.Figure.MONEY_TO_COIN;
+import static gamecenter.core.utils.ParameterUtil.NativePrePayOrder.APPID;
+import static gamecenter.core.utils.ParameterUtil.NativePrePayOrder.COINS;
+
 public class WechatPayOrderProcessor extends AbstractTopupProcessor {
 
-    ProfileManager profileManager;
-    GlobalPaymentBean globalPaymentBean;
-    private UserProfile userProfile;
+    private final ProfileManager profileManager;
+    private final GlobalPaymentBean globalPaymentBean;
+    private final UserProfile userProfile;
     private String tempJsonStr;
+
+    public WechatPayOrderProcessor(ProfileManager profileManager, GlobalPaymentBean globalPaymentBean, UserProfile userProfile) {
+        this.profileManager = profileManager;
+        this.globalPaymentBean = globalPaymentBean;
+        this.userProfile = userProfile;
+    }
 
     @Override
     public String execute() throws Exception {
@@ -48,13 +59,13 @@ public class WechatPayOrderProcessor extends AbstractTopupProcessor {
             unifiedorder.setOut_trade_no("trade_" + TimeUtil.getCurrentDateTime().getTime());
             unifiedorder.setTotal_fee(String.valueOf(getChargeAmount()));
             unifiedorder.setSpbill_create_ip(getRemoteAddress(getHttpRequest()));
-            unifiedorder.setNotify_url(CoreCenterHost.getHttpURL(CoreCenterHost.WECHAT_PAYMENT_NOTIFICATION_CALLBACK_URL));
+            unifiedorder.setNotify_url(CoreCenterHost.getHttpURL(WECHAT_PAYMENT_NOTIFICATION_CALLBACK_URL));
             unifiedorder.setTrade_type("NATIVE");
             unifiedorder.setOpenid(wechatOpenId);
 
-            Map attachMap = new HashMap();
-            attachMap.put(ParameterUtil.NativePrePayOrder.COINS, Figure.MONEY_TO_COIN.calculate(getChargeAmount()));
-            attachMap.put(ParameterUtil.NativePrePayOrder.APPID, appProfile.getAppId());
+            Map<String, String> attachMap = new HashMap();
+            attachMap.put(COINS, String.valueOf(MONEY_TO_COIN.calculate(getChargeAmount())));
+            attachMap.put(APPID, appProfile.getAppId());
             String attach = ParameterUtil.zipParam(attachMap);
 
             unifiedorder.setAttach(attach);
@@ -78,10 +89,6 @@ public class WechatPayOrderProcessor extends AbstractTopupProcessor {
 
     public ProfileManager getProfileManager() {
         return profileManager;
-    }
-
-    public void setProfileManager(ProfileManager profileManager) {
-        this.profileManager = profileManager;
     }
 
     public String getRemoteAddress(HttpServletRequest request) {
@@ -110,16 +117,10 @@ public class WechatPayOrderProcessor extends AbstractTopupProcessor {
         return userProfile;
     }
 
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
 
     public GlobalPaymentBean getGlobalPaymentBean() {
         return globalPaymentBean;
     }
 
-    public void setGlobalPaymentBean(GlobalPaymentBean globalPaymentBean) {
-        this.globalPaymentBean = globalPaymentBean;
-    }
 }
 

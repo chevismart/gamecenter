@@ -30,7 +30,7 @@ public class WechatPayNotificationProcessorTest {
         appProfile = mock(AppProfile.class);
         wechatProfile = mock(WechatProfile.class);
         profiles = mock(Map.class);
-        processor = new WechatPayNotificationProcessor();
+        processor = new WechatPayNotificationProcessor(profileManager);
     }
 
     @Test

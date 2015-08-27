@@ -13,7 +13,6 @@ public class WechatTokenManager extends AbstractRunnable {
     private ProfileManager profileManager;
 
     public WechatTokenManager(ProfileManager profileManager) {
-
         this.profileManager = profileManager;
     }
 

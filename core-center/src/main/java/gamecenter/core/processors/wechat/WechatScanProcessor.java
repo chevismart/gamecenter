@@ -9,10 +9,16 @@ import gamecenter.core.services.wechat.WechatJsConfigService;
 
 public class WechatScanProcessor extends GeneralProcessor {
     //services
-    WechatJsConfigService wechatJsConfigService;
+    private final WechatJsConfigService wechatJsConfigService;
     //beans
-    UserProfile userProfile;
-    ProfileManager profileManager;
+    private final UserProfile userProfile;
+    private final ProfileManager profileManager;
+
+    public WechatScanProcessor(WechatJsConfigService wechatJsConfigService, UserProfile userProfile, ProfileManager profileManager) {
+        this.wechatJsConfigService = wechatJsConfigService;
+        this.userProfile = userProfile;
+        this.profileManager = profileManager;
+    }
 
     @Override
     public String execute() {
@@ -24,18 +30,6 @@ public class WechatScanProcessor extends GeneralProcessor {
         WechatJsConfig wechatJsConfig = wechatJsConfigService.getConfig(jsapi_ticket, wechatAppId, code);
         getHttpRequest().setAttribute("wechatJsConfig", wechatJsConfig);
         return Action.SUCCESS;
-    }
-
-    public void setWechatJsConfigService(WechatJsConfigService wechatJsConfigService) {
-        this.wechatJsConfigService = wechatJsConfigService;
-    }
-
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
-
-    public void setProfileManager(ProfileManager profileManager) {
-        this.profileManager = profileManager;
     }
 
 }

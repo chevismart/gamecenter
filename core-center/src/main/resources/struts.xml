@@ -64,7 +64,7 @@
             <result name="success" type="dispatcher">/jsp/center/userProfile.jsp</result>
         </action>
 
-        <action name="errorProcessor" class="gamecenter.core.processors.ErrorProcesser">
+        <action name="errorProcessor" class="gamecenter.core.processors.ErrorProcessor">
             <result>/jsp/error.jsp</result>
         </action>
 

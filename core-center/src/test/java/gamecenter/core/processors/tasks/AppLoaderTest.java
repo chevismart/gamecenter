@@ -7,15 +7,11 @@ import static org.mockito.Mockito.mock;
 
 public class AppLoaderTest {
 
-    AppLoader appLoader = new AppLoader();
-
     @Test
     public void loaderSuccessullyLoadedAppProfiles() throws Exception {
 
         ProfileManager mockProfileManager = mock(ProfileManager.class);
-        appLoader.setProfileManager(mockProfileManager);
-
+        AppLoader appLoader = new AppLoader(mockProfileManager);
         appLoader.run();
-
     }
 }

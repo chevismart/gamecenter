@@ -17,7 +17,7 @@
         <property name="normalTask">
             <list>
                 <bean id="appLoader" class="gamecenter.core.processors.tasks.AppLoader">
-                    <property name="profileManager" ref="profileManager"/>
+                    <constructor-arg name="profileManager" ref="profileManager"/>
                 </bean>
                 <bean id="tokenManager" class="gamecenter.core.processors.tasks.WechatTokenManager">
                     <constructor-arg name="profileManager" ref="profileManager"/>
@@ -46,53 +46,53 @@
     </bean>
 
     <bean id="wechatLoginProcessor" class="gamecenter.core.processors.wechat.WechatLoginProcessor">
-        <property name="userService" ref="userService"/>
-        <property name="subscribeService" ref="subscribeService"/>
-        <property name="profileManager" ref="profileManager"/>
-        <property name="userProfile" ref="userProfile"/>
+        <constructor-arg name="userService" ref="userService"/>
+        <constructor-arg name="subscribeService" ref="subscribeService"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
+        <constructor-arg name="userProfile" ref="userProfile"/>
     </bean>
 
     <bean id="wechatTryPlayProcessor" class="gamecenter.core.processors.wechat.WechatTryPlayProcessor">
-        <property name="subscribeService" ref="subscribeService"/>
-        <property name="userProfile" ref="userProfile"/>
+        <constructor-arg name="subscribeService" ref="subscribeService"/>
+        <constructor-arg name="userProfile" ref="userProfile"/>
     </bean>
 
     <bean id="wechatScanProcessor" class="gamecenter.core.processors.wechat.WechatScanProcessor">
-        <property name="wechatJsConfigService" ref="wechatJsConfigService"/>
-        <property name="userProfile" ref="userProfile"/>
-        <property name="profileManager" ref="profileManager"/>
+        <constructor-arg name="wechatJsConfigService" ref="wechatJsConfigService"/>
+        <constructor-arg name="userProfile" ref="userProfile"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
-    
+
     <bean id="wechatMessageProcessor" class="gamecenter.core.processors.wechat.WechatMessageProcessor">
         <constructor-arg name="subscribeService" ref="subscribeService"/>
         <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 
     <bean id="welcomeProcessor" class="gamecenter.core.processors.WelcomeProcessor">
-        <property name="userProfile" ref="userProfile"/>
+        <constructor-arg name="userProfile" ref="userProfile"/>
     </bean>
 
     <bean id="wechatPayNotificationProcessor" class="gamecenter.core.processors.wechat.WechatPayNotificationProcessor">
-        <property name="profileManager" ref="profileManager"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 
     <bean id="wechatPayOrderProcessor" class="gamecenter.core.processors.wechat.WechatPayOrderProcessor">
-        <property name="profileManager" ref="profileManager"/>
-        <property name="userProfile" ref="userProfile"/>
-        <property name="globalPaymentBean" ref="globalPaymentBean"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
+        <constructor-arg name="userProfile" ref="userProfile"/>
+        <constructor-arg name="globalPaymentBean" ref="globalPaymentBean"/>
     </bean>
 
     <bean id="credentialProcessor" class="gamecenter.core.processors.CredentialProcessor">
-        <property name="profileManager" ref="profileManager"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 
     <bean id="paidNotifyProcessor" class="gamecenter.core.processors.wechat.PaidNotificationResponseHandler">
-        <property name="profileManager" ref="profileManager"/>
-        <property name="globalPaymentBean" ref="globalPaymentBean"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
+        <constructor-arg name="globalPaymentBean" ref="globalPaymentBean"/>
     </bean>
 
     <bean id="prePayOrderProcessor" class="gamecenter.core.processors.wechat.NativePrePayProcessor">
-        <property name="profileManager" ref="profileManager"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 
     <bean id="deviceRegistryProcessor" class="gamecenter.core.processors.devices.DeviceRegistryProcessor">

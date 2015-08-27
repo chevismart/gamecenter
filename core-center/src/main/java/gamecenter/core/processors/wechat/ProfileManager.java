@@ -22,23 +22,24 @@ import weixin.popular.bean.User;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Created by Chevis on 2014/12/11.
- */
 public class ProfileManager {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    AccessTokenService accessTokenService;
-    SnsAuthService snsAuthService;
-    JsApiTicketService jsApiTicketService;
+    private final AccessTokenService accessTokenService;
+    private final SnsAuthService snsAuthService;
+    private final JsApiTicketService jsApiTicketService;
     private Map<String, AppProfile> profiles;
     private Boolean isHost;
 
-    public ProfileManager(Map<String, AppProfile> profiles) {
+    public ProfileManager(Map<String, AppProfile> profiles, AccessTokenService accessTokenService, SnsAuthService snsAuthService, JsApiTicketService jsApiTicketService) {
         this.profiles = profiles;
-        accessTokenService = new AccessTokenService(new TokenAPI());
-        snsAuthService = new SnsAuthService(new SnsAPI(), new UserAPI());
-        jsApiTicketService = new JsApiTicketService();
+        this.accessTokenService = accessTokenService;
+        this.snsAuthService = snsAuthService;
+        this.jsApiTicketService = jsApiTicketService;
+    }
+
+    public ProfileManager(Map<String, AppProfile> profiles) {
+        this(profiles, new AccessTokenService(new TokenAPI()), new SnsAuthService(new SnsAPI(), new UserAPI()), new JsApiTicketService());
     }
 
     public Map<String, AppProfile> getProfiles() {

@@ -13,11 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
-/**
- * Created by Chevis on 2015/1/7.
- */
 public class CredentialProcessor extends GeneralProcessor {
-    ProfileManager profileManager;
+    private final ProfileManager profileManager;
+
+    public CredentialProcessor(ProfileManager profileManager) {
+        this.profileManager = profileManager;
+    }
 
     @Override
     public String execute() throws Exception {
@@ -58,9 +59,5 @@ public class CredentialProcessor extends GeneralProcessor {
 
     public ProfileManager getProfileManager() {
         return profileManager;
-    }
-
-    public void setProfileManager(ProfileManager profileManager) {
-        this.profileManager = profileManager;
     }
 }

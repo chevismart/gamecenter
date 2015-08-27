@@ -2,7 +2,6 @@ package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.ActionContext;
 import gamecenter.core.beans.wechat.PayNotification;
-import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.utils.CollectionUtils;
@@ -21,16 +20,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-/**
- * Created by Chevis on 2014/12/25.
- */
 public class WechatPayNotificationProcessor extends GeneralProcessor {
 
     Logger paymentLogger = LoggerFactory.getLogger("wechatPaymentLogger");
-    ProfileManager profileManager;
-    WechatProfile wechatProfile;
-    String paynotificationKey = "Paynotification";
-    private String paynotification;
+    protected final ProfileManager profileManager;
+    String payNotificationKey = "Paynotification";
+
+    public WechatPayNotificationProcessor(ProfileManager profileManager) {
+        this.profileManager = profileManager;
+    }
 
     @Override
     public String execute() throws Exception {
@@ -48,12 +46,12 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
             logger.warn("The payment notification is invalid to be processed.");
         }
         logger.info("The next step is {}", nextStep);
-        storePaynotification(payNotification);
+        storePayNotification(payNotification);
         return nextStep;
     }
 
-    protected void storePaynotification(PayNotification payNotification) {
-        getHttpRequest().setAttribute(paynotificationKey, payNotification);
+    protected void storePayNotification(PayNotification payNotification) {
+        getHttpRequest().setAttribute(payNotificationKey, payNotification);
     }
 
     protected PayNotification getPayNotification() throws IOException {
@@ -63,9 +61,9 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
             logger.debug("Received pay notification xml: {}", xml);
             payNotification = XMLConverUtil.convertToObject(PayNotification.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
             logger.info("Converted payment notification is: {}", payNotification.toString());
-            getHttpRequest().setAttribute("Paynotification", payNotification);
+            getHttpRequest().setAttribute("PayNotification", payNotification);
         } else {
-            payNotification = (PayNotification) getHttpRequest().getAttribute(paynotificationKey);
+            payNotification = (PayNotification) getHttpRequest().getAttribute(payNotificationKey);
             logger.info("Retrieve the pay notification from http request: {}", payNotification.toString());
         }
         return payNotification;
@@ -109,10 +107,6 @@ public class WechatPayNotificationProcessor extends GeneralProcessor {
 
     public ProfileManager getProfileManager() {
         return profileManager;
-    }
-
-    public void setProfileManager(ProfileManager profileManager) {
-        this.profileManager = profileManager;
     }
 }
 

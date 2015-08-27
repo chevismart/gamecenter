@@ -7,9 +7,14 @@ import gamecenter.core.services.db.SubscribeService;
 
 public class WechatTryPlayProcessor extends GeneralProcessor {
     //services
-    SubscribeService subscribeService;
+   private final SubscribeService subscribeService;
     //beans
-    UserProfile userProfile;
+    private final  UserProfile userProfile;
+
+    public WechatTryPlayProcessor(SubscribeService subscribeService, UserProfile userProfile) {
+        this.subscribeService = subscribeService;
+        this.userProfile = userProfile;
+    }
 
     @Override
     public String execute() {
@@ -21,13 +26,4 @@ public class WechatTryPlayProcessor extends GeneralProcessor {
         else
             return Action.ERROR;
     }
-
-    public void setSubscribeService(SubscribeService subscribeService) {
-        this.subscribeService = subscribeService;
-    }
-
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
-
 }

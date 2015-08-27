@@ -22,17 +22,24 @@ import java.util.Map;
  */
 public class WechatLoginProcessor extends GeneralProcessor implements GeneralLoginInterface {
     //services
-    ProfileManager profileManager;
-    SubscribeService subscribeService;
-    UserService userService;
+    private final ProfileManager profileManager;
+    private final SubscribeService subscribeService;
+    private final UserService userService;
     //beans
-    UserProfile userProfile;
+    private final UserProfile userProfile;
     User wechatUser;
     //请求参数
     String appId;
     String code;
     String state;
     String openId;
+
+    public WechatLoginProcessor(ProfileManager profileManager, SubscribeService subscribeService, UserService userService, UserProfile userProfile) {
+        this.profileManager = profileManager;
+        this.subscribeService = subscribeService;
+        this.userService = userService;
+        this.userProfile = userProfile;
+    }
 
     @Override
     public String execute() throws Exception {
@@ -100,24 +107,8 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
         return result;
     }
 
-    public void setProfileManager(ProfileManager profileManager) {
-        this.profileManager = profileManager;
-    }
-
     public UserProfile getUserProfile() {
         return userProfile;
-    }
-
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    public void setSubscribeService(SubscribeService subscribeService) {
-        this.subscribeService = subscribeService;
     }
 
     @Override

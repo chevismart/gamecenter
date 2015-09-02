@@ -1,6 +1,7 @@
 package gamecenter.core.utils;
 
 import gamecenter.core.beans.AccessChannel;
+import gamecenter.core.services.HttpService;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;

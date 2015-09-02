@@ -1,4 +1,4 @@
-package gamecenter.core.utils;
+package gamecenter.core.services;
 
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;

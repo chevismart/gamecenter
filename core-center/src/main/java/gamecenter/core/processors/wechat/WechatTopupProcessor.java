@@ -4,23 +4,34 @@ import gamecenter.core.beans.UserProfile;
 import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.services.db.SubscribeService;
+import gamecenter.core.utils.HttpService;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
-/**
- * Created by Chevis on 15/6/9.
- */
 public class WechatTopupProcessor extends GeneralProcessor {
 
-    SubscribeService subscribeService;
-    UserProfile userProfile;
+    private final SubscribeService subscribeService;
+    private final UserProfile userProfile;
+
+    public WechatTopupProcessor(SubscribeService subscribeService, UserProfile userProfile) {
+        this.subscribeService = subscribeService;
+        this.userProfile = userProfile;
+    }
+
+    private static BasicNameValuePair[] getTopupParams(int coins) {
+        return new BasicNameValuePair[]{
+                new BasicNameValuePair("CENTER_ID", "00000000"),
+                new BasicNameValuePair("TOKEN", "tokenStr"),
+                new BasicNameValuePair("DATA_TYPE", "JSON"),
+                new BasicNameValuePair("REQ_TYPE", "TOP_UP"),
+                new BasicNameValuePair("MAC", "accf233b95f6"),
+                new BasicNameValuePair("TOP_UP_REFERENCE_ID", "ABCDEF0000"),
+                new BasicNameValuePair("TOP_UP_COIN_QTY", String.valueOf(coins))
+        };
+    }
 
     private static String getParams(int coins) {
         NameValuePair[] param = {
@@ -56,34 +67,20 @@ public class WechatTopupProcessor extends GeneralProcessor {
 
         //TODO: Retrieve the bonus and send to topup
         logger.info("Preparing topup");
+        boolean result = false;
 
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        String uri = "http://wawaonline.net:8003";
-        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectionRequestTimeout(5000).build();
-        HttpGet httpGet = new HttpGet(uri.concat("?").concat(getParams(userProfile.getBonus())));
-        httpGet.setConfig(requestConfig);
-        HttpResponse response = httpClient.execute(httpGet);
-
-        String value = IOUtils.toString(response.getEntity().getContent());
-
-        logger.debug("Response is: {}", value);
-
-
-        boolean result = subscribeService.consumeBonus(userProfile.getOpenId(), deviceId, userProfile.getBonus());
+        try {
+            String uri = "http://wawaonline.net:8003";
+            HttpResponse response = HttpService.get(uri, getTopupParams(userProfile.getBonus()));
+            String value = IOUtils.toString(response.getEntity().getContent());
+            logger.debug("Response is: {}", value);
+            result = subscribeService.consumeBonus(userProfile.getOpenId(), deviceId, userProfile.getBonus());
+            userProfile.setBonus(0);
+        } catch (Exception e) {
+            logger.error("Topup failed since: {}", e);
+        }
 
         logger.info("Topup result: {}", result);
-
-        userProfile.setBonus(0);
-
-        return SUCCESS;
+        return result ? SUCCESS : ERROR;
     }
-
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
-
-    public void setSubscribeService(SubscribeService subscribeService) {
-        this.subscribeService = subscribeService;
-    }
-
 }

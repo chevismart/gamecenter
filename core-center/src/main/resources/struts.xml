@@ -70,6 +70,7 @@
 
         <action name="topup" class="topupProcessor">
             <result name="success" type="dispatcher">/jsp/center/topupSuccess.jsp</result>
+            <result name="error" type="dispatcher">/jsp/center/topupFailure.jsp</result>
         </action>
 
         <action name="simpleAction" class="demoActionClass">

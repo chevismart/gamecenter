@@ -26,6 +26,9 @@ public class CredentialProcessor extends GeneralProcessor {
         String clientId = getHttpRequest().getParameter("clientId").trim();
         String appId = getHttpRequest().getParameter("appId").trim();
         AccessChannel channel = AccessChannel.valueOf(getHttpRequest().getParameter("credentialType").trim());
+
+        logger.debug("Received parameters: clientId({}), appId({}), channel({})", clientId, appId, channel);
+
         Token token = null;
         if (clientId.startsWith("client")) {
             AppProfile appProfile = profileManager.getAppProfile(appId);
@@ -33,7 +36,7 @@ public class CredentialProcessor extends GeneralProcessor {
             if (null != appProfile && channel.equals(AccessChannel.WECHAT) && appProfile.isWechatProfileValid()) {
                 token = appProfile.getWechatProfile().getWechatAccessToken();
             }
-
+            logger.debug("AppProfile is {}, Token is {}", appProfile, token);
             String json = JsonUtil.toJSONString(token);
 
             HttpServletResponse response = getHttpResponse();

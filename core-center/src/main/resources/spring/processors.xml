@@ -64,8 +64,13 @@
     </bean>
 
     <bean id="wechatMessageProcessor" class="gamecenter.core.processors.wechat.WechatMessageProcessor">
-        <constructor-arg name="subscribeService" ref="subscribeService"/>
-        <constructor-arg name="profileManager" ref="profileManager"/>
+        <constructor-arg name="handlers">
+            <list>
+                <ref bean="subscribeMessageHandler"/>
+                <ref bean="checkBalanceMessageHandler"/>
+                <ref bean="contactUsMessageHandler"/>
+            </list>
+        </constructor-arg>
     </bean>
 
     <bean id="welcomeProcessor" class="gamecenter.core.processors.WelcomeProcessor">
@@ -112,5 +117,51 @@
     <!-- Task runner -->
     <bean id="cloudServer" class="gamecenter.core.processors.tasks.CloudServerLoader"/>
 
+    <!-- Wechat Message Handler -->
+    <bean id="subscribeMessageHandler" class="gamecenter.core.processors.wechat.messages.SubscribeMessageHandler">
+        <constructor-arg name="msgTypeFilter" ref="eventFilter"/>
+        <constructor-arg name="eventTypeFilter" ref="subscribeEventFilter"/>
+        <constructor-arg name="keyFilter" value="alwaysStringPassFilter"/>
+        <constructor-arg name="subscribeService" ref="subscribeService"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
+    </bean>
 
+    <bean id="checkBalanceMessageHandler" class="gamecenter.core.processors.wechat.messages.CheekBalanceMessageHandler">
+        <constructor-arg name="msgTypeFilter" ref="eventFilter"/>
+        <constructor-arg name="eventTypeFilter" ref="clickEventFilter"/>
+        <constructor-arg name="keyFilter" ref="checkBalanceEventFilter"/>
+        <constructor-arg name="customerService" ref="customerService"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
+    </bean>
+
+    <bean id="contactUsMessageHandler" class="gamecenter.core.processors.wechat.messages.ContactUsMessageHandler">
+        <constructor-arg name="msgTypeFilter" ref="eventFilter"/>
+        <constructor-arg name="eventTypeFilter" ref="clickEventFilter"/>
+        <constructor-arg name="keyFilter" ref="contactUsEventFilter"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
+    </bean>
+
+    <bean id="eventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
+        <constructor-arg name="expect" value="event"/>
+    </bean>
+
+    <bean id="subscribeEventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
+        <constructor-arg name="expect" value="subscribe"/>
+    </bean>
+
+    <bean id="clickEventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
+        <constructor-arg name="expect" value="CLICK"/>
+    </bean>
+
+    <bean id="checkBalanceEventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
+        <constructor-arg name="expect" value="account_balance"/>
+    </bean>
+
+    <bean id="accountBalanceEventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
+        <constructor-arg name="expect" value="account_balance"/>
+    </bean>
+
+    <bean id="contactUsEventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
+        <constructor-arg name="expect" value="contact_us"/>
+    </bean>
 </beans>

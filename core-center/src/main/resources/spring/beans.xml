@@ -38,6 +38,10 @@
         <constructor-arg name="userMapper" ref="userMapper"/>
         <constructor-arg name="wechatMapper" ref="wechatMapper"/>
     </bean>
+    <bean id="customerService" class="gamecenter.core.services.db.CustomerService">
+        <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
+        <constructor-arg name="customerMapper" ref="customerMapper"/>
+    </bean>
     <bean id="AppService" class="gamecenter.core.services.db.AppService">
         <constructor-arg name="wechatMapper" ref="wechatMapper"/>
     </bean>

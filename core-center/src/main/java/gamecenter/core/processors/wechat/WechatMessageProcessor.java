@@ -1,33 +1,25 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.Action;
-import gamecenter.core.beans.wechat.EventMessage;
 import gamecenter.core.processors.GeneralProcessor;
-import gamecenter.core.services.db.SubscribeService;
+import gamecenter.core.processors.MessageHandler;
 import gamecenter.core.utils.EncryptUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import weixin.popular.api.MessageAPI;
-import weixin.popular.bean.BaseResult;
-import weixin.popular.bean.message.Message;
-import weixin.popular.bean.message.NewsMessage;
-import weixin.popular.bean.message.TextMessage;
+import weixin.popular.bean.EventMessage;
 import weixin.popular.util.XMLConverUtil;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
-
-import static java.util.Arrays.asList;
+import java.util.List;
 
 public class WechatMessageProcessor extends GeneralProcessor {
     //services
-    private final SubscribeService subscribeService;
-    private final ProfileManager profileManager;
+    private final List<MessageHandler<EventMessage>> handlers;
 
-    public WechatMessageProcessor(SubscribeService subscribeService, ProfileManager profileManager) {
-        this.subscribeService = subscribeService;
-        this.profileManager = profileManager;
+    public WechatMessageProcessor(List<MessageHandler<EventMessage>> handlers) {
+        this.handlers = handlers;
     }
 
     @Override
@@ -61,35 +53,8 @@ public class WechatMessageProcessor extends GeneralProcessor {
                 logger.debug("Received message xml: {}", xml);
                 EventMessage eventMessage = XMLConverUtil.convertToObject(EventMessage.class, new String(xml.getBytes("iso-8859-1"), "utf-8"));
                 if (eventMessage != null) {
-                    //订阅事件
-                    if (eventMessage.getMsgType().equals("event") && eventMessage.getEvent().equals("subscribe")) {
-                        String openId = eventMessage.getFromUserName();
-                        logger.info("User{} is subscribing.", openId);
-                        //判断是否第一次关注
-                        String content = "";
-                        boolean hasSubscibed = subscribeService.getHasSubscibed(openId);
-                        if (!hasSubscibed)
-                            content = "谢谢关注公众号!您可获得一次免费试玩机会";
-                        else
-                            content = "谢谢关注公众号";
-                        //发送消息
-                        MessageAPI messageAPI = new MessageAPI();
-                        Message message = new TextMessage(eventMessage.getFromUserName(), content);
-                        NewsMessage.Article article = new NewsMessage.Article(
-                                "一起疯狂吧",
-                                "谢谢关注公众号! 点击连接扫描娃娃机二维码，可以免费获得一次抽奖机会！",
-                                "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe89a9d2fa17df80f&redirect_uri=http://wawaonline.net/corecenter/auth&response_type=code&scope=snsapi_base&state=appid:liyuanapp,deviceid:ATM0001#wechat_redirect",
-                                "https://mmbiz.qlogo.cn/mmbiz/OeNzyqPZgIJMt1YGFM7hMA7ggibQyNe70sk29PoeK8ce4PAZXXMfIhQXC8lOQSB9PkyAm9RXRsr3Ida8Yg9cA8Q/0");
-
-                        Message articleMsg = new NewsMessage(eventMessage.getFromUserName(), asList(article));
-
-                        BaseResult result = messageAPI.messageCustomSend(profileManager.getAppProfile("liyuanapp").getWechatProfile().getWechatAccessToken().getAccess_token(), articleMsg);
-                        //无错误信息返回
-                        if (result.getErrmsg().equals(""))
-                            logger.info("subscribe response success");
-                    }
-                    //其他信息
-
+                    for (MessageHandler<EventMessage> handler : handlers)
+                        handler.process(eventMessage);
                 }
             }
         } else {

@@ -17,9 +17,6 @@ import weixin.popular.bean.User;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Created by Chevis on 14/12/20.
- */
 public class WechatLoginProcessor extends GeneralProcessor implements GeneralLoginInterface {
     //services
     private final ProfileManager profileManager;

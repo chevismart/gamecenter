@@ -14,4 +14,6 @@ public interface TradeMapper {
     int updateByPrimaryKeySelective(Trade record);
 
     int updateByPrimaryKey(Trade record);
+
+    Trade selectByOpenId(String openId);
 }

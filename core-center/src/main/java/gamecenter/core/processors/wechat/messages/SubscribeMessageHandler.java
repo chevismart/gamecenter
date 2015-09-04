@@ -3,7 +3,6 @@ package gamecenter.core.processors.wechat.messages;
 import gamecenter.core.processors.Filter;
 import gamecenter.core.processors.wechat.ProfileManager;
 import gamecenter.core.services.db.SubscribeService;
-import weixin.popular.api.MessageAPI;
 import weixin.popular.bean.BaseResult;
 import weixin.popular.bean.EventMessage;
 import weixin.popular.bean.message.Message;
@@ -15,12 +14,10 @@ import static java.util.Arrays.asList;
 public class SubscribeMessageHandler extends WechatMessageHandler {
 
     private final SubscribeService subscribeService;
-    private final ProfileManager profileManager;
 
     public SubscribeMessageHandler(Filter<String> msgTypeFilter, Filter<String> eventTypeFilter, Filter<String> keyFilter, SubscribeService subscribeService, ProfileManager profileManager) {
-        super(msgTypeFilter, eventTypeFilter, keyFilter);
+        super(msgTypeFilter, eventTypeFilter, keyFilter, profileManager);
         this.subscribeService = subscribeService;
-        this.profileManager = profileManager;
     }
 
     void handleIt(EventMessage eventMessage) {
@@ -33,7 +30,6 @@ public class SubscribeMessageHandler extends WechatMessageHandler {
         else
             content = "谢谢关注公众号";
         //发送消息
-        MessageAPI messageAPI = new MessageAPI();
         Message message = new TextMessage(openId(eventMessage), content);
         NewsMessage.Article article = new NewsMessage.Article(
                 "一起疯狂吧",
@@ -43,13 +39,9 @@ public class SubscribeMessageHandler extends WechatMessageHandler {
 
         Message articleMsg = new NewsMessage(eventMessage.getFromUserName(), asList(article));
 
-        BaseResult result = messageAPI.messageCustomSend(getAccessToken(), articleMsg);
+        BaseResult result = replyClient(eventMessage, articleMsg);
         //无错误信息返回
         if (result.getErrmsg().equals(""))
             logger.info("subscribe response success");
-    }
-
-    private String getAccessToken() {
-        return profileManager.getAppProfile("liyuanapp").getWechatProfile().getWechatAccessToken().getAccess_token();
     }
 }

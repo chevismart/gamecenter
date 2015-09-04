@@ -60,7 +60,7 @@ public class ProfileManagerTest {
     @Test
     public void requestAccessTokenByProfileManagerSuccessfully() throws Exception {
         profileManager.addAppProfile(appId, appName);
-        profileManager.addWechatProfile(appId, "wxe89a9d2fa17df80f", "71d8fc7778571e6b54712953b68084e4", null, null);
+        profileManager.addWechatProfile(appId, "wxe89a9d2fa17df80f", "71d8fc7778571e6b54712953b68084e4", null, null, null);
         Whitebox.setInternalState(profileManager, "accessTokenService", accessTokenService);
         Whitebox.setInternalState(profileManager, "snsAuthService", snsAuthService);
         when(accessTokenService.requestWechatAccessToken(any(AppProfile.class))).thenReturn(accessToken);
@@ -95,7 +95,7 @@ public class ProfileManagerTest {
         when(appProfile.getAppId()).thenReturn(appId);
         when(appProfile.getAppName()).thenReturn(appName);
 
-        profileManager.addWechatProfile(appId, wechatId, wechatSecret, RandomStringUtils.random(10), RandomStringUtils.random(32));
+        profileManager.addWechatProfile(appId, wechatId, wechatSecret, RandomStringUtils.random(10), RandomStringUtils.random(32), RandomStringUtils.random(32));
 
         verify(appProfiles, atLeastOnce()).get(eq(appId));
         verify(appProfile, times(1)).setWechatProfile(any(WechatProfile.class));
@@ -109,7 +109,7 @@ public class ProfileManagerTest {
         when(appProfiles.get(eq(appId))).thenReturn(appProfile);
         when(appProfile.getAppId()).thenReturn(StringUtils.EMPTY);
 
-        profileManager.addWechatProfile(appId, wechatId, wechatSecret, RandomStringUtils.random(10), RandomStringUtils.random(32));
+        profileManager.addWechatProfile(appId, wechatId, wechatSecret, RandomStringUtils.random(10), RandomStringUtils.random(32), RandomStringUtils.random(32));
 
         verify(appProfiles, only()).get(eq(appId));
         verify(appProfile, never()).setWechatProfile(any(WechatProfile.class));

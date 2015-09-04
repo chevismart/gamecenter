@@ -8,9 +8,6 @@ import gamecenter.core.utils.XMLMessageConverter;
 
 import java.util.List;
 
-/**
- * Created by Chevis on 2014/12/20.
- */
 public class AppLoader extends AbstractRunnable {
 
     private final static String ROOT_NODE = "applications";
@@ -35,7 +32,8 @@ public class AppLoader extends AbstractRunnable {
                         wechatProfile.getWechatAppId(),
                         wechatProfile.getWechatAppSecret(),
                         wechatProfile.getMchid(),
-                        wechatProfile.getPayKey());
+                        wechatProfile.getPayKey(),
+                        wechatProfile.getInitId());
                 profileManager.requestWechatAccessToken(appProfile.getAppId());
                 logger.info("Wechat access token is successfully obtained!");
                 profileManager.requestWechatJsapiTicket(appProfile.getAppId());

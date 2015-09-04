@@ -3,9 +3,6 @@ package gamecenter.core.beans;
 import gamecenter.core.beans.wechat.WechatProfile;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * Created by Chevis on 2014/12/11.
- */
 public class AppProfile {
     private String appName;
     private String appId;

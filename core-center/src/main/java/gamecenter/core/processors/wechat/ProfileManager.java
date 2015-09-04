@@ -5,6 +5,7 @@ import gamecenter.core.beans.builders.AppProfileBuilder;
 import gamecenter.core.beans.builders.WechatProfileBuilder;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.constants.CommonConstants;
+import gamecenter.core.processors.Filter;
 import gamecenter.core.services.wechat.AccessTokenService;
 import gamecenter.core.services.wechat.JsApiTicketService;
 import gamecenter.core.services.wechat.SnsAuthService;
@@ -24,10 +25,10 @@ import java.util.Map;
 
 public class ProfileManager {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
     private final AccessTokenService accessTokenService;
     private final SnsAuthService snsAuthService;
     private final JsApiTicketService jsApiTicketService;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
     private Map<String, AppProfile> profiles;
     private Boolean isHost;
 
@@ -52,23 +53,43 @@ public class ProfileManager {
         return appProfile;
     }
 
-    public AppProfile findAppProfileByWechatId(String appId) {
+    public AppProfile findAppProfileByWechatId(final String appId) {
+
+        Filter<AppProfile> appIdFilter = new Filter<AppProfile>() {
+            public boolean shouldInclude(AppProfile appProfile) {
+                return appProfile.getWechatProfile().getWechatAppId().equals(appId);
+            }
+        };
+        return findAppProfile(appIdFilter);
+    }
+
+    public AppProfile findAppProfileByWechatInitId(final String initId) {
+        Filter<AppProfile> initIdFilter = new Filter<AppProfile>() {
+            public boolean shouldInclude(AppProfile appProfile) {
+                return appProfile.getWechatProfile().getInitId().equals(initId);
+            }
+        };
+        return findAppProfile(initIdFilter);
+    }
+
+    private AppProfile findAppProfile(Filter<AppProfile> appProfileFilter) {
         for (Map.Entry<String, AppProfile> entry : profiles.entrySet()) {
             AppProfile appProfile = entry.getValue();
-            if (appProfile.isWechatProfileValid() &&
-                    appProfile.getWechatProfile().getWechatAppId().equals(appId))
+            if (appProfile.isWechatProfileValid() && appProfileFilter.shouldInclude(appProfile)) {
                 return appProfile;
+            }
         }
         return null;
     }
 
-    public void addWechatProfile(String appId, String wechatAppId, String wechatAppSecret, String mchid, String payKey) {
+    public void addWechatProfile(String appId, String wechatAppId, String wechatAppSecret, String mchid, String payKey, String initId) {
 
         WechatProfile wechatProfile = WechatProfileBuilder.newBuilder()
                 .wechatAppId(wechatAppId)
                 .wechatAppSecret(wechatAppSecret)
                 .mchid(mchid)
                 .payKey(payKey)
+                .initId(initId)
                 .build();
         AppProfile appProfile = profiles.get(appId);
         if (ProfileUtil.verifyAppProfile(appProfile)) {

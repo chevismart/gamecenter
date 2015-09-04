@@ -9,11 +9,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Chevis on 2014/12/13.
- */
 public class WechatProfile {
 
+    private String initId;
     private String wechatAppId;
     private String wechatAppSecret;
     private SnsToken wechatSnsToken;
@@ -26,18 +24,20 @@ public class WechatProfile {
     private String wechatJsapiTicket;
     private Map<String, User> activeUserList;
 
-    public WechatProfile(String wechatAppId, String wechatAppSecret, String mchid, String payKey) {
+    public WechatProfile(String wechatAppId, String wechatAppSecret, String mchid, String payKey, String initId) {
         this.wechatAppId = wechatAppId;
         this.wechatAppSecret = wechatAppSecret;
         this.mchid = mchid;
         this.payKey = payKey;
+        this.initId = initId;
         activeUserList = new HashMap<String, User>();
     }
 
     @Override
     public String toString() {
         return "WechatProfile{" +
-                "wechatAppId='" + wechatAppId + '\'' +
+                "initId='" + initId + '\'' +
+                ", wechatAppId='" + wechatAppId + '\'' +
                 ", wechatAppSecret='" + wechatAppSecret + '\'' +
                 ", wechatSnsToken=" + wechatSnsToken +
                 ", mchid='" + mchid + '\'' +
@@ -45,6 +45,8 @@ public class WechatProfile {
                 ", wechatUserProfile=" + wechatUserProfile +
                 ", wechatAccessTokenUpdateTime=" + wechatAccessTokenUpdateTime +
                 ", wechatAccessToken=" + wechatAccessToken +
+                ", wechatJsapiTicketUpdateTime=" + wechatJsapiTicketUpdateTime +
+                ", wechatJsapiTicket='" + wechatJsapiTicket + '\'' +
                 ", activeUserList=" + activeUserList +
                 '}';
     }
@@ -137,5 +139,13 @@ public class WechatProfile {
 
     public void setPayKey(String payKey) {
         this.payKey = payKey;
+    }
+
+    public String getInitId() {
+        return initId;
+    }
+
+    public void setInitId(String initId) {
+        this.initId = initId;
     }
 }

@@ -8,19 +8,13 @@ import weixin.popular.bean.message.TextMessage;
 
 public class ContactUsMessageHandler extends WechatMessageHandler {
 
-    private final ProfileManager profileManager;
-
     public ContactUsMessageHandler(Filter<String> msgTypeFilter, Filter<String> eventTypeFilter, Filter<String> keyFilter, ProfileManager profileManager) {
-        super(msgTypeFilter, eventTypeFilter, keyFilter);
-        this.profileManager = profileManager;
+        super(msgTypeFilter, eventTypeFilter, keyFilter, profileManager);
     }
 
     void handleIt(EventMessage eventMessage) {
-        Message message = new TextMessage(openId(eventMessage), "请拨打 [首领] 电话 >>> 13631383391, 密码：荔园");
-        replyClient(getAccessToken(), message);
+        Message message = new TextMessage(openId(eventMessage), "请拨打 [首领] 电话 >>> 13602211275, 密码：荔园");
+        replyClient(eventMessage, message);
     }
 
-    private String getAccessToken() {
-        return profileManager.getAppProfile("liyuanapp").getWechatProfile().getWechatAccessToken().getAccess_token();
-    }
 }

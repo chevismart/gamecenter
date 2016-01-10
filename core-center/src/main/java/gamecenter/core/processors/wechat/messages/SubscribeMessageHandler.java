@@ -4,10 +4,10 @@ import gamecenter.core.processors.Filter;
 import gamecenter.core.processors.wechat.ProfileManager;
 import gamecenter.core.services.db.SubscribeService;
 import weixin.popular.bean.BaseResult;
-import weixin.popular.bean.EventMessage;
-import weixin.popular.bean.message.Message;
-import weixin.popular.bean.message.NewsMessage;
-import weixin.popular.bean.message.TextMessage;
+import weixin.popular.bean.message.EventMessage;
+import weixin.popular.bean.message.message.Message;
+import weixin.popular.bean.message.message.NewsMessage;
+import weixin.popular.bean.message.message.TextMessage;
 
 import static java.util.Arrays.asList;
 

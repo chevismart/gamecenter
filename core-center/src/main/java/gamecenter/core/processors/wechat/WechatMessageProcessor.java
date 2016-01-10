@@ -6,7 +6,7 @@ import gamecenter.core.processors.MessageHandler;
 import gamecenter.core.utils.EncryptUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import weixin.popular.bean.EventMessage;
+import weixin.popular.bean.message.EventMessage;
 import weixin.popular.util.XMLConverUtil;
 
 import java.io.InputStream;

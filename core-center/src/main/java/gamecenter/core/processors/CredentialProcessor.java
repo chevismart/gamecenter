@@ -6,7 +6,7 @@ import gamecenter.core.beans.AccessChannel;
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.processors.wechat.ProfileManager;
 import org.apache.struts2.StrutsStatics;
-import weixin.popular.bean.Token;
+import weixin.popular.bean.token.Token;
 import weixin.popular.util.JsonUtil;
 
 import javax.servlet.http.HttpServletRequest;

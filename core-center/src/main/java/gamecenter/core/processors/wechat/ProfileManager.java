@@ -15,10 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import weixin.popular.api.SnsAPI;
-import weixin.popular.api.TokenAPI;
-import weixin.popular.api.UserAPI;
-import weixin.popular.bean.Token;
-import weixin.popular.bean.User;
+import weixin.popular.bean.token.Token;
+import weixin.popular.bean.user.User;
 
 import java.util.Locale;
 import java.util.Map;
@@ -40,7 +38,7 @@ public class ProfileManager {
     }
 
     public ProfileManager(Map<String, AppProfile> profiles) {
-        this(profiles, new AccessTokenService(new TokenAPI()), new SnsAuthService(new SnsAPI(), new UserAPI()), new JsApiTicketService());
+        this(profiles, new AccessTokenService(), new SnsAuthService(new SnsAPI()), new JsApiTicketService());
     }
 
     public Map<String, AppProfile> getProfiles() {

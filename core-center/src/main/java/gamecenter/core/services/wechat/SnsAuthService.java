@@ -5,9 +5,11 @@ import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.services.Service;
 import org.apache.commons.lang3.StringUtils;
 import weixin.popular.api.SnsAPI;
-import weixin.popular.api.UserAPI;
-import weixin.popular.bean.SnsToken;
-import weixin.popular.bean.User;
+import weixin.popular.bean.sns.SnsToken;
+import weixin.popular.bean.user.User;
+
+import static weixin.popular.api.SnsAPI.*;
+import static weixin.popular.api.UserAPI.userInfo;
 
 /**
  * Created by Chevis on 2014/12/15.
@@ -15,11 +17,9 @@ import weixin.popular.bean.User;
 public class SnsAuthService extends Service {
     private static boolean IS_USER_INFO_CACHED = false;
     private SnsAPI wechatSnsApi;
-    private UserAPI userAPI;
 
-    public SnsAuthService(SnsAPI wechatSnsApi, UserAPI userAPI) {
+    public SnsAuthService(SnsAPI wechatSnsApi) {
         this.wechatSnsApi = wechatSnsApi;
-        this.userAPI = userAPI;
     }
 
     private boolean isUserInfoCached(WechatProfile wechatProfile, String openId) {
@@ -30,7 +30,7 @@ public class SnsAuthService extends Service {
         User userInfo = null;
         if (appProfile.isWechatProfileValid()) {
             WechatProfile wechatProfile = appProfile.getWechatProfile();
-            SnsToken snsToken = wechatSnsApi.oauth2AccessToken(wechatProfile.getWechatAppId(), wechatProfile.getWechatAppSecret(), code);
+            SnsToken snsToken = oauth2AccessToken(wechatProfile.getWechatAppId(), wechatProfile.getWechatAppSecret(), code);
 
             userInfo = getUser(appProfile, local, wechatProfile, snsToken.getOpenid(), snsToken.getAccess_token());
 
@@ -44,7 +44,7 @@ public class SnsAuthService extends Service {
             userInfo = wechatProfile.getActiveUserList().get(openId);
             logForUserInfoRetrieval("cache", userInfo);
         } else {
-            userInfo = userAPI.userInfo(wechatProfile.getWechatAccessToken().getAccess_token(), openId);
+            userInfo = userInfo(wechatProfile.getWechatAccessToken().getAccess_token(), openId);
             if (!isUserValid(userInfo)) {
                 userInfo = wechatSnsApi.userinfo(accessToken, openId, local);
             } else {

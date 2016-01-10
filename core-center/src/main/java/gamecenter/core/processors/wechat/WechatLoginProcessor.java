@@ -12,7 +12,7 @@ import gamecenter.core.services.db.UserService;
 import gamecenter.core.utils.ParameterUtil;
 import gamecenter.core.utils.ProfileUtil;
 import org.apache.commons.lang3.StringUtils;
-import weixin.popular.bean.User;
+import weixin.popular.bean.user.User;
 
 import java.util.Locale;
 import java.util.Map;

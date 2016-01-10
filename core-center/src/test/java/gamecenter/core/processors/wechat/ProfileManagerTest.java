@@ -13,8 +13,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.slf4j.Logger;
-import weixin.popular.bean.Token;
-import weixin.popular.bean.User;
+import weixin.popular.bean.token.Token;
+import weixin.popular.bean.user.User;
 
 import java.util.Date;
 import java.util.HashMap;

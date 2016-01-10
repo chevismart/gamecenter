@@ -9,8 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import weixin.popular.api.MenuAPI;
 import weixin.popular.bean.BaseResult;
-import weixin.popular.bean.MenuButtons;
-import weixin.popular.bean.MenuButtons.Button;
+import weixin.popular.bean.menu.Button;
+import weixin.popular.bean.menu.MenuButtons;
 
 import java.io.IOException;
 import java.util.ArrayList;

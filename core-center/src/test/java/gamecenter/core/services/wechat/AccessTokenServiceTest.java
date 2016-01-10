@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import weixin.popular.api.TokenAPI;
-import weixin.popular.bean.Token;
+import weixin.popular.bean.token.Token;
 import weixin.popular.client.LocalHttpClient;
 
 import static org.junit.Assert.assertNotNull;
@@ -44,7 +44,7 @@ public class AccessTokenServiceTest {
         when(httpResponse.getEntity()).thenReturn(httpEntity);
         when(EntityUtils.toString(httpEntity)).thenReturn(json);
 
-        service = new AccessTokenService(tokenAPI);
+        service = new AccessTokenService();
         Token token = service.requestWechatAccessTokenFromHost(appProfile);
         assertNotNull(token);
     }

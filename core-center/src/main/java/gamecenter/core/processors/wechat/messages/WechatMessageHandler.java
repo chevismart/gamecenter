@@ -7,9 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import weixin.popular.api.MessageAPI;
 import weixin.popular.bean.BaseResult;
-import weixin.popular.bean.EventMessage;
-import weixin.popular.bean.message.Message;
-
+import weixin.popular.bean.message.EventMessage;
+import weixin.popular.bean.message.message.Message;
 
 public abstract class WechatMessageHandler implements MessageHandler<EventMessage> {
     private final Filter<String> msgTypeFilter;

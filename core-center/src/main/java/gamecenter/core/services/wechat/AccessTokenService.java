@@ -20,7 +20,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import weixin.popular.api.TokenAPI;
-import weixin.popular.bean.Token;
+import weixin.popular.bean.token.Token;
 import weixin.popular.client.LocalHttpClient;
 import weixin.popular.util.JsonUtil;
 
@@ -34,18 +34,13 @@ import java.util.List;
  */
 public class AccessTokenService extends Service {
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    TokenAPI wechatAccessTokenApi = new TokenAPI();
-
-    public AccessTokenService(TokenAPI wechatAccessTokenApi) {
-        this.wechatAccessTokenApi = wechatAccessTokenApi;
-    }
 
     public Token requestWechatAccessToken(final AppProfile appProfile) {
         Token accessToken = null;
         String appId = appProfile.getAppId();
         if (appProfile.isWechatProfileValid()) {
             WechatProfile wechatProfile = appProfile.getWechatProfile();
-            accessToken = verifyToken(wechatAccessTokenApi.token(wechatProfile.getWechatAppId(), wechatProfile.getWechatAppSecret()),
+            accessToken = verifyToken(TokenAPI.token(wechatProfile.getWechatAppId(), wechatProfile.getWechatAppSecret()),
                     wechatProfile.getWechatAppId(),
                     wechatProfile);
         } else {

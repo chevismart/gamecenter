@@ -75,7 +75,7 @@ public class NativePrePayOrderService extends Service {
             unifiedorder.setDevice_info(payNotification.getDevice_info());
             unifiedorder.setSign(SignatureUtil.generateSign(MapUtil.order(MapUtil.objectToMap(unifiedorder)), payKey));
 
-            UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder);
+            UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder,payKey);
             logger.info("the pre-pay id is", unifiedorderResult.getPrepay_id());
             PayNotification returnInfo = new PayNotification();
             returnInfo.setReturn_code(CommonConstants.SUCCESS);

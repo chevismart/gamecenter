@@ -3,9 +3,9 @@ package gamecenter.core.processors.wechat.messages;
 import gamecenter.core.processors.Filter;
 import gamecenter.core.processors.wechat.ProfileManager;
 import gamecenter.core.services.db.CustomerService;
-import weixin.popular.bean.EventMessage;
-import weixin.popular.bean.message.Message;
-import weixin.popular.bean.message.TextMessage;
+import weixin.popular.bean.message.EventMessage;
+import weixin.popular.bean.message.message.Message;
+import weixin.popular.bean.message.message.TextMessage;
 
 public class CheekBalanceMessageHandler extends WechatMessageHandler {
 

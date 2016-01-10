@@ -72,7 +72,7 @@ public class WechatPayOrderProcessor extends AbstractTopupProcessor {
             unifiedorder.setDevice_info("ATM001");
             unifiedorder.setSign(SignatureUtil.generateSign(MapUtil.order(MapUtil.objectToMap(unifiedorder, StringUtils.EMPTY)), wechatProfile.getPayKey()));
 
-            UnifiedorderResult result = payMchAPI.payUnifiedorder(unifiedorder);
+            UnifiedorderResult result = payMchAPI.payUnifiedorder(unifiedorder, wechatProfile.getPayKey());
             logger.info(result.getCode_url());
             globalPaymentBean.getUnSettlementPayments().put(unifiedorder.getOut_trade_no(), unifiedorder.getOut_trade_no());
             getHttpResponse().sendRedirect(result.getCode_url());

@@ -68,9 +68,14 @@
             <result>/jsp/error.jsp</result>
         </action>
 
+        <!-- The following is the processor for corecenter topup on adapter-->
         <action name="topup" class="topupProcessor">
             <result name="success" type="dispatcher">/jsp/center/topupSuccess.jsp</result>
             <result name="error" type="dispatcher">/jsp/center/topupFailure.jsp</result>
+        </action>
+
+        <action name="chargeCoin" class="wechatChargeProcessor">
+            <result name="success" type="dispatcher">/jsp/center/topupSuccess.jsp</result>
         </action>
 
         <action name="simpleAction" class="demoActionClass">

@@ -10,17 +10,9 @@ import gamecenter.core.utils.TimeUtil;
  */
 public class WechatTokenManager extends AbstractRunnable {
 
-    private ProfileManager profileManager;
+    private final ProfileManager profileManager;
 
     public WechatTokenManager(ProfileManager profileManager) {
-        this.profileManager = profileManager;
-    }
-
-    public ProfileManager getProfileManager() {
-        return profileManager;
-    }
-
-    public void setProfileManager(ProfileManager profileManager) {
         this.profileManager = profileManager;
     }
 

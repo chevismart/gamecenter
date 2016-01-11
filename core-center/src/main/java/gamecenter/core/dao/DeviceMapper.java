@@ -2,6 +2,8 @@ package gamecenter.core.dao;
 
 import gamecenter.core.domain.Device;
 
+import java.util.List;
+
 public interface DeviceMapper {
     int deleteByPrimaryKey(Integer deviceid);
 
@@ -12,6 +14,8 @@ public interface DeviceMapper {
     Device selectByPrimaryKey(Integer deviceid);
 
     Device selectByMacAddr(String macAddr);
+
+    List<Device> selectByCenterId(int centerid);
 
     int updateByPrimaryKeySelective(Device record);
 

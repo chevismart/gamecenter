@@ -22,6 +22,9 @@
                 <bean id="tokenManager" class="gamecenter.core.processors.tasks.WechatTokenManager">
                     <constructor-arg name="profileManager" ref="profileManager"/>
                 </bean>
+                <bean id="connectionManager" class="gamecenter.core.processors.tasks.ConnectionManager">
+                    <constructor-arg name="dbServices" ref="dbServices"/>
+                </bean>
                 <!--<bean id="cloudServerLoader" class="gamecenter.core.processors.tasks.CloudServerLoader"/>-->
             </list>
         </property>

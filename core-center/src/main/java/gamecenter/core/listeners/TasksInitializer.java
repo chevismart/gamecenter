@@ -1,7 +1,6 @@
 package gamecenter.core.listeners;
 
 import gamecenter.core.beans.Tasks;
-import gamecenter.core.constants.CommonConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
@@ -10,6 +9,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+import static gamecenter.core.constants.CommonConstants.*;
+import static gamecenter.core.constants.CommonConstants.TASKS_BEAN_NAME;
 
 /**
  * Created by Chevis on 2014/12/11.
@@ -23,8 +25,8 @@ public class TasksInitializer implements ServletContextListener {
     @Override
     public void contextInitialized(final ServletContextEvent servletContextEvent) {
         WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
-        tasks = (Tasks) context.getBean(CommonConstants.TASKS_BEAN_NAME);
-        taskExecutor = (TaskExecutor) context.getBean(CommonConstants.TASK_EXECUTOR_NAME);
+        tasks = (Tasks) context.getBean(TASKS_BEAN_NAME);
+        taskExecutor = (TaskExecutor) context.getBean(TASK_EXECUTOR_NAME);
         logger.debug("The following tasks to be initialized: {}", tasks);
         for (Runnable normalTask : tasks.getNormalTask()) {
             taskExecutor.execute(normalTask);

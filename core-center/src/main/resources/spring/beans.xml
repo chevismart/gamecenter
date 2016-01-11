@@ -25,12 +25,23 @@
 
     <bean id="globalPaymentBean" class="gamecenter.core.beans.GlobalPaymentBean" scope="singleton"></bean>
 
+    <bean id="dbServices" class="gamecenter.core.services.db.DBServices">
+        <constructor-arg name="appService" ref="appService"/>
+        <constructor-arg name="customerService" ref="customerService"/>
+        <constructor-arg name="deviceService" ref="deviceService"/>
+        <constructor-arg name="subscribeService" ref="subscribeService"/>
+        <constructor-arg name="userService" ref="userService"/>
+    </bean>
+
 	<bean id="subscribeService" class="gamecenter.core.services.db.SubscribeService">
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
         <constructor-arg name="playrecordMapper" ref="playrecordMapper"/>
         <constructor-arg name="deviceMapper" ref="deviceMapper"/>
     </bean>
     <bean id="wechatJsConfigService" class="gamecenter.core.services.wechat.WechatJsConfigService">
+    </bean>
+    <bean id="deviceService" class="gamecenter.core.services.db.DeviceService">
+        <constructor-arg name="deviceMapper" ref="deviceMapper"/>
     </bean>
     <bean id="userService" class="gamecenter.core.services.db.UserService">
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
@@ -42,7 +53,7 @@
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
         <constructor-arg name="customerMapper" ref="customerMapper"/>
     </bean>
-    <bean id="AppService" class="gamecenter.core.services.db.AppService">
+    <bean id="appService" class="gamecenter.core.services.db.AppService">
         <constructor-arg name="wechatMapper" ref="wechatMapper"/>
     </bean>
 </beans>

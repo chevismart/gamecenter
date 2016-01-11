@@ -10,7 +10,6 @@ import gamecenter.core.services.wechat.AccessTokenService;
 import gamecenter.core.services.wechat.JsApiTicketService;
 import gamecenter.core.services.wechat.SnsAuthService;
 import gamecenter.core.utils.ProfileUtil;
-import gamecenter.core.utils.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +19,12 @@ import weixin.popular.bean.user.User;
 
 import java.util.Locale;
 import java.util.Map;
+
+import static gamecenter.core.constants.CommonConstants.DEFAULT_WECHAT_ACCESS_TOKEN_EXPIRY_TIME_IN_SECOND;
+import static gamecenter.core.constants.CommonConstants.EXPIRY_SHIFT_PERIOD_IN_SECOND;
+import static gamecenter.core.utils.TimeUtil.getCurrentDateTime;
+import static gamecenter.core.utils.TimeUtil.getExpiryDateTime;
+import static gamecenter.core.utils.TimeUtil.isExpiry;
 
 public class ProfileManager {
 
@@ -151,7 +156,7 @@ public class ProfileManager {
 
     public void checkAndUpdateAllAccessToken() {
         for (AppProfile appProfile : profiles.values()) {
-            chevkWechatProfile(appProfile);
+            checkWechatProfile(appProfile);
         }
     }
 
@@ -159,15 +164,15 @@ public class ProfileManager {
         return null != user && StringUtils.isNotEmpty(user.getOpenid());
     }
 
-    private void chevkWechatProfile(AppProfile appProfile) {
+    private void checkWechatProfile(AppProfile appProfile) {
         WechatProfile wechatProfile = appProfile.getWechatProfile();
         if (ProfileUtil.verifyAppProfile(appProfile) &&
                 appProfile.isWechatProfileValid() && (null == wechatProfile.getWechatAccessToken() ||
-                TimeUtil.isExpiry(TimeUtil.getCurrentDateTime(),
-                        TimeUtil.getExpiryDateTime(wechatProfile.getWechatAccessTokenUpdateTime(),
-                                getExpiryInSecond(CommonConstants.DEFAULT_WECHAT_ACCESS_TOKEN_EXPIRY_TIME_IN_SECOND,
+                isExpiry(getCurrentDateTime(),
+                        getExpiryDateTime(wechatProfile.getWechatAccessTokenUpdateTime(),
+                                getExpiryInSecond(DEFAULT_WECHAT_ACCESS_TOKEN_EXPIRY_TIME_IN_SECOND,
                                         wechatProfile.getWechatAccessToken().getExpires_in()),
-                                CommonConstants.EXPIRY_SHIFT_PERIOD_IN_SECOND
+                                EXPIRY_SHIFT_PERIOD_IN_SECOND
                         )))) {
             String appId = appProfile.getAppId();
             logger.info("Updating wechat access token for appId {}", appId);
@@ -176,10 +181,10 @@ public class ProfileManager {
         //检查jsapiticket是否过时
         if (ProfileUtil.verifyAppProfile(appProfile) &&
                 appProfile.isWechatProfileValid() && (null == wechatProfile.getWechatAccessToken() ||
-                TimeUtil.isExpiry(TimeUtil.getCurrentDateTime(),
-                        TimeUtil.getExpiryDateTime(wechatProfile.getWechatJsapiTicketUpdateTime(),
+                isExpiry(getCurrentDateTime(),
+                        getExpiryDateTime(wechatProfile.getWechatJsapiTicketUpdateTime(),
                                 CommonConstants.DEFAULT_WECHAT_JSAPI_TICKET_EXPIRY_TIME_IN_SECOND,
-                                CommonConstants.EXPIRY_SHIFT_PERIOD_IN_SECOND
+                                EXPIRY_SHIFT_PERIOD_IN_SECOND
                         )))) {
             String appId = appProfile.getAppId();
             logger.info("Updating wechat jsapiTicket for appId {}", appId);

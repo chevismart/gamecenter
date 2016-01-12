@@ -1,15 +1,15 @@
 Phase 1: Release for free play(Target release date: 2016-Jan-24)
-1.[InProgress] Fix the issue that lost DB connection if long time no activity between corecenter and mysql
+1.[COMPLETED] Fix the issue that lost DB connection if long time no activity between corecenter and mysql
 2.[COMPLETED] Topup coins timeout is too long and should be a gracefully error handling in client side
-3. Add toggle for the feature enable/disable
-4. Add the http interface on corecenter for status monitoring, including the connection with cloud-server, number of free play, number of subscribers
-5. Add disclaimer warning for the no payment return once user confirmed the free play service
-6. UI enhancement on the free play page via wechat channel.
-7. Check device connection and health status
+3. Add the http interface on corecenter for status monitoring, including the connection with cloud-server, number of free play, number of subscribers
+4. Add disclaimer warning for the no payment return once user confirmed the free play service
+5. UI enhancement on the free play page via wechat channel.
+6. Check device connection and health status
 
 Phase 2: Add the wechat buy coins
 1. Implement the buy coins
 2. Request the hardware adaptor for the atm installation from niu
 3. UI enhancement
+4. Add toggle for the feature enable/disable
 
 

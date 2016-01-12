@@ -1,5 +1,7 @@
 .idea/
 *.iml
+*.lock
 target/
-WEB-INF/classes/
-WEB-INF/lib/
+src/main/webapp/META-INF/
+src/main/webapp/WEB-INF/classes/
+src/main/webapp/WEB-INF/lib/

@@ -80,4 +80,18 @@ public class Device {
     public void setDevicedesc(String devicedesc) {
         this.devicedesc = devicedesc == null ? null : devicedesc.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "deviceid=" + deviceid +
+                ", centerid=" + centerid +
+                ", devicename='" + devicename + '\'' +
+                ", macaddr='" + macaddr + '\'' +
+                ", powerstatus='" + powerstatus + '\'' +
+                ", connectionstatus='" + connectionstatus + '\'' +
+                ", remark='" + remark + '\'' +
+                ", devicedesc='" + devicedesc + '\'' +
+                '}';
+    }
 }

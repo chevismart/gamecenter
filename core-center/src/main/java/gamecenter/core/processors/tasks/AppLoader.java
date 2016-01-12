@@ -8,7 +8,7 @@ import gamecenter.core.utils.XMLMessageConverter;
 
 import java.util.List;
 
-public class AppLoader extends AbstractRunnable {
+public class AppLoader extends AbstractRunnable implements ScheduleTask {
 
     private final static String ROOT_NODE = "applications";
 
@@ -43,5 +43,9 @@ public class AppLoader extends AbstractRunnable {
         }
 
 
+    }
+
+    public int interval() {
+        return 60;
     }
 }

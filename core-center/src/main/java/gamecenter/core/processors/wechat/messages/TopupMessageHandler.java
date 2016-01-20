@@ -22,8 +22,9 @@ public class TopupMessageHandler extends WechatMessageHandler {
     void handleIt(EventMessage eventMessage) {
         try {
             String openId = openId(eventMessage);
+            Integer coins = Integer.valueOf(eventMessage.getContent().replace("t", ""));
 //            User user = dbServices.getUserService().getOperatorByOpenId(openId);
-            String content = cloudServerService.topUpCoin("accf233b95f6", 1, openId) ? "加币成功" : "加币失败";
+            String content = cloudServerService.topUpCoin("accf233b95f6", coins, openId) ? "加币" + coins + "个成功" : "加币失败";
             Message message = new TextMessage(openId, content);
             replyClient(eventMessage, message);
         } catch (Exception e) {

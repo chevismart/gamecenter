@@ -161,7 +161,7 @@
     <bean id="topUpMessageHandler" class="gamecenter.core.processors.wechat.messages.TopupMessageHandler">
         <constructor-arg name="msgTypeFilter" ref="textFilter"/>
         <constructor-arg name="eventTypeFilter" ref="clickEventFilter"/>
-        <constructor-arg name="keyFilter" ref="topUpFilter"/>
+        <constructor-arg name="keyFilter" ref="coinsFilter"/>
         <constructor-arg name="profileManager" ref="profileManager"/>
         <constructor-arg name="dbServices" ref="dbServices"/>
         <constructor-arg name="cloudServerService" ref="cloudServerServices"/>
@@ -201,5 +201,8 @@
 
     <bean id="contactUsEventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
         <constructor-arg name="expect" value="contact_us"/>
+    </bean>
+    <bean id="coinsFilter" class="gamecenter.core.processors.RegexIncludeFilter" scope="singleton">
+        <constructor-arg name="regex" value="^[t][\d]{1,3}"/>
     </bean>
 </beans>

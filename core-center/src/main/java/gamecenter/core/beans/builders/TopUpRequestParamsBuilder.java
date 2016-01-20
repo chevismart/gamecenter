@@ -8,16 +8,15 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Chevis on 15/3/31.
- */
-public class TopUpRequestParamsBuilder implements TopUpRequestParamsBuilderInterface.Builder, TopUpRequestParamsBuilderInterface.CenterIdBuilder, TopUpRequestParamsBuilderInterface.CoinBuilder, TopUpRequestParamsBuilderInterface.MacAddressBuilder, TopUpRequestParamsBuilderInterface.ReferenceIdBuilder, TopUpRequestParamsBuilderInterface.TokenBuilder {
+import static gamecenter.core.beans.Enums.CORE_CENTER_REQ_TYPE.TOP_UP;
+import static gamecenter.core.beans.Enums.REQUEST_DATA_TYPE.JSON;
+
+public class TopUpRequestParamsBuilder implements TopUpRequestParamsBuilderInterface.Builder, TopUpRequestParamsBuilderInterface.CenterIdBuilder, TopUpRequestParamsBuilderInterface.CoinBuilder, TopUpRequestParamsBuilderInterface.MacAddressBuilder, TopUpRequestParamsBuilderInterface.ReferenceIdBuilder {
 
 
-    private final Enums.REQUEST_DATA_TYPE dataType = Enums.REQUEST_DATA_TYPE.JSON;
-    private final Enums.CORE_CENTER_REQ_TYPE reqType = Enums.CORE_CENTER_REQ_TYPE.TOP_UP;
+    private final Enums.REQUEST_DATA_TYPE dataType = JSON;
+    private final Enums.CORE_CENTER_REQ_TYPE reqType = TOP_UP;
     private String centerId;
-    private String token;
     private String macAddress;
     private String referenceId;
     private int coins;
@@ -28,7 +27,7 @@ public class TopUpRequestParamsBuilder implements TopUpRequestParamsBuilderInter
     }
 
     @Override
-    public TopUpRequestParamsBuilderInterface.TokenBuilder centerId(String centerId) {
+    public TopUpRequestParamsBuilderInterface.MacAddressBuilder centerId(String centerId) {
         this.centerId = centerId;
         return this;
     }
@@ -52,22 +51,14 @@ public class TopUpRequestParamsBuilder implements TopUpRequestParamsBuilderInter
     }
 
     @Override
-    public TopUpRequestParamsBuilderInterface.MacAddressBuilder token(String token) {
-        this.token = token;
-        return this;
-    }
-
-    @Override
     public String build() {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("CENTER_ID", centerId)); // 00000000
-        params.add(new BasicNameValuePair("TOKEN", token)); // tokenStr
         params.add(new BasicNameValuePair("DATA_TYPE", dataType.name())); //JSON
         params.add(new BasicNameValuePair("REQ_TYPE", reqType.name())); // TOP_UP
         params.add(new BasicNameValuePair("MAC", macAddress)); // accf233b95f6
         params.add(new BasicNameValuePair("TOP_UP_REFERENCE_ID", referenceId)); // ABCDE12345
-        params.add(new BasicNameValuePair("TOP_UP_COIN_QTY", String.valueOf(coins))); // 10 params.add(
-
+        params.add(new BasicNameValuePair("TOP_UP_COIN_QTY", String.valueOf(coins))); // 10
         return URLEncodedUtils.format(params, "UTF-8");
     }
 }

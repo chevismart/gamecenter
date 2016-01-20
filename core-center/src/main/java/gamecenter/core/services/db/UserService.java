@@ -85,4 +85,8 @@ public class UserService {
         return true;
     }
 
+    public User getOperatorByOpenId(String openid) {
+        return userMapper.getOperatorByOpenId(openid);
+    }
+
 }

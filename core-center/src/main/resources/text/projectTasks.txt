@@ -4,7 +4,7 @@ Phase 1: Release for free play(Target release date: 2016-Jan-24)
 3. Add the http interface on corecenter for status monitoring, including the connection with cloud-server, number of free play, number of subscribers
 4. Add disclaimer warning for the no payment return once user confirmed the free play service
 5. UI enhancement on the free play page via wechat channel.
-6. Check device connection and health status
+6. [COMPLETED]Check device connection and health status
 
 Phase 2: Add the wechat buy coins
 1. Implement the buy coins

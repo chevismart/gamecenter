@@ -22,9 +22,7 @@
                 <bean id="tokenManager" class="gamecenter.core.processors.tasks.WechatTokenManager">
                     <constructor-arg name="profileManager" ref="profileManager"/>
                 </bean>
-                <bean id="connectionManager" class="gamecenter.core.processors.tasks.ConnectionManager">
-                    <constructor-arg name="dbServices" ref="dbServices"/>
-                </bean>
+                <ref bean="connectionManager"/>
                 <!--<bean id="cloudServerLoader" class="gamecenter.core.processors.tasks.CloudServerLoader"/>-->
             </list>
         </property>
@@ -32,6 +30,11 @@
             <list>
             </list>
         </property>
+    </bean>
+
+    <bean id="connectionManager" class="gamecenter.core.processors.tasks.ConnectionManager">
+        <constructor-arg name="dbServices" ref="dbServices"/>
+        <constructor-arg name="cloudServerService" ref="cloudServerServices"/>
     </bean>
 
     <bean id="accessRouterProcessor" class="gamecenter.core.processors.AccessRouterProcessor"/>
@@ -72,6 +75,8 @@
                 <ref bean="subscribeMessageHandler"/>
                 <ref bean="checkBalanceMessageHandler"/>
                 <ref bean="contactUsMessageHandler"/>
+                <ref bean="connectionStatusMessageHandler"/>
+                <ref bean="topUpMessageHandler"/>
             </list>
         </constructor-arg>
     </bean>
@@ -137,6 +142,15 @@
         <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 
+    <bean id="connectionStatusMessageHandler" class="gamecenter.core.processors.wechat.messages.ConnectionStatusMessageHandler">
+        <constructor-arg name="msgTypeFilter" ref="textFilter"/>
+        <constructor-arg name="eventTypeFilter" ref="clickEventFilter"/>
+        <constructor-arg name="keyFilter" ref="checkConnectionFilter"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
+        <constructor-arg name="dbServices" ref="dbServices"/>
+        <constructor-arg name="connectionManager" ref="connectionManager"/>
+    </bean>
+
     <bean id="contactUsMessageHandler" class="gamecenter.core.processors.wechat.messages.ContactUsMessageHandler">
         <constructor-arg name="msgTypeFilter" ref="eventFilter"/>
         <constructor-arg name="eventTypeFilter" ref="clickEventFilter"/>
@@ -144,8 +158,21 @@
         <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 
+    <bean id="topUpMessageHandler" class="gamecenter.core.processors.wechat.messages.TopupMessageHandler">
+        <constructor-arg name="msgTypeFilter" ref="textFilter"/>
+        <constructor-arg name="eventTypeFilter" ref="clickEventFilter"/>
+        <constructor-arg name="keyFilter" ref="topUpFilter"/>
+        <constructor-arg name="profileManager" ref="profileManager"/>
+        <constructor-arg name="dbServices" ref="dbServices"/>
+        <constructor-arg name="cloudServerService" ref="cloudServerServices"/>
+    </bean>
+
     <bean id="eventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
         <constructor-arg name="expect" value="event"/>
+    </bean>
+
+    <bean id="textFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
+        <constructor-arg name="expect" value="text"/>
     </bean>
 
     <bean id="subscribeEventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
@@ -158,6 +185,14 @@
 
     <bean id="checkBalanceEventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
         <constructor-arg name="expect" value="account_balance"/>
+    </bean>
+
+    <bean id="checkConnectionFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
+        <constructor-arg name="expect" value="status"/>
+    </bean>
+
+    <bean id="topUpFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">
+        <constructor-arg name="expect" value="t1"/>
     </bean>
 
     <bean id="accountBalanceEventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">

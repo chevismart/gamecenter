@@ -25,9 +25,12 @@ public abstract class WechatMessageHandler implements MessageHandler<EventMessag
     }
 
     public void process(EventMessage eventMessage) {
-        if (msgTypeFilter.shouldInclude(eventMessage.getMsgType()) &&
-                eventTypeFilter.shouldInclude(eventMessage.getEvent()) &&
-                keyFilter.shouldInclude(eventMessage.getEventKey())) {
+        String msgType = eventMessage.getMsgType();
+        if (msgTypeFilter.shouldInclude(msgType) &&
+                ((msgType.equalsIgnoreCase("event") &&
+                        eventTypeFilter.shouldInclude(eventMessage.getEvent()) &&
+                        keyFilter.shouldInclude(eventMessage.getEventKey()))
+                        || (msgType.equals("text") && keyFilter.shouldInclude(eventMessage.getContent())))) {
             handleIt(eventMessage);
         }
     }

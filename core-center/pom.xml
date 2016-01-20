@@ -29,6 +29,12 @@
             <artifactId>cloud-server</artifactId>
             <version>${cloudServer.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
+        </dependency>
+
         <!-- easymock -->
         <dependency>
             <groupId>org.easymock</groupId>

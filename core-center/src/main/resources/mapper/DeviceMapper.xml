@@ -5,6 +5,7 @@
         <id column="deviceId" property="deviceid" jdbcType="INTEGER"/>
         <result column="centerId" property="centerid" jdbcType="INTEGER"/>
         <result column="deviceName" property="devicename" jdbcType="VARCHAR"/>
+        <result column="deviceDesc" property="devicedesc" jdbcType="VARCHAR"/>
         <result column="macAddr" property="macaddr" jdbcType="VARCHAR"/>
         <result column="powerStatus" property="powerstatus" jdbcType="VARCHAR"/>
         <result column="connectionStatus" property="connectionstatus" jdbcType="VARCHAR"/>

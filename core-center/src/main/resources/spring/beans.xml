@@ -25,6 +25,12 @@
 
     <bean id="globalPaymentBean" class="gamecenter.core.beans.GlobalPaymentBean" scope="singleton"></bean>
 
+    <bean id="cloudServerServices" class="gamecenter.core.services.CloudServerService">
+        <constructor-arg name="deviceMapper" ref="deviceMapper"/>
+        <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
+        <constructor-arg name="playrecordMapper" ref="playrecordMapper"/>
+    </bean>
+
     <bean id="dbServices" class="gamecenter.core.services.db.DBServices">
         <constructor-arg name="appService" ref="appService"/>
         <constructor-arg name="customerService" ref="customerService"/>

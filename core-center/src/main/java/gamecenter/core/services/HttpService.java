@@ -8,7 +8,6 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import weixin.popular.client.HttpClientFactory;
 
@@ -19,9 +18,9 @@ import static java.util.Arrays.asList;
 import static org.apache.http.client.utils.URLEncodedUtils.format;
 
 public class HttpService {
-    public static final int HTTP_TIMEOUT = 2000;
-    private static Logger logger = LoggerFactory.getLogger(HttpService.class);
+    public static final int HTTP_TIMEOUT = 10000;
     public static HttpClient httpClient = HttpClientFactory.createHttpClient();
+    private static Logger logger = LoggerFactory.getLogger(HttpService.class);
 
     public static HttpResponse get(String uri, BasicNameValuePair... params) throws IOException {
         HttpGet httpGet = new HttpGet(uri.concat("?").concat(getParams(params)));

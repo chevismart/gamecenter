@@ -19,6 +19,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 import java.util.Collections;
 
+import static gamecenter.core.services.HttpService.HTTP_TIMEOUT;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -36,7 +37,7 @@ public class HttpServiceTest {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 if (isWaiting) try {
-                    Thread.sleep(2000);
+                    Thread.sleep(HTTP_TIMEOUT);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

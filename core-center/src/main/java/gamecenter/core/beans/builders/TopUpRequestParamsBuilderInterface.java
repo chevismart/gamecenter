@@ -5,11 +5,7 @@ package gamecenter.core.beans.builders;
  */
 public interface TopUpRequestParamsBuilderInterface {
     public interface CenterIdBuilder {
-        public TokenBuilder centerId(String centerId);
-    }
-
-    public static interface TokenBuilder {
-        public MacAddressBuilder token(String token);
+        public MacAddressBuilder centerId(String centerId);
     }
 
     public interface MacAddressBuilder {

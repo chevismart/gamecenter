@@ -27,7 +27,6 @@ public class TopUpRequestParamsBuilderTest {
 
         String values = TopUpRequestParamsBuilder.newBuilder()
                 .centerId(centerId)
-                .token(token)
                 .macAddress(macAdd)
                 .referenceId(refId)
                 .coins(coins)
@@ -38,7 +37,6 @@ public class TopUpRequestParamsBuilderTest {
     private String getExceptedResult() {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("CENTER_ID", centerId));
-        params.add(new BasicNameValuePair("TOKEN", token));
         params.add(new BasicNameValuePair("DATA_TYPE", dataType.name()));
         params.add(new BasicNameValuePair("REQ_TYPE", reqType.name()));
         params.add(new BasicNameValuePair("MAC", macAdd));

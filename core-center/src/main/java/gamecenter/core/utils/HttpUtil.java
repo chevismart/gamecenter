@@ -1,5 +1,6 @@
 package gamecenter.core.utils;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 
@@ -32,6 +34,10 @@ public class HttpUtil {
             client.getConnectionManager().shutdown();
         }
         return json;
+    }
+
+    public static String getContent(HttpResponse httpResponse) throws IOException {
+        return IOUtils.toString(httpResponse.getEntity().getContent());
     }
 
 }

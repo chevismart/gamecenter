@@ -1,57 +1,23 @@
 package gamecenter.core.processors.wechat;
 
 import gamecenter.core.beans.UserProfile;
-import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.processors.GeneralProcessor;
-import gamecenter.core.services.HttpService;
-import gamecenter.core.services.db.SubscribeService;
-import org.apache.commons.io.IOUtils;
+import gamecenter.core.services.CloudServerService;
+import gamecenter.core.services.db.DBServices;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+
+import static gamecenter.core.constants.CommonConstants.*;
 
 public class WechatTopupProcessor extends GeneralProcessor {
 
-    private final SubscribeService subscribeService;
+    private final DBServices dbServices;
     private final UserProfile userProfile;
+    private final CloudServerService cloudServerService;
 
-    public WechatTopupProcessor(SubscribeService subscribeService, UserProfile userProfile) {
-        this.subscribeService = subscribeService;
+    public WechatTopupProcessor(DBServices dbServices, UserProfile userProfile, CloudServerService cloudServerService) {
+        this.dbServices = dbServices;
         this.userProfile = userProfile;
-    }
-
-    private static BasicNameValuePair[] getTopupParams(int coins) {
-        return new BasicNameValuePair[]{
-                new BasicNameValuePair("CENTER_ID", "00000000"),
-                new BasicNameValuePair("TOKEN", "tokenStr"),
-                new BasicNameValuePair("DATA_TYPE", "JSON"),
-                new BasicNameValuePair("REQ_TYPE", "TOP_UP"),
-                new BasicNameValuePair("MAC", "accf233b95f6"),
-                new BasicNameValuePair("TOP_UP_REFERENCE_ID", "ABCDEF0000"),
-                new BasicNameValuePair("TOP_UP_COIN_QTY", String.valueOf(coins))
-        };
-    }
-
-    private static String getParams(int coins) {
-        NameValuePair[] param = {
-                new BasicNameValuePair("CENTER_ID", "00000000"),
-                new BasicNameValuePair("TOKEN", "tokenStr"),
-                new BasicNameValuePair("DATA_TYPE", "JSON"),
-                new BasicNameValuePair("REQ_TYPE", "TOP_UP"),
-                new BasicNameValuePair("MAC", "accf233b95f6"),
-                new BasicNameValuePair("TOP_UP_REFERENCE_ID", "ABCDEF0000"),
-                new BasicNameValuePair("TOP_UP_COIN_QTY", String.valueOf(coins))
-        };
-        return StringUtils.join(param, "&");
-    }
-
-    private static String getUrl(String url) {
-        return url.concat("?").concat(getParams(1));
-    }
-
-    public static void main(String[] args) {
-        System.err.println(getUrl("http://wawaonline.net:8003"));
+        this.cloudServerService = cloudServerService;
     }
 
     public String execute() throws Exception {
@@ -59,28 +25,36 @@ public class WechatTopupProcessor extends GeneralProcessor {
         logger.debug("Start to topup!");
         logger.debug("User profile is: {}", userProfile.toString());
 
-        String appId = getHttpRequest().getParameter(CommonConstants.WECHAT_STATE_PARAM_APPID);
-        String deviceId = getHttpRequest().getParameter(CommonConstants.WECHAT_STATE_PARAM_DEVICEID);
+        String appId = getHttpRequest().getParameter(WECHAT_STATE_PARAM_APPID);
+        String mac = getHttpRequest().getParameter(WECHAT_STATE_PARAM_DEVICEID);
+        String coins = getHttpRequest().getParameter(WECHAT_TOP_UP_COINS);
         String openId = userProfile.getOpenId();
-
-        logger.debug("appId={}, deviceId={}, openId={}", appId, deviceId, openId);
-
-        //TODO: Retrieve the bonus and send to topup
-        logger.info("Preparing topup");
         boolean result = false;
 
-        try {
-            String uri = "http://wawaonline.net:8003";
-            HttpResponse response = HttpService.get(uri, getTopupParams(userProfile.getBonus()));
-            String value = IOUtils.toString(response.getEntity().getContent());
-            logger.debug("Response is: {}", value);
-            result = subscribeService.consumeBonus(userProfile.getOpenId(), deviceId, userProfile.getBonus());
-            userProfile.setBonus(0);
-        } catch (Exception e) {
-            logger.error("Topup failed since: {}", e);
+        logger.debug("appId={}, mac={}, openId={}", appId, mac, openId);
+
+        if (StringUtils.isEmpty(appId) && StringUtils.isEmpty(mac) || StringUtils.isEmpty(coins) || StringUtils.isEmpty(openId)) {
+            logger.warn("Missing parameters for top up! appId={}, mac={}, openId={}, coins={}", appId, mac, openId, coins);
+        } else {
+            logger.info("Preparing top up");
+            try {
+                int wallet = dbServices.getCustomerService().getCustomerWalletBalanceByOpenId(openId);
+                int coinsQty = Integer.valueOf(coins);
+                int balance = wallet - coinsQty;
+                if (balance >= 0) {
+                    result = cloudServerService.topUpCoin(mac, coinsQty, openId);
+                    if (result) {
+                        dbServices.getCustomerService().updateWallet(openId, balance);
+                    }
+                    logger.info("Top up {} coins for {} {}", coins, openId, result ? "success" : "fail");
+                } else {
+                    logger.warn("User {} wallet balance {} is insufficient for {} coin top up", openId, balance, coins);
+                }
+            } catch (Exception e) {
+                logger.error("Top up failed since: {}", e);
+            }
         }
 
-        logger.info("Topup result: {}", result);
         return result ? SUCCESS : ERROR;
     }
 }

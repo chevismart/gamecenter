@@ -58,6 +58,8 @@ public class CloudServerService {
             playrecordMapper.insert(playrecord);
             logger.debug("Update Playrecord Table successfully with play record: [{}]", playrecord);
             return true;
+        }else{
+            logger.warn("Top up failed!");
         }
         return false;
     }

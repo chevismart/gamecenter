@@ -2,4 +2,4 @@ Wechat login path
 https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe89a9d2fa17df80f&redirect_uri=http://wawaonline.net/corecenter/auth&response_type=code&scope=snsapi_base&state=appid:liyuanapp,deviceid:ATM0001#wechat_redirect
 
 Wechat liyuan qr code
-http://weixin.qq.com/r/8ENAWELECh91rQY79xbi#ATM002
+http://weixin.qq.com/r/8ENAWELECh91rQY79xbi#accf233b95f6

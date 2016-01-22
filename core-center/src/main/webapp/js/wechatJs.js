@@ -46,6 +46,6 @@ function redirectToTopup(deviceId) {
     var timestamp = Date.parse(new Date());
     //var urls = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
     //    "appid=" + appId + "&redirect_uri=http://wawaonline.net/corecenter/topup&response_type=code&scope=snsapi_base&state=appid:" + appId + ",deviceid:" + device + "#wechat_redirect";
-    var fixedUrl = "http://wawaonline.net/corecenter/topup?appid=" + getAppId() + "&deviceid=" + deviceId + "&timestamp=" + timestamp;
+    var fixedUrl = "http://wawaonline.net/corecenter/topup?appid=" + getAppId() + "&deviceid=" + deviceId + "&topupCoins=" + bonus() + "&timestamp=" + timestamp;
     window.location = fixedUrl;
 }

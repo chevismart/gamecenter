@@ -16,13 +16,29 @@ public class CustomerService {
     }
 
     public int getCustomerWalletBalanceByOpenId(String openId) {
+        Customer customer = getCustomer(openId);
+        if (customer != null) {
+            return customer.getWallet().intValue();
+        }
+        return 0;
+    }
+
+    public void updateWallet(String openId, float coins) {
+        Customer customer = getCustomer(openId);
+        if (customer != null) {
+            customer.setWallet(coins);
+            customerMapper.updateByPrimaryKey(customer);
+        }
+    }
+
+    private Customer getCustomer(String openId) {
         CustomerWechat customerWechat = customerWechatMapper.selectByOpenId(openId);
         if (customerWechat != null) {
             Customer customer = customerMapper.selectByPrimaryKey(customerWechat.getCustomerid());
             if (customer != null) {
-                return customer.getWallet().intValue();
+                return customer;
             }
         }
-        return 0;
+        return null;
     }
 }

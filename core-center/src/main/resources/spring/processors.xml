@@ -110,7 +110,8 @@
 
     <bean id="topupProcessor" class="gamecenter.core.processors.wechat.WechatTopupProcessor">
         <constructor-arg name="userProfile" ref="userProfile"/>
-        <constructor-arg name="subscribeService" ref="subscribeService"/>
+        <constructor-arg name="dbServices" ref="dbServices"/>
+        <constructor-arg name="cloudServerService" ref="cloudServerServices"/>
     </bean>
 
     <bean id="deviceRegistryProcessor" class="gamecenter.core.processors.devices.DeviceRegistryProcessor">

@@ -41,8 +41,7 @@
 
 	<bean id="subscribeService" class="gamecenter.core.services.db.SubscribeService">
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
-        <constructor-arg name="playrecordMapper" ref="playrecordMapper"/>
-        <constructor-arg name="deviceMapper" ref="deviceMapper"/>
+        <constructor-arg name="customerMapper" ref="customerMapper"/>
     </bean>
     <bean id="wechatJsConfigService" class="gamecenter.core.services.wechat.WechatJsConfigService">
     </bean>

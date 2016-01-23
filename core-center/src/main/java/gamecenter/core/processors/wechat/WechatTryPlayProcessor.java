@@ -1,6 +1,5 @@
 package gamecenter.core.processors.wechat;
 
-import com.opensymphony.xwork2.Action;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.services.db.DBServices;
@@ -33,8 +32,8 @@ public class WechatTryPlayProcessor extends GeneralProcessor {
         }
         if (isSuccess) {
             logger.info("Successfully charge wallet!");
-            return Action.SUCCESS;
+            return SUCCESS;
         } else
-            return Action.ERROR;
+            return ERROR;
     }
 }

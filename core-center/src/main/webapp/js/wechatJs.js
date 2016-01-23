@@ -49,3 +49,8 @@ function redirectToTopup(deviceId) {
     var fixedUrl = "http://wawaonline.net/corecenter/topup?appid=" + getAppId() + "&deviceid=" + deviceId + "&topupCoins=" + bonus() + "&timestamp=" + timestamp;
     window.location = fixedUrl;
 }
+
+function tryPlay(openId){
+    var topupUrl = "http://wawaonline.net/corecenter/tryPlay"
+
+}

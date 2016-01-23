@@ -62,8 +62,6 @@ public class SubscribeServiceTest {
         boolean result = subscribeService.consumeBonus(testOpenId, deviceMacAddr, 1);
 
         verify(customerWechatMapper, times(1)).selectByOpenId(anyString());
-        verify(deviceMapper, only()).selectByMacAddr(anyString());
-        verify(playrecordMapper, only()).insert(any(Playrecord.class));
         verify(customerWechatMapper, times(1)).updateByPrimaryKey(customerWechat);
         assertThat(result, is(true));
     }

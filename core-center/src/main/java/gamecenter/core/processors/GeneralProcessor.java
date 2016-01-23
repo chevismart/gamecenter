@@ -9,9 +9,6 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Created by Chevis on 2015/1/17.
- */
 public abstract class GeneralProcessor extends ActionSupport {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());

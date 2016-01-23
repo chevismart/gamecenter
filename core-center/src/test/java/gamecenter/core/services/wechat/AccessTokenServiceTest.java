@@ -2,7 +2,7 @@ package gamecenter.core.services.wechat;
 
 import gamecenter.core.beans.AppProfile;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.util.EntityUtils;
 import org.junit.Before;
@@ -24,14 +24,14 @@ public class AccessTokenServiceTest {
     AccessTokenService service;
     AppProfile appProfile;
     TokenAPI tokenAPI;
-    HttpResponse httpResponse;
+    CloseableHttpResponse httpResponse;
     HttpEntity httpEntity;
 
     @Before
     public void setUp() throws Exception {
         appProfile = mock(AppProfile.class);
         tokenAPI = mock(TokenAPI.class);
-        httpResponse = mock(HttpResponse.class);
+        httpResponse = mock(CloseableHttpResponse.class);
         httpEntity = mock(HttpEntity.class);
     }
 

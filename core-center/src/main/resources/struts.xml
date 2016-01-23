@@ -64,6 +64,12 @@
             <result name="success" type="dispatcher">/jsp/center/userProfile.jsp</result>
         </action>
 
+        <action name="pocket" class="pocketProcessor">
+            <result name="success" type="dispatcher">/jsp/center/pocket.jsp</result>
+        </action>
+
+        <action name="json" class="jsonProcessor"></action>
+
         <action name="errorProcessor" class="gamecenter.core.processors.ErrorProcessor">
             <result>/jsp/error.jsp</result>
         </action>

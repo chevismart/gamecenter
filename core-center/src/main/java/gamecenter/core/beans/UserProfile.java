@@ -16,12 +16,14 @@ public class UserProfile {
     @Override
     public String toString() {
         return "UserProfile{" +
-                "displayName='" + displayName + '\'' +
+                "openId='" + openId + '\'' +
+                ", displayName='" + displayName + '\'' +
                 ", internalId='" + internalId + '\'' +
                 ", accessInfo=" + accessInfo +
                 ", userImgUrl='" + userImgUrl + '\'' +
                 ", isFollowed=" + isFollowed +
                 ", deviceId='" + deviceId + '\'' +
+                ", bonus=" + bonus +
                 '}';
     }
 

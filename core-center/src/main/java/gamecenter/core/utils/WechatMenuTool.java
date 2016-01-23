@@ -32,12 +32,12 @@ public class WechatMenuTool {
         Button buttonPlayIt = new Button();
         buttonPlayIt.setName("使用钱包代币");
         buttonPlayIt.setType("view");
-        buttonPlayIt.setUrl("http://wawaonline.net/corecenter/wechatLogin");
+        buttonPlayIt.setUrl("http://wawaonline.net/corecenter/pocket");
 
         Button buttonPlayFree = new Button();
         buttonPlayFree.setName("免费试玩");
         buttonPlayFree.setType("view");
-        buttonPlayFree.setUrl("http://wawaonline.net/corecenter/wechatLogin");
+        buttonPlayFree.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe89a9d2fa17df80f&redirect_uri=http://wawaonline.net/corecenter/auth&response_type=code&scope=snsapi_base&state=appid:liyuanapp,deviceid:ATM0001#wechat_redirect");
 
         buttonGroup1.setSub_button(asList(buttonPlayFree, buttonPlayIt));
 

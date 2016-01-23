@@ -32,4 +32,13 @@ public class CustomerWechat extends CustomerWechatKey {
     public void setSubscribetime(Date subscribetime) {
         this.subscribetime = subscribetime;
     }
+
+    @Override
+    public String toString() {
+        return "CustomerWechat{" +
+                "openid='" + openid + '\'' +
+                ", subscribebonus=" + subscribebonus +
+                ", subscribetime=" + subscribetime +
+                '}';
+    }
 }

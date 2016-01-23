@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.alibaba.fastjson.JSON.parseObject;
+import static weixin.popular.util.JsonUtil.parseObject;
 
 public class CloudServerService {
 

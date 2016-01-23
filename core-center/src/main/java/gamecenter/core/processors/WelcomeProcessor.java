@@ -16,7 +16,7 @@ public class WelcomeProcessor extends GeneralProcessor {
 
     @Override
     public String execute() throws Exception {
-
+        logger.debug("User info before page render: {}",userProfile);
         return Action.SUCCESS;
     }
 

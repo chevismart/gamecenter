@@ -1,7 +1,6 @@
 package gamecenter.core.processors.wechat;
 
 import com.opensymphony.xwork2.Action;
-import gamecenter.core.beans.AccessChannel;
 import gamecenter.core.beans.AccessInfo;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.constants.CommonConstants;
@@ -16,6 +15,9 @@ import weixin.popular.bean.user.User;
 
 import java.util.Locale;
 import java.util.Map;
+
+import static gamecenter.core.beans.AccessChannel.WECHAT;
+import static gamecenter.core.constants.CommonConstants.ACCESS_ROUTER_WECHAT_OAUTH;
 
 public class WechatLoginProcessor extends GeneralProcessor implements GeneralLoginInterface {
     //services
@@ -54,52 +56,47 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
             logger.debug("Login with openId ={}, appId ={}", openId, appId);
         }
 
-        String result;
+        String result = ACCESS_ROUTER_WECHAT_OAUTH;
 
         try {
             if (isValidLogin()) {
 
                 logger.debug("Login valid.");
-                AccessInfo accessInfo = new AccessInfo();
-                accessInfo.setAccessChannel(AccessChannel.WECHAT);
-                accessInfo.setAppProfile(profileManager.getAppProfile(appId));
-                logger.debug("Stored access info.");
-                // TODO: to retrieve the user from DB by openId, or create profile
-                userProfile.setAccessInfo(accessInfo);
-                userProfile.setOpenId(wechatUser.getOpenid());
-                userProfile.setDisplayName(wechatUser.getNickname());
-                userProfile.setInternalId(ProfileUtil.getUserUnifyId(AccessChannel.WECHAT, wechatUser.getOpenid()));
-                userProfile.setUserImgUrl(wechatUser.getHeadimgurl());
-                userProfile.setIsFollowed(null != wechatUser.getSubscribe() && wechatUser.getSubscribe() != 0);
-//                userProfile.setDeviceId(stateParam.get(CommonConstants.WECHAT_STATE_PARAM_DEVICEID));
-                profileManager.getAppProfile(appId).getWechatProfile().getActiveUserList().put(wechatUser.getOpenid(), wechatUser);
-                logger.debug("Construct user profile completely.");
-                //如果首次登陆，记录录微信用户信息
-                if (!userService.hasWechatCustomer(userProfile.getOpenId())) {
-                    userService.addWechatCustomer(userProfile.getDisplayName(), userProfile.getOpenId(),
-                            profileManager.getAppProfile(appId).getWechatProfile().getWechatAppId());
-                    logger.debug("Recorded user info successfully.");
+                if (userProfile.getAccessInfo() == null) {
+                    logger.info("Creating profile for the user first login");
+                    AccessInfo accessInfo = new AccessInfo();
+                    accessInfo.setAccessChannel(WECHAT);
+                    accessInfo.setAppProfile(profileManager.getAppProfile(appId));
+                    logger.debug("Stored access info.");
+                    // TODO: to retrieve the user from DB by openId, or create profile
+                    userProfile.setAccessInfo(accessInfo);
+                    userProfile.setOpenId(wechatUser.getOpenid());
+                    userProfile.setDisplayName(wechatUser.getNickname());
+                    userProfile.setInternalId(ProfileUtil.getUserUnifyId(WECHAT, wechatUser.getOpenid()));
+                    userProfile.setUserImgUrl(wechatUser.getHeadimgurl());
+                    userProfile.setIsFollowed(null != wechatUser.getSubscribe() && wechatUser.getSubscribe() != 0);
+                    profileManager.getAppProfile(appId).getWechatProfile().getActiveUserList().put(wechatUser.getOpenid(), wechatUser);
+                    logger.debug("Construct user profile completely.");
+                    //如果首次登陆，记录录微信用户信息
+                    if (!userService.hasWechatCustomer(userProfile.getOpenId())) {
+                        userService.addWechatCustomer(userProfile.getDisplayName(), userProfile.getOpenId(),
+                                profileManager.getAppProfile(appId).getWechatProfile().getWechatAppId());
+                        logger.debug("Recorded user info successfully.");
+                    }
+                    //获取订阅相关信息
+                    boolean hasSubscribed = subscribeService.getHasSubscribed(userProfile.getOpenId());
+                    logger.error("wechat user is = {}", wechatUser.getNickname());
+                    logger.error("wechat subscribe is = {}", wechatUser.getSubscribe());
+
+                    boolean isSubscribing = false; // subscribeService.getIsSubscibing(wechatUser);
+                    boolean hasSubscribeBonus = subscribeService.getHasSubscribeBonus(userProfile.getOpenId());
+                    logger.debug("Request the subscribe details from wechat: subscribed = {}, isSubscribing = {}, hasBonus = {}",
+                            hasSubscribed, isSubscribing, hasSubscribeBonus);
+                    if (hasSubscribeBonus) {
+                        userProfile.setBonus(getBonus());
+                    }
                 }
-                //获取订阅相关信息
-                boolean hasSubscribed = subscribeService.getHasSubscribed(userProfile.getOpenId());
-                logger.error("wechat user is = {}", wechatUser.getNickname());
-                logger.error("wechat subscribe is = {}", wechatUser.getSubscribe());
-
-                boolean isSubscribing = false; // subscribeService.getIsSubscibing(wechatUser);
-                boolean hasSubscribeBonus = subscribeService.getHasSubscribeBonus(userProfile.getOpenId());
-                logger.debug("Request the subscribe details from wechat: subscribed = {}, isSubscribing = {}, hasBonus = {}",
-                        hasSubscribed, isSubscribing, hasSubscribeBonus);
-                getHttpRequest().setAttribute("hasSubscribed", hasSubscribed);
-                getHttpRequest().setAttribute("isSubscribing", isSubscribing);
-                getHttpRequest().setAttribute("hasSubscribeBonus", hasSubscribeBonus);
-
-                if (hasSubscribeBonus) {
-                    userProfile.setBonus(getBonus());
-                }
-
-                result = Action.SUCCESS;
-            } else {
-                result = CommonConstants.ACCESS_ROUTER_WECHAT_OAUTH;
+                result = SUCCESS;
             }
 
         } catch (Exception e) {
@@ -111,7 +108,7 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
 
     private int getBonus() {
 
-        int max_num = 4;
+        int max_num = 3;
         //随机生成币数
         int coins = (int) (max_num * Math.random() + 1);
         return coins;

@@ -39,6 +39,7 @@ public class CustomerService {
         if (customer != null) {
             customer.setWallet(customer.getWallet() + income);
             updateCustomer(customer);
+            return true;
         } else {
             logger.warn("Customer info not found for open id = {}", openId);
         }

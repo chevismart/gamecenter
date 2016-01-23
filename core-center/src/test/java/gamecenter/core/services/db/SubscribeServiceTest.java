@@ -1,5 +1,6 @@
 package gamecenter.core.services.db;
 
+import gamecenter.core.dao.CustomerMapper;
 import gamecenter.core.dao.CustomerWechatMapper;
 import gamecenter.core.dao.DeviceMapper;
 import gamecenter.core.dao.PlayrecordMapper;
@@ -20,16 +21,17 @@ import static org.mockito.Mockito.*;
 
 public class SubscribeServiceTest {
     static SubscribeService subscribeService;
-    private String testOpenId = "testOpenId";
-    private String deviceMacAddr = "testMacAddr";
     CustomerWechatMapper customerWechatMapper = mock(CustomerWechatMapper.class);
     PlayrecordMapper playrecordMapper = mock(PlayrecordMapper.class);
     DeviceMapper deviceMapper = mock(DeviceMapper.class);
     CustomerWechat customerWechat = mock(CustomerWechat.class);
+    CustomerMapper customerMapper = mock(CustomerMapper.class);
+    private String testOpenId = "testOpenId";
+    private String deviceMacAddr = "testMacAddr";
 
     @Before
     public void setUp() throws Exception {
-        subscribeService = new SubscribeService(customerWechatMapper, playrecordMapper, deviceMapper);
+        subscribeService = new SubscribeService(customerWechatMapper, customerMapper);
     }
 
     @Test

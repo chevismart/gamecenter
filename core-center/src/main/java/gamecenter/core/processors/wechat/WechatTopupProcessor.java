@@ -22,8 +22,7 @@ public class WechatTopupProcessor extends GeneralProcessor {
 
     public String execute() throws Exception {
 
-        logger.debug("Start to topup!");
-        logger.debug("User profile is: {}", userProfile.toString());
+        logger.debug("Start to topup!\n User profile is: {}", userProfile.toString());
 
         String appId = getHttpRequest().getParameter(WECHAT_STATE_PARAM_APPID);
         String mac = getHttpRequest().getParameter(WECHAT_STATE_PARAM_DEVICEID);
@@ -38,13 +37,16 @@ public class WechatTopupProcessor extends GeneralProcessor {
         } else {
             logger.info("Preparing top up");
             try {
-                int wallet = dbServices.getCustomerService().getCustomerWalletBalanceByOpenId(openId);
+
                 int coinsQty = Integer.valueOf(coins);
+
+
+                int wallet = dbServices.getCustomerService().getCustomerWalletBalanceByOpenId(openId);
                 int balance = wallet - coinsQty;
                 if (balance >= 0) {
                     result = cloudServerService.topUpCoin(mac, coinsQty, openId);
                     if (result) {
-                        dbServices.getCustomerService().updateWallet(openId, balance);
+                        boolean isSuccess = dbServices.getCustomerService().payBill(openId, coinsQty);
                     }
                     logger.info("Top up {} coins for {} {}", coins, openId, result ? "success" : "fail");
                 } else {

@@ -11,6 +11,8 @@ public class Playrecord {
 
     private Date time;
 
+    private String refid;
+
     public Integer getPlayrecordid() {
         return playrecordid;
     }
@@ -41,5 +43,13 @@ public class Playrecord {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public String getRefid() {
+        return refid;
+    }
+
+    public void setRefid(String refid) {
+        this.refid = refid;
     }
 }

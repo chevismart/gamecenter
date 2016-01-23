@@ -15,10 +15,7 @@
         <result column="deviceDesc" property="devicedesc" jdbcType="LONGVARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    deviceId, centerId, deviceName, macAddr, powerStatus, connectionStatus, remark
-  </sql>
-    <sql id="Blob_Column_List">
-    deviceDesc
+    deviceId, centerId, deviceName, macAddr, powerStatus, connectionStatus, remark, devicedesc
   </sql>
     <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
         select

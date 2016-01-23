@@ -1,10 +1,8 @@
 package gamecenter.core.services.db;
+
+import gamecenter.core.dao.CustomerMapper;
 import gamecenter.core.dao.CustomerWechatMapper;
-import gamecenter.core.dao.DeviceMapper;
-import gamecenter.core.dao.PlayrecordMapper;
 import gamecenter.core.domain.CustomerWechat;
-import gamecenter.core.domain.Device;
-import gamecenter.core.domain.Playrecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,16 +12,13 @@ import java.util.Date;
  * Created by Frank on 15/02/14.
  */
 public class SubscribeService extends DBService {
-    //dao
-    private final CustomerWechatMapper customerWechatMapper;
-    private final PlayrecordMapper playrecordMapper;
-    private final DeviceMapper deviceMapper;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final CustomerWechatMapper customerWechatMapper;
+    private final CustomerMapper customerMapper;
 
-    public SubscribeService(CustomerWechatMapper customerWechatMapper, PlayrecordMapper playrecordMapper, DeviceMapper deviceMapper) {
+    public SubscribeService(CustomerWechatMapper customerWechatMapper, CustomerMapper customerMapper) {
         this.customerWechatMapper = customerWechatMapper;
-        this.playrecordMapper = playrecordMapper;
-        this.deviceMapper = deviceMapper;
+        this.customerMapper = customerMapper;
     }
 
     private SubscribeDetail getSubscribeDetails(String openId) {
@@ -64,23 +59,13 @@ public class SubscribeService extends DBService {
         return true;
     }
 
-    //兑现订阅福利（免费试玩）
+    //将奖励币数加入钱包
     public boolean consumeBonus(String openId, String deviceMacAddr, int bonus) {
-        //随机生成币数
-//        int amount = (int) (maxBonus * Math.random() + 1);
-        //加币试玩
         //获取Device对象
-        Device device = deviceMapper.selectByMacAddr(deviceMacAddr);
+//        Device device = deviceMapper.selectByMacAddr(deviceMacAddr);
         //获取CustomerWechat对象
-        logger.debug("Device is {} with device mac address [{}]", device, deviceMacAddr);
+//        logger.debug("Device is {} with device mac address [{}]", device, deviceMacAddr);
         CustomerWechat customerWechat = customerWechatMapper.selectByOpenId(openId);
-        //生成Playrecord纪录
-        Playrecord playrecord = new Playrecord();
-        playrecord.setCustomerid(customerWechat.getCustomerid());
-        playrecord.setDeviceid(device.getDeviceid());
-        playrecord.setTime(new Date(System.currentTimeMillis()));
-        playrecordMapper.insert(playrecord);
-        logger.debug("Update Playrecord Table successfully with play record: [{}]", playrecord);
         //完成试玩
         customerWechat.setSubscribebonus(false);
         customerWechatMapper.updateByPrimaryKey(customerWechat);
@@ -90,7 +75,7 @@ public class SubscribeService extends DBService {
     }
 
     //getter attr
-    public boolean getHasSubscibed(String openId) {
+    public boolean getHasSubscribed(String openId) {
         return getSubscribeDetails(openId).isSubscribed;
     }
 

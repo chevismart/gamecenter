@@ -59,8 +59,8 @@
     </bean>
 
     <bean id="wechatTryPlayProcessor" class="gamecenter.core.processors.wechat.WechatTryPlayProcessor">
-        <constructor-arg name="subscribeService" ref="subscribeService"/>
         <constructor-arg name="userProfile" ref="userProfile"/>
+        <constructor-arg name="dbServices" ref="dbServices"/>
     </bean>
 
     <bean id="wechatScanProcessor" class="gamecenter.core.processors.wechat.WechatScanProcessor">

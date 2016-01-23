@@ -35,10 +35,11 @@ public class CloudServerService {
 
     public boolean topUpCoin(String mac, int coinsQty, String openId) throws IOException {
 
+        String refId = RandomStringUtils.randomAlphabetic(10);
         HttpResponse response = HttpService.get("http://localhost:8003/topup",
                 new BasicNameValuePair("TOP_UP_COIN_QTY", String.valueOf(coinsQty)),
                 new BasicNameValuePair("MAC", mac),
-                new BasicNameValuePair("TOP_UP_REFERENCE_ID", RandomStringUtils.randomAlphabetic(10))
+                new BasicNameValuePair("TOP_UP_REFERENCE_ID", refId)
         );
 
         String reply = HttpUtil.getContent(response).trim();
@@ -55,10 +56,11 @@ public class CloudServerService {
             playrecord.setCustomerid(customerWechat.getCustomerid());
             playrecord.setDeviceid(device.getDeviceid());
             playrecord.setTime(new Date(System.currentTimeMillis()));
+            playrecord.setRefid(refId);
             playrecordMapper.insert(playrecord);
             logger.debug("Update Playrecord Table successfully with play record: [{}]", playrecord);
             return true;
-        }else{
+        } else {
             logger.warn("Top up failed!");
         }
         return false;

@@ -81,7 +81,7 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
                     logger.debug("Recorded user info successfully.");
                 }
                 //获取订阅相关信息
-                boolean hasSubscribed = subscribeService.getHasSubscibed(userProfile.getOpenId());
+                boolean hasSubscribed = subscribeService.getHasSubscribed(userProfile.getOpenId());
                 logger.error("wechat user is = {}", wechatUser.getNickname());
                 logger.error("wechat subscribe is = {}", wechatUser.getSubscribe());
 

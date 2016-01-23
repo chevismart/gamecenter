@@ -24,7 +24,7 @@ public class SubscribeMessageHandler extends WechatMessageHandler {
         logger.info("User{} is subscribing.", openId(eventMessage));
         //判断是否第一次关注
         String content = "";
-        boolean hasSubscibed = subscribeService.getHasSubscibed(openId(eventMessage));
+        boolean hasSubscibed = subscribeService.getHasSubscribed(openId(eventMessage));
         if (!hasSubscibed)
             content = "谢谢关注公众号!您可获得一次免费试玩机会";
         else

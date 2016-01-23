@@ -6,9 +6,10 @@
         <result column="customerId" property="customerid" jdbcType="INTEGER"/>
         <result column="deviceId" property="deviceid" jdbcType="INTEGER"/>
         <result column="time" property="time" jdbcType="TIMESTAMP"/>
+        <result column="refId" property="refid" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        playrecordId, customerId, deviceId, time
+        playrecordId, customerId, deviceId, time, refId
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -22,9 +23,9 @@
     </delete>
     <insert id="insert" parameterType="Playrecord">
         insert into playrecord (playrecordId, customerId, deviceId,
-        time)
+        time, refId)
         values (#{playrecordid,jdbcType=INTEGER}, #{customerid,jdbcType=INTEGER}, #{deviceid,jdbcType=INTEGER},
-        #{time,jdbcType=TIMESTAMP})
+        #{time,jdbcType=TIMESTAMP}, #{refId,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="Playrecord">
         insert into playrecord
@@ -41,6 +42,9 @@
             <if test="time != null">
                 time,
             </if>
+            <if test="refid != null">
+                refId,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="playrecordid != null">
@@ -54,6 +58,9 @@
             </if>
             <if test="time != null">
                 #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="refid != null">
+                #{refid,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -69,6 +76,9 @@
             <if test="time != null">
                 time = #{time,jdbcType=TIMESTAMP},
             </if>
+            <if test="refid != null">
+                time = #{refid,jdbcType=VARCHAR},
+            </if>
         </set>
         where playrecordId = #{playrecordid,jdbcType=INTEGER}
     </update>
@@ -76,7 +86,8 @@
         update playrecord
         set customerId = #{customerid,jdbcType=INTEGER},
         deviceId = #{deviceid,jdbcType=INTEGER},
-        time = #{time,jdbcType=TIMESTAMP}
+        time = #{time,jdbcType=TIMESTAMP},
+        refId = #{refid, jdbcType=VARCHAR}
         where playrecordId = #{playrecordid,jdbcType=INTEGER}
     </update>
 </mapper>

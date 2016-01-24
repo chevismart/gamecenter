@@ -1,17 +1,14 @@
 package gamecenter.core.services.db;
 
-import gamecenter.core.dao.CustomerMapper;
-import gamecenter.core.dao.CustomerWechatMapper;
-import gamecenter.core.dao.UserMapper;
-import gamecenter.core.dao.WechatMapper;
-import gamecenter.core.domain.Customer;
-import gamecenter.core.domain.CustomerWechat;
-import gamecenter.core.domain.User;
-import gamecenter.core.domain.Wechat;
+import gamecenter.core.dao.*;
+import gamecenter.core.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 public class UserService {
     //dao
@@ -19,13 +16,24 @@ public class UserService {
     private final UserMapper userMapper;
     private final CustomerMapper customerMapper;
     private final WechatMapper wechatMapper;
+    private final CenterMapper centerMapper;
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public UserService(CustomerWechatMapper customerWechatMapper, UserMapper userMapper, CustomerMapper customerMapper, WechatMapper wechatMapper) {
+    public UserService(CustomerWechatMapper customerWechatMapper, UserMapper userMapper, CustomerMapper customerMapper, WechatMapper wechatMapper, CenterMapper centerMapper) {
         this.customerWechatMapper = customerWechatMapper;
         this.userMapper = userMapper;
         this.customerMapper = customerMapper;
         this.wechatMapper = wechatMapper;
+        this.centerMapper = centerMapper;
+    }
+
+    public List<CustomerWechat> getCenterOperators(String cneterId) {
+
+        Center center = centerMapper.selectByCenterId(cneterId);
+        if (center != null) {
+            // TODO
+        }
+        return newArrayList();
     }
 
     public boolean hasWechatCustomer(String openId) {

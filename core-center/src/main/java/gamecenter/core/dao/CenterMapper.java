@@ -11,6 +11,8 @@ public interface CenterMapper {
 
     Center selectByPrimaryKey(Integer centerid);
 
+    Center selectByCenterId(String centerid);
+
     int updateByPrimaryKeySelective(Center record);
 
     int updateByPrimaryKey(Center record);

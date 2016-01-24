@@ -51,8 +51,7 @@ public abstract class WechatMessageHandler implements MessageHandler<EventMessag
     }
 
     protected BaseResult replyClient(EventMessage receivedMessage, Message replyMessage) {
-        MessageAPI messageAPI = new MessageAPI();
-        BaseResult result = messageAPI.messageCustomSend(getAccessToken(receivedMessage), replyMessage);
+        BaseResult result = MessageAPI.messageCustomSend(getAccessToken(receivedMessage), replyMessage);
         //无错误信息返回
         if (result.getErrmsg().equals(""))
             logger.info("subscribe response success");

@@ -6,7 +6,6 @@ import com.sun.net.httpserver.HttpServer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.After;
@@ -20,6 +19,7 @@ import java.net.SocketTimeoutException;
 import java.util.Collections;
 
 import static gamecenter.core.services.HttpService.HTTP_TIMEOUT;
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -42,7 +42,7 @@ public class HttpServiceTest {
                     e.printStackTrace();
                 }
                 content = RandomStringUtils.randomAlphabetic(10);
-                httpExchange.sendResponseHeaders(HttpStatus.SC_OK, content.length());
+                httpExchange.sendResponseHeaders(SC_OK, content.length());
                 OutputStream os = httpExchange.getResponseBody();
                 os.write(content.getBytes());
                 os.close();

@@ -2,9 +2,11 @@ package gamecenter.core.processors.wechat;
 
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.processors.GeneralProcessor;
+import gamecenter.core.services.BroadcastService;
 import gamecenter.core.services.CloudServerService;
 import gamecenter.core.services.db.DBServices;
 import org.apache.commons.lang3.StringUtils;
+import weixin.popular.bean.token.Token;
 
 import static gamecenter.core.constants.CommonConstants.*;
 
@@ -13,11 +15,13 @@ public class WechatTopupProcessor extends GeneralProcessor {
     private final DBServices dbServices;
     private final UserProfile userProfile;
     private final CloudServerService cloudServerService;
+    private final BroadcastService broadcastService;
 
-    public WechatTopupProcessor(DBServices dbServices, UserProfile userProfile, CloudServerService cloudServerService) {
+    public WechatTopupProcessor(DBServices dbServices, UserProfile userProfile, CloudServerService cloudServerService, BroadcastService broadcastService) {
         this.dbServices = dbServices;
         this.userProfile = userProfile;
         this.cloudServerService = cloudServerService;
+        this.broadcastService = broadcastService;
     }
 
     public String execute() throws Exception {
@@ -44,9 +48,14 @@ public class WechatTopupProcessor extends GeneralProcessor {
                 int wallet = dbServices.getCustomerService().getCustomerWalletBalanceByOpenId(openId);
                 int balance = wallet - coinsQty;
                 if (balance >= 0) {
-                    result = cloudServerService.topUpCoin(mac, coinsQty, openId);
-                    if (result) {
-                        boolean isSuccess = dbServices.getCustomerService().payBill(openId, coinsQty);
+                    Token wechatAccessToken = userProfile.getAccessInfo().getAppProfile().getWechatProfile().getWechatAccessToken();
+                    boolean isSuccess = dbServices.getCustomerService().payBill(openId, coinsQty, wechatAccessToken);
+                    if (isSuccess) {
+                        result = cloudServerService.topUpCoin(mac, coinsQty, openId);
+                        if (!result) {
+                            logger.warn("Top up failed and revert the topup record");
+                            dbServices.getCustomerService().chargeWallet(openId, coinsQty, wechatAccessToken);
+                        }
                     }
                     logger.info("Top up {} coins for {} {}", coins, openId, result ? "success" : "fail");
                 } else {

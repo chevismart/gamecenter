@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import gamecenter.core.domain.Device;
 import gamecenter.core.listeners.AbstractRunnable;
+import gamecenter.core.services.BroadcastService;
 import gamecenter.core.services.CloudServerService;
 import gamecenter.core.services.db.DBServices;
 import org.apache.commons.lang3.StringUtils;
@@ -20,57 +21,61 @@ import static java.lang.Thread.sleep;
 public class ConnectionManager extends AbstractRunnable implements ScheduleTask {
 
     private final DBServices dbServices;
+    private final CloudServerService cloudServerService;
+    private final BroadcastService broadcastService;
     private Multimap<String, Device> onlineDevices = ArrayListMultimap.create();
-    private CloudServerService cloudServerService;
 
-    public ConnectionManager(DBServices dbServices, CloudServerService cloudServerService) {
+    public ConnectionManager(DBServices dbServices, CloudServerService cloudServerService, BroadcastService broadcastService) {
         this.dbServices = dbServices;
         this.cloudServerService = cloudServerService;
+        this.broadcastService = broadcastService;
     }
 
     public void run() {
         List<Device> devices = dbServices.getDeviceService().retrieveAllDeviceByCenterId(1);
         String result = "没有设备在线！";
         while (isContinue) {
-            List<String> tempList = Lists.newArrayList();
+            List<String> onlineDeviceList = Lists.newArrayList();
+            List<String> deviceNames = Lists.newArrayList();
             try {
                 sleep(millionSecondFromSecond(interval()));
-                tempList = cloudServerService.getOnlineClientMac("00000000");
+                onlineDeviceList = cloudServerService.getOnlineClientMac("00000000");
             } catch (Exception ignore) {
                 logger.debug("Http request error: ", ignore);
             }
 
-            List<String> deviceNames = Lists.newArrayList();
-            if (tempList != null && tempList.size() > 0) {
-                Multimap<String, Device> tempCache = ArrayListMultimap.create();
-                for (Device device : devices) {
-                    String centerId = String.valueOf(device.getCenterid());
-                    if (tempList.contains(device.getMacaddr())) {
-                        deviceNames.add(device.getDevicename());
-                        device.setConnectionstatus("ONLINE");
-                        device.setPowerstatus("ON");
-                        tempCache.put(centerId, device);
-                        onlineDevices = tempCache;
-                    } else {
-                        device.setConnectionstatus("OFFLINE");
-                        device.setPowerstatus("OFF");
-                        List<Device> deviceList = Lists.newArrayList();
-                        for(Device onlineDevice :onlineDevices.get(centerId)){
-                            if(onlineDevice.getMacaddr().equalsIgnoreCase(device.getMacaddr()))
-                                deviceList.add(device);
-                        }
-                        onlineDevices.removeAll(deviceList);
+            Multimap<String, Device> tempCache = ArrayListMultimap.create();
+            for (Device device : devices) {
+                String preStatus = device.getConnectionstatus();
+                String centerId = String.valueOf(device.getCenterid());
+                if (onlineDeviceList.contains(device.getMacaddr())) {
+                    deviceNames.add(device.getDevicename());
+                    device.setConnectionstatus("ONLINE");
+                    device.setPowerstatus("ON");
+                    tempCache.put(centerId, device);
+                    onlineDevices = tempCache;
+                } else {
+                    device.setConnectionstatus("OFFLINE");
+                    device.setPowerstatus("OFF");
+                    List<Device> deviceList = Lists.newArrayList();
+                    for (Device onlineDevice : onlineDevices.get(centerId)) {
+                        if (onlineDevice.getMacaddr().equalsIgnoreCase(device.getMacaddr()))
+                            deviceList.add(device);
                     }
-                    device.setRemark(dateToString(new Date()));
-                    dbServices.getDeviceService().updateDeviceStatus(device); // TODO: should be update device by batch here.
+                    onlineDevices.removeAll(deviceList);
                 }
-                result = "在线设备：" + StringUtils.join(deviceNames.toArray(new String[deviceNames.size()]), ",");
-            }else{
-                onlineDevices.clear();
+                if (!device.getConnectionstatus().equals(preStatus)) {
+                    broadcastService.notifyDeviceStatusForOwner(device);
+                }
+                device.setRemark(dateToString(new Date()));
+                dbServices.getDeviceService().updateDeviceStatus(device); // TODO: should be update device by batch here.
             }
-
+            if (deviceNames.size() > 0)
+                result = "在线设备：" + StringUtils.join(deviceNames.toArray(new String[deviceNames.size()]), ",");
+//                onlineDevices.clear();
+            logger.info(result);
         }
-        logger.info(result);
+
     }
 
     public int interval() {

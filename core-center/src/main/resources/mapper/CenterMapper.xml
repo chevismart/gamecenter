@@ -4,11 +4,12 @@
     <resultMap id="BaseResultMap" type="Center">
         <id column="centerId" property="centerid" jdbcType="INTEGER"/>
         <result column="centerName" property="centername" jdbcType="VARCHAR"/>
+        <result column="centerRefId" property="centerRefId" jdbcType="VARCHAR"/>
         <result column="enabled" property="enabled" jdbcType="BIT"/>
         <result column="extraParam" property="extraparam" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        centerId, centerName, enabled, extraParam
+        centerId, centerName, enabled, extraParam,centerRefId
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -16,14 +17,20 @@
         from center
         where centerId = #{centerid,jdbcType=INTEGER}
     </select>
+    <select id="selectByCenterRefId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from center
+        where centerRefId = #{centerRefId,jdbcType=VARCHAR}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from center
         where centerId = #{centerid,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="Center">
-        insert into center (centerId, centerName, enabled,
+        insert into center (centerId, centerName, enabled,centerRefId,
         extraParam)
-        values (#{centerid,jdbcType=INTEGER}, #{centername,jdbcType=VARCHAR}, #{enabled,jdbcType=BIT},
+        values (#{centerid,jdbcType=INTEGER}, #{centername,jdbcType=VARCHAR}, #{centerRefId,jdbcType=VARCHAR},#{enabled,jdbcType=BIT},
         #{extraparam,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="Center">
@@ -41,6 +48,9 @@
             <if test="extraparam != null">
                 extraParam,
             </if>
+            <if test="centerRefId != null">
+                extraParam,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="centerid != null">
@@ -55,6 +65,9 @@
             <if test="extraparam != null">
                 #{extraparam,jdbcType=VARCHAR},
             </if>
+            <if test="centerRefId != null">
+                #{centerRefId,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="Center">
@@ -65,6 +78,9 @@
             </if>
             <if test="enabled != null">
                 enabled = #{enabled,jdbcType=BIT},
+            </if>
+            <if test="centerRefId != null">
+                centerRefId = #{centerRefId,jdbcType=VARCHAR},
             </if>
             <if test="extraparam != null">
                 extraParam = #{extraparam,jdbcType=VARCHAR},
@@ -77,6 +93,7 @@
         set centerName = #{centername,jdbcType=VARCHAR},
         enabled = #{enabled,jdbcType=BIT},
         extraParam = #{extraparam,jdbcType=VARCHAR}
+        centerRefId = #{centerRefId,jdbcType=VARCHAR}
         where centerId = #{centerid,jdbcType=INTEGER}
     </update>
 </mapper>

@@ -7,6 +7,8 @@ public class Center {
 
     private Boolean enabled;
 
+    private String centerRefId;
+
     private String extraparam;
 
     public Integer getCenterid() {
@@ -39,5 +41,13 @@ public class Center {
 
     public void setExtraparam(String extraparam) {
         this.extraparam = extraparam == null ? null : extraparam.trim();
+    }
+
+    public String getCenterRefId() {
+        return centerRefId;
+    }
+
+    public void setCenterRefId(String centerRefId) {
+        this.centerRefId = centerRefId;
     }
 }

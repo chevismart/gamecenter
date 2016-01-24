@@ -13,6 +13,8 @@ public class Playrecord {
 
     private String refid;
 
+    private Integer quantity;
+
     public Integer getPlayrecordid() {
         return playrecordid;
     }
@@ -51,5 +53,13 @@ public class Playrecord {
 
     public void setRefid(String refid) {
         this.refid = refid;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

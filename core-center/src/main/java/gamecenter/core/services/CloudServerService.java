@@ -57,6 +57,7 @@ public class CloudServerService {
             playrecord.setDeviceid(device.getDeviceid());
             playrecord.setTime(new Date(System.currentTimeMillis()));
             playrecord.setRefid(refId);
+            playrecord.setQuantity(coinsQty);
             playrecordMapper.insert(playrecord);
             logger.debug("Update Playrecord Table successfully with play record: [{}]", playrecord);
             return true;

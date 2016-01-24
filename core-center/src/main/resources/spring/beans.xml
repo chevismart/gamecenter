@@ -53,6 +53,7 @@
         <constructor-arg name="customerMapper" ref="customerMapper"/>
         <constructor-arg name="userMapper" ref="userMapper"/>
         <constructor-arg name="wechatMapper" ref="wechatMapper"/>
+        <constructor-arg name="centerMapper" ref="centerMapper"/>
     </bean>
     <bean id="customerService" class="gamecenter.core.services.db.CustomerService">
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
@@ -60,5 +61,8 @@
     </bean>
     <bean id="appService" class="gamecenter.core.services.db.AppService">
         <constructor-arg name="wechatMapper" ref="wechatMapper"/>
+    </bean>
+    <bean id="broadcastService" class="gamecenter.core.services.BroadcastService">
+        <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 </beans>

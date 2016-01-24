@@ -3,12 +3,10 @@ package gamecenter.core.processors.wechat;
 import com.opensymphony.xwork2.Action;
 import gamecenter.core.beans.AccessInfo;
 import gamecenter.core.beans.UserProfile;
-import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.processors.GeneralLoginInterface;
 import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.services.db.SubscribeService;
 import gamecenter.core.services.db.UserService;
-import gamecenter.core.utils.ParameterUtil;
 import gamecenter.core.utils.ProfileUtil;
 import org.apache.commons.lang3.StringUtils;
 import weixin.popular.bean.user.User;
@@ -17,7 +15,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import static gamecenter.core.beans.AccessChannel.WECHAT;
-import static gamecenter.core.constants.CommonConstants.ACCESS_ROUTER_WECHAT_OAUTH;
+import static gamecenter.core.constants.CommonConstants.*;
+import static gamecenter.core.utils.ParameterUtil.extractParam;
 
 public class WechatLoginProcessor extends GeneralProcessor implements GeneralLoginInterface {
     //services
@@ -45,13 +44,15 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
 
         openId = getHttpRequest().getParameter("openId");
         appId = getHttpRequest().getParameter("appId");
+        String uri = null;
 
         if (StringUtils.isEmpty(openId) && StringUtils.isEmpty(appId)) {
-            code = getHttpRequest().getParameter(CommonConstants.WECHAT_AUTH_CODE);
-            state = getHttpRequest().getParameter(CommonConstants.WECHAT_AUTH_STATE);
-            Map<String, String> stateParam = ParameterUtil.extractParam(state);
-            appId = stateParam.get(CommonConstants.WECHAT_STATE_PARAM_APPID);
-            logger.info("Login with code = {}, state = {}", code, state);
+            code = getHttpRequest().getParameter(WECHAT_AUTH_CODE);
+            state = getHttpRequest().getParameter(WECHAT_AUTH_STATE);
+            Map<String, String> stateParam = extractParam(state);
+            appId = stateParam.get(WECHAT_STATE_PARAM_APPID);
+            uri = stateParam.get(OPTIONAL_URL);
+            logger.info("Login with code = {}, state = {}, params = {}", code, state, stateParam);
         } else {
             logger.debug("Login with openId ={}, appId ={}", openId, appId);
         }
@@ -95,6 +96,18 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
                     if (hasSubscribeBonus) {
                         userProfile.setBonus(getBonus());
                     }
+                }
+
+                //Route the request to the target
+                logger.debug("URI is {}", uri);
+                if (StringUtils.isNotEmpty(uri)) {
+                    if (uri.contains("wawaonline.net/corecenter/pocket")) {
+                        String pocket = "pocket";
+                        logger.info("Redirecting to next processor: {}", pocket);
+                        return pocket;
+                    }
+                }else {
+                    logger.info("No additional processor to be follow up.");
                 }
                 result = SUCCESS;
             }

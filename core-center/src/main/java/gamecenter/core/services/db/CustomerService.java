@@ -6,7 +6,6 @@ import gamecenter.core.domain.Customer;
 import gamecenter.core.domain.CustomerWechat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import weixin.popular.bean.token.Token;
 
 public class CustomerService {
 
@@ -35,7 +34,7 @@ public class CustomerService {
         }
     }
 
-    public boolean chargeWallet(String openId, int income, Token wechatAccessToken) {
+    public boolean chargeWallet(String openId, int income) {
         Customer customer = getCustomer(openId);
         if (customer != null) {
             customer.setWallet(customer.getWallet() + income);
@@ -47,7 +46,7 @@ public class CustomerService {
         return false;
     }
 
-    public boolean payBill(String openId, int cost, Token token) {
+    public boolean payBill(String openId, int cost) {
         Customer customer = getCustomer(openId);
         if (customer != null) {
             if (customer.getWallet() >= cost) {

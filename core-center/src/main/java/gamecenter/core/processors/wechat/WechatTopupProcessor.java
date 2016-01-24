@@ -49,12 +49,12 @@ public class WechatTopupProcessor extends GeneralProcessor {
                 int balance = wallet - coinsQty;
                 if (balance >= 0) {
                     Token wechatAccessToken = userProfile.getAccessInfo().getAppProfile().getWechatProfile().getWechatAccessToken();
-                    boolean isSuccess = dbServices.getCustomerService().payBill(openId, coinsQty, wechatAccessToken);
+                    boolean isSuccess = dbServices.getCustomerService().payBill(openId, coinsQty);
                     if (isSuccess) {
                         result = cloudServerService.topUpCoin(mac, coinsQty, openId);
                         if (!result) {
                             logger.warn("Top up failed and revert the topup record");
-                            dbServices.getCustomerService().chargeWallet(openId, coinsQty, wechatAccessToken);
+                            dbServices.getCustomerService().chargeWallet(openId, coinsQty);
                         }
                     }
                     logger.info("Top up {} coins for {} {}", coins, openId, result ? "success" : "fail");

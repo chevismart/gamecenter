@@ -25,7 +25,7 @@ public class WechatTryPlayProcessor extends GeneralProcessor {
         int bonus = userProfile.getBonus();
         try {
             if (bonus > 0) {
-                if (dbServices.getCustomerService().chargeWallet(openId, bonus, userProfile.getAccessInfo().getAppProfile().getWechatProfile().getWechatAccessToken())) {
+                if (dbServices.getCustomerService().chargeWallet(openId, bonus)) {
                     logger.info("Charge {} coins for open id {} success!", bonus, openId);
                     userProfile.setBonus(0);
                     isSuccess = dbServices.getSubscribeService().consumeBonus(userProfile.getOpenId(), userProfile.getDeviceId(), bonus);

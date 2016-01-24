@@ -49,6 +49,7 @@
         <action name="wechatLogin" class="wechatLoginProcessor">
             <result name="wechatOAuth" type="chain">wechatOAuth</result>
             <result name="success" type="chain">scan</result>
+            <result name="pocket" type="chain">pocket</result>
         </action>
         <action name="wechatOAuth" class="wechatOAuthProcessor"/>
 

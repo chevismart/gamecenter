@@ -7,9 +7,6 @@ import gamecenter.core.constants.CommonConstants;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Chevis on 2014/12/13.
- */
 public class AccessRouterProcessor extends GeneralProcessor {
 
     @Override

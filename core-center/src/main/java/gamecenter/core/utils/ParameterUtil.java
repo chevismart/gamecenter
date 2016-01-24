@@ -7,9 +7,6 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Chevis on 2014/12/18.
- */
 public class ParameterUtil {
 
     public static final String SEPERATOR = ",";

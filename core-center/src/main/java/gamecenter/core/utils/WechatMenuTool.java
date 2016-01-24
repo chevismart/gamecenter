@@ -1,6 +1,5 @@
 package gamecenter.core.utils;
 
-import gamecenter.core.beans.AccessChannel;
 import gamecenter.core.services.HttpService;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -16,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static gamecenter.core.beans.AccessChannel.WECHAT;
 import static java.util.Arrays.asList;
 
 public class WechatMenuTool {
@@ -32,7 +32,9 @@ public class WechatMenuTool {
         Button buttonPlayIt = new Button();
         buttonPlayIt.setName("使用钱包代币");
         buttonPlayIt.setType("view");
-        buttonPlayIt.setUrl("http://wawaonline.net/corecenter/pocket");
+
+        //https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe89a9d2fa17df80f&redirect_uri=http://wawaonline.net/corecenter/pocket&response_type=code&scope=snsapi_base&state=appid:liyuanapp,deviceid:ATM0001#wechat_redirect
+        buttonPlayIt.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe89a9d2fa17df80f&redirect_uri=http://wawaonline.net/corecenter/auth&response_type=code&scope=snsapi_base&state=appid:liyuanapp,deviceid:ATM0001,optionalUrl:wawaonline.net/corecenter/pocket#wechat_redirect");
 
         Button buttonPlayFree = new Button();
         buttonPlayFree.setName("免费试玩");
@@ -69,7 +71,7 @@ public class WechatMenuTool {
         List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("clientId", "client01"));
         params.add(new BasicNameValuePair("appId", "liyuanapp"));
-        params.add(new BasicNameValuePair("credentialType", AccessChannel.WECHAT.name()));
+        params.add(new BasicNameValuePair("credentialType", WECHAT.name()));
         String token = null;
         try {
             HttpResponse response = HttpService.post("http://wawaonline.net/corecenter/credential", params);

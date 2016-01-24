@@ -89,6 +89,7 @@
 
     <bean id="pocketProcessor" class="gamecenter.core.processors.PocketProcessor">
         <constructor-arg name="userProfile" ref="userProfile"/>
+        <constructor-arg name="dbServices" ref="dbServices"/>
     </bean>
 
     <bean id="wechatPayNotificationProcessor" class="gamecenter.core.processors.wechat.WechatPayNotificationProcessor">
@@ -107,6 +108,7 @@
 
     <bean id="jsonProcessor" class="gamecenter.core.processors.JsonProcessor">
         <constructor-arg name="userProfile" ref="userProfile"/>
+        <constructor-arg name="dbServices" ref="dbServices"/>
     </bean>
 
     <bean id="paidNotifyProcessor" class="gamecenter.core.processors.wechat.PaidNotificationResponseHandler">

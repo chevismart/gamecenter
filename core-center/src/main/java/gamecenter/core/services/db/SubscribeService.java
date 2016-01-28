@@ -40,10 +40,10 @@ public class SubscribeService extends DBService {
 
     private boolean isSubscribed(CustomerWechat customerWechat) {
         if (customerWechat.getSubscribetime() != null) {
-            logger.debug("User({}) subscribed previously.");
+            logger.debug("User({}) subscribed previously.", customerWechat.getOpenid());
             return true;// Return if the user is subscribed before.
         } else {
-            logger.debug("User({}) is not subscribed.");
+            logger.debug("User({}) is not subscribed.", customerWechat.getOpenid());
         }
         return false;
     }

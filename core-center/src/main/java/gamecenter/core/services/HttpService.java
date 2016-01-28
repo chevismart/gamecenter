@@ -20,7 +20,7 @@ import static java.util.Arrays.asList;
 import static org.apache.http.client.utils.URLEncodedUtils.format;
 
 public class HttpService {
-    public static final int HTTP_TIMEOUT = 10000;
+    public static final int HTTP_TIMEOUT = 15000;
     public static HttpClient httpClient = HttpClientFactory.createHttpClient();
     private static Logger logger = LoggerFactory.getLogger(HttpService.class);
     private static HttpRequestRetryHandler retryhandler = new DefaultHttpRequestRetryHandler(1, false);

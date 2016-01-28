@@ -9,6 +9,7 @@
 <html>
 <head>
   <title>加币失败！</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
 </head>
 <body>
 请接受我们诚挚的道歉，我们将会尽快修复重新投入服务！

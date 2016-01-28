@@ -3,9 +3,10 @@ package gamecenter.core.processors.wechat;
 import com.opensymphony.xwork2.Action;
 import gamecenter.core.beans.UserProfile;
 import gamecenter.core.beans.wechat.WechatJsConfig;
-import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.services.wechat.WechatJsConfigService;
+
+import static gamecenter.core.constants.CommonConstants.WECHAT_AUTH_CODE;
 
 public class WechatScanProcessor extends GeneralProcessor {
     //services
@@ -26,10 +27,14 @@ public class WechatScanProcessor extends GeneralProcessor {
         String appId = userProfile.getAccessInfo().getAppProfile().getAppId();
         String jsapi_ticket = profileManager.getAppProfile(appId).getWechatProfile().getWechatJsapiTicket();
         logger.info("用户获取到jsapiticket：" + jsapi_ticket);
-        String code = getHttpRequest().getParameter(CommonConstants.WECHAT_AUTH_CODE);
-        WechatJsConfig wechatJsConfig = wechatJsConfigService.getConfig(jsapi_ticket, wechatAppId, code);
+        String code = getHttpRequest().getParameter(WECHAT_AUTH_CODE);
+        WechatJsConfig wechatJsConfig = wechatJsConfigService.getConfig(jsapi_ticket, wechatAppId, getUrl(code));
         getHttpRequest().setAttribute("wechatJsConfig", wechatJsConfig);
         return Action.SUCCESS;
+    }
+
+    private String getUrl(String code) {
+        return "http://wawaonline.net/corecenter/auth?code=" + code + "&state=appid%3Aliyuanapp%2Cdeviceid%3AATM0001%2CoptionalUrl%3Awawaonline.net/corecenter/pocket";
     }
 
 }

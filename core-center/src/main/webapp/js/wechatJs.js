@@ -3,7 +3,7 @@
  */
 var applicationId;
 
-function config(appId, nonceStr, timestamp, signature, apiList) {
+function config(appId, nonceStr, timestamp, signature, apiList, coins) {
 
     wx.config({
         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -20,7 +20,7 @@ function config(appId, nonceStr, timestamp, signature, apiList) {
             scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
             success: function (res) {
                 var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                redirectToTopup(locateTheDevice(result));
+                redirectToTopup(locateTheDevice(result),coins);
             }
         });
     });
@@ -28,10 +28,10 @@ function config(appId, nonceStr, timestamp, signature, apiList) {
         alert("something goes wrong: " + res.errMsg);
     });
 }
-function scan(appId, nonceStr, timestamp, signature) {
+function scan(appId, nonceStr, timestamp, signature, coins) {
     applicationId = appId;
     var apiList = ['scanQRCode'];
-    config(appId, nonceStr, timestamp, signature, apiList);
+    config(appId, nonceStr, timestamp, signature, apiList, coins);
 }
 
 function getAppId() {
@@ -42,11 +42,11 @@ function locateTheDevice(fullPath) {
     return fullPath.substring(fullPath.indexOf('#') + 1);
 }
 
-function redirectToTopup(deviceId) {
+function redirectToTopup(deviceId, coins) {
     var timestamp = Date.parse(new Date());
     //var urls = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
     //    "appid=" + appId + "&redirect_uri=http://wawaonline.net/corecenter/topup&response_type=code&scope=snsapi_base&state=appid:" + appId + ",deviceid:" + device + "#wechat_redirect";
-    var fixedUrl = "http://wawaonline.net/corecenter/topup?appid=" + getAppId() + "&deviceid=" + deviceId + "&topupCoins=" + bonus() + "&timestamp=" + timestamp;
+    var fixedUrl = "http://wawaonline.net/corecenter/topup?appid=" + getAppId() + "&deviceid=" + deviceId + "&topupCoins=" + coins + "&timestamp=" + timestamp;
     window.location = fixedUrl;
 }
 

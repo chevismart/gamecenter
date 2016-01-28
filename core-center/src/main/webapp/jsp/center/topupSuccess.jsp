@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>加币成功</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
 </head>
 <body>
 Thanks You!

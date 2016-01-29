@@ -1,17 +1,33 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Chevis
-  Date: 15/6/22
-  Time: 下午2:53
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>加币成功</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <script type="text/javascript"
+            src="http://wawaonline.net/corecenter/js/third-party/jquery-2.1.1.min.js"></script>
+    <link rel="stylesheet" href="http://wawaonline.net/corecenter/css/weui.min.css"/>
+    <script type="application/javascript">
+//        $("#cancel").click(function(){
+//            WeixinJSBridge.call('closeWindow');
+//        });
+    </script>
 </head>
 <body>
-Thanks You!
+<div class="weui_msg">
+    <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+    <div class="weui_text_area">
+        <h2 class="weui_msg_title">加币操作成功</h2>
+        <p class="weui_msg_desc">请于售币机上按键取币</p>
+    </div>
+    <div class="weui_opr_area">
+        <p class="weui_btn_area">
+            <a href="http://wawaonline.net/corecenter/pocket" class="weui_btn weui_btn_primary">确定</a>
+            <%--<a href="javascript:void(0)" id="cancel" class="weui_btn weui_btn_default">取消</a>--%>
+        </p>
+    </div>
+    <div class="weui_extra_area">
+        <%--<a href="">查看详情</a>--%>
+    </div>
+</div>
 </body>
 </html>

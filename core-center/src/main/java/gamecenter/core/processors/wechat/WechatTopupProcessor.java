@@ -6,7 +6,6 @@ import gamecenter.core.services.BroadcastService;
 import gamecenter.core.services.CloudServerService;
 import gamecenter.core.services.db.DBServices;
 import org.apache.commons.lang3.StringUtils;
-import weixin.popular.bean.token.Token;
 
 import static gamecenter.core.constants.CommonConstants.*;
 
@@ -40,15 +39,11 @@ public class WechatTopupProcessor extends GeneralProcessor {
             logger.warn("Missing parameters for top up! appId={}, mac={}, openId={}, coins={}", appId, mac, openId, coins);
         } else {
             logger.info("Preparing top up");
+            int coinsQty = Integer.valueOf(coins);
             try {
-
-                int coinsQty = Integer.valueOf(coins);
-
-
                 int wallet = dbServices.getCustomerService().getCustomerWalletBalanceByOpenId(openId);
                 int balance = wallet - coinsQty;
                 if (balance >= 0) {
-                    Token wechatAccessToken = userProfile.getAccessInfo().getAppProfile().getWechatProfile().getWechatAccessToken();
                     boolean isSuccess = dbServices.getCustomerService().payBill(openId, coinsQty);
                     if (isSuccess) {
                         result = cloudServerService.topUpCoin(mac, coinsQty, openId);
@@ -63,6 +58,8 @@ public class WechatTopupProcessor extends GeneralProcessor {
                 }
             } catch (Exception e) {
                 logger.error("Top up failed since: {}", e);
+                boolean chargeResult = dbServices.getCustomerService().chargeWallet(openId, coinsQty);
+                logger.info("Recharge the coins {} for user {}", coinsQty, openId);
             }
         }
 

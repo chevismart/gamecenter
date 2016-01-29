@@ -44,13 +44,9 @@ public class WechatTopupProcessor extends GeneralProcessor {
                 int wallet = dbServices.getCustomerService().getCustomerWalletBalanceByOpenId(openId);
                 int balance = wallet - coinsQty;
                 if (balance >= 0) {
-                    boolean isSuccess = dbServices.getCustomerService().payBill(openId, coinsQty);
-                    if (isSuccess) {
-                        result = cloudServerService.topUpCoin(mac, coinsQty, openId);
-                        if (!result) {
-                            logger.warn("Top up failed and revert the topup record");
-                            dbServices.getCustomerService().chargeWallet(openId, coinsQty);
-                        }
+                    result = cloudServerService.topUpCoin(mac, coinsQty, openId);
+                    if (result) {
+                        dbServices.getCustomerService().payBill(openId, coinsQty);
                     }
                     logger.info("Top up {} coins for {} {}", coins, openId, result ? "success" : "fail");
                 } else {
@@ -58,8 +54,6 @@ public class WechatTopupProcessor extends GeneralProcessor {
                 }
             } catch (Exception e) {
                 logger.error("Top up failed since: {}", e);
-                boolean chargeResult = dbServices.getCustomerService().chargeWallet(openId, coinsQty);
-                logger.info("Recharge the coins {} for user {}", coinsQty, openId);
             }
         }
 

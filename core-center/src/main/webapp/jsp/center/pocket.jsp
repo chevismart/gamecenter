@@ -13,11 +13,9 @@
     <script type="text/javascript" src="http://wawaonline.net/corecenter/js/third-party/jweixin-1.0.0.js"></script>
     <title>我的钱包</title>
     <script type="application/javascript">
+        var coinQty = new Number(getWallet());
         $(document).ready(function () {
-
-            var coinQty = getWallet();
             hideInvalidOption(coinQty);
-
             $(".lanchBtn").find("a").click(function () {
                         var coin = $("#coinQty").val();
                         var appId = '${wechatJsConfig.appId}';
@@ -27,8 +25,6 @@
                         scan(appId, nonceStr, timestamp, signature, coin);
                     }
             );
-
-
         });
 
     </script>
@@ -78,6 +74,64 @@
         #selectCoin {
             margin-top: 150px;
         }
+
+        /*SELECT W/DOWN-ARROW*/
+        select#coinQty
+        {
+            width                    : 80pt;
+            height                   : 40pt;
+            line-height              : 40pt;
+            padding-right            : 20pt;
+            text-indent              : 4pt;
+            text-align               : left;
+            vertical-align           : middle;
+            box-shadow               : inset 0 0 3px #606060;
+            border                   : 1px solid #acacac;
+            -moz-border-radius       : 6px;
+            -webkit-border-radius    : 6px;
+            border-radius            : 6px;
+            -webkit-appearance       : none;
+            -moz-appearance          : none;
+            appearance               : none;
+            font-family              : Arial,  Calibri, Tahoma, Verdana;
+            font-size                : 18pt;
+            font-weight              : 500;
+            color                    : #000099;
+            cursor                   : pointer;
+            outline                  : none;
+        }
+        select#coinQty option
+        {
+            padding             : 4px 10px 4px 10px;
+            font-size           : 11pt;
+            font-weight         : normal;
+        }
+        select#coinQty option[selected]{ font-weight:bold}
+        select#coinQty option:nth-child(even) { background-color:#f5f5f5; }
+        select#coinQty:hover {font-weight: 700;}
+        select#coinQty:focus {box-shadow: inset 0 0 5px #000099; font-weight: 600;}
+
+        /*LABEL FOR SELECT*/
+        label#lblSelect{ position: relative; display: inline-block;}
+        /*DOWNWARD ARROW (25bc)*/
+        label#lblSelect::after
+        {
+            content                 : "\25bc";
+            position                : absolute;
+            top                     : 0;
+            right                   : 0;
+            bottom                  : 0;
+            width                   : 20pt;
+            line-height             : 40pt;
+            vertical-align          : middle;
+            text-align              : center;
+            background              : #000099;
+            color                   : #FF0000;
+            -moz-border-radius       : 0 6px 6px 0;
+            -webkit-border-radius    : 0 6px 6px 0;
+            border-radius           : 0 6px 6px 0;
+            pointer-events          : none;
+        }
     </style>
 </head>
 <body>
@@ -104,6 +158,7 @@
         <br>
 
         <div id="selectCoin">
+            <h3>请扫描售币机上二维码加币</h3>
             <select id="coinQty">
                 <option value="1">1个币</option>
                 <option value="3">3个币</option>

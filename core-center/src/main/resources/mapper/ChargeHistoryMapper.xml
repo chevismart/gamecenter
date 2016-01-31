@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="gamecenter.core.dao.ChargeHistoryMapper">
+    <resultMap id="BaseResultMap" type="ChargeHistory">
+        <id column="chargeHistoryId" property="chargeHistoryId" jdbcType="INTEGER"/>
+        <result column="customerId" property="customerId" jdbcType="INTEGER"/>
+        <result column="wechatId" property="wechatId" jdbcType="INTEGER"/>
+        <result column="centerId" property="centerId" jdbcType="INTEGER"/>
+        <result column="timestamp" property="timestamp" jdbcType="TIMESTAMP"/>
+        <result column="coin" property="coin" jdbcType="INTEGER"/>
+        <result column="paid" property="paid" jdbcType="DOUBLE"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        chargeHistoryId, centerId, customerId, wechatId, timestamp, coin, paid
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from charge_history
+        where chargeHistoryId = #{chargeHistoryId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from charge_history
+        where chargeHistoryId = #{chargeHistoryId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="ChargeHistory">
+        insert into charge_history (chargeHistoryId,centerId, customerId, wechatId, timestamp, coin, paid)
+        values (#{chargeHistoryId,jdbcType=INTEGER}, #{centerId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER},#{wechatId,jdbcType=INTEGER},#{timestamp,jdbcType=TIMESTAMP},
+        #{coin,jdbcType=INTEGER}, #{paid, jdbcType=DOUBLE})
+    </insert>
+    <insert id="insertSelective" parameterType="ChargeHistory">
+        insert into charge_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chargeHistoryId != null">
+                chargeHistoryId,
+            </if>
+            <if test="centerId != null">
+                centerId,
+            </if>
+            <if test="customerId != null">
+                customerId,
+            </if>
+            <if test="wechatId != null">
+                wechatId,
+            </if>
+            <if test="timestamp != null">
+                timestamp,
+            </if>
+            <if test="coin != null">
+                coin,
+            </if>
+            <if test="paid != null">
+                paid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chargeHistoryId != null">
+                #{chargeHistoryId,jdbcType=INTEGER},
+            </if>
+            <if test="centerId != null">
+                #{centerId,jdbcType=INTEGER},
+            </if>
+            <if test="customerId != null">
+                #{customerId,jdbcType=INTEGER},
+            </if>
+            <if test="wechatId != null">
+                #{wechatId,jdbcType=INTEGER},
+            </if>
+            <if test="timestamp != null">
+                #{timestamp,jdbcType=TIMESTAMP},
+            </if>
+            <if test="coin != null">
+                #{coin,jdbcType=INTEGER},
+            </if>
+            <if test="paid != null">
+                #{paid,jdbcType=DOUBLE},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="ChargeHistory">
+        update charge_history
+        <set>
+            <if test="centerId != null">
+                centerId = #{centerId,jdbcType=INTEGER},
+            </if>
+            <if test="customerId != null">
+                customerId = #{customerId,jdbcType=INTEGER},
+            </if>
+            <if test="wechatId != null">
+                wechatId = #{wechatId,jdbcType=INTEGER},
+            </if>
+            <if test="timestamp != null">
+                timestamp = #{timestamp,jdbcType=TIMESTAMP},
+            </if>
+            <if test="coin != null">
+                coin = #{coin,jdbcType=INTEGER},
+            </if>
+            <if test="paid != null">
+                paid = #{paid,jdbcType=DOUBLE},
+            </if>
+        </set>
+        where chargeHistoryId = #{chargeHistoryId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="ChargeHistory">
+        update charge_history
+        set centerId = #{centerId,jdbcType=INTEGER},
+        customerId = #{customerId,jdbcType=INTEGER},
+        wechatId = #{wechatId,jdbcType=INTEGER},
+        timestamp = #{timestamp,jdbcType=TIMESTAMP},
+        coin = #{coin,jdbcType=INTEGER},
+        paid = #{paid,jdbcType=DOUBLE}
+        where chargeHistoryId = #{chargeHistoryId,jdbcType=INTEGER}
+    </update>
+</mapper>

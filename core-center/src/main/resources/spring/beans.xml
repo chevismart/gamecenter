@@ -37,8 +37,12 @@
         <constructor-arg name="deviceService" ref="deviceService"/>
         <constructor-arg name="subscribeService" ref="subscribeService"/>
         <constructor-arg name="userService" ref="userService"/>
+        <constructor-arg name="chargeHistoryService" ref="chargeHistoryService"/>
     </bean>
 
+    <bean id="chargeHistoryService" class="gamecenter.core.services.db.ChargeHistoryService">
+        <constructor-arg name="chargeHistoryMapper" ref="chargeHistoryMapper"/>
+    </bean>
 	<bean id="subscribeService" class="gamecenter.core.services.db.SubscribeService">
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
         <constructor-arg name="customerMapper" ref="customerMapper"/>
@@ -58,6 +62,7 @@
     <bean id="customerService" class="gamecenter.core.services.db.CustomerService">
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
         <constructor-arg name="customerMapper" ref="customerMapper"/>
+        <constructor-arg name="chargeHistoryMapper" ref="chargeHistoryMapper"/>
     </bean>
     <bean id="appService" class="gamecenter.core.services.db.AppService">
         <constructor-arg name="wechatMapper" ref="wechatMapper"/>

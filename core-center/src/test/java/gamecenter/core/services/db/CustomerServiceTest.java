@@ -1,5 +1,6 @@
 package gamecenter.core.services.db;
 
+import gamecenter.core.dao.ChargeHistoryMapper;
 import gamecenter.core.dao.CustomerMapper;
 import gamecenter.core.dao.CustomerWechatMapper;
 import gamecenter.core.domain.Customer;
@@ -16,11 +17,12 @@ public class CustomerServiceTest {
 
     CustomerMapper customerMapper = mock(CustomerMapper.class);
     CustomerWechatMapper customerWechatMapper = mock(CustomerWechatMapper.class);
+    ChargeHistoryMapper chargeHistoryMapper = mock(ChargeHistoryMapper.class);
     CustomerService customerService;
 
     @Before
     public void setUp() throws Exception {
-        customerService = new CustomerService(customerWechatMapper, customerMapper);
+        customerService = new CustomerService(customerWechatMapper, customerMapper, chargeHistoryMapper);
     }
 
     @Test

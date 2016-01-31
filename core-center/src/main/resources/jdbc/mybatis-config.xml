@@ -11,6 +11,7 @@
         <typeAlias alias="Trade" type="gamecenter.core.domain.Trade"/>
         <typeAlias alias="User" type="gamecenter.core.domain.User"/>
         <typeAlias alias="Wechat" type="gamecenter.core.domain.Wechat"/>
+        <typeAlias alias="ChargeHistory" type="gamecenter.core.domain.ChargeHistory"/>
     </typeAliases>
     <!--<mappers>-->
     <!--<mapper resource="mapper/AccessChannelDaoMapper.xml"/>-->

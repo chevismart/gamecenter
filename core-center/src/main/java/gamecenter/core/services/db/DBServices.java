@@ -9,13 +9,15 @@ public class DBServices extends DBService {
     private final DeviceService deviceService;
     private final SubscribeService subscribeService;
     private final UserService userService;
+    private final ChargeHistoryService chargeHistoryService;
 
-    public DBServices(AppService appService, CustomerService customerService, DeviceService deviceService, SubscribeService subscribeService, UserService userService) {
+    public DBServices(AppService appService, CustomerService customerService, DeviceService deviceService, SubscribeService subscribeService, UserService userService, ChargeHistoryService chargeHistoryService) {
         this.appService = appService;
         this.customerService = customerService;
         this.deviceService = deviceService;
         this.subscribeService = subscribeService;
         this.userService = userService;
+        this.chargeHistoryService = chargeHistoryService;
     }
 
     public AppService getAppService() {
@@ -36,5 +38,9 @@ public class DBServices extends DBService {
 
     public UserService getUserService() {
         return userService;
+    }
+
+    public ChargeHistoryService getChargeHistoryService() {
+        return chargeHistoryService;
     }
 }

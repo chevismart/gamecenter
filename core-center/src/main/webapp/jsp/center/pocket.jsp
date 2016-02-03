@@ -161,8 +161,14 @@
             <h3>请扫描售币机上二维码加币</h3>
             <select id="coinQty">
                 <option value="1">1个币</option>
+                <option value="2">2个币</option>
                 <option value="3">3个币</option>
+                <option value="4">4个币</option>
                 <option value="5">5个币</option>
+                <option value="6">6个币</option>
+                <option value="7">7个币</option>
+                <option value="8">8个币</option>
+                <option value="9">9个币</option>
                 <option value="10">10个币</option>
             </select>
         </div>

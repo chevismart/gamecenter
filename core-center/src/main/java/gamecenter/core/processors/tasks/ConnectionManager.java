@@ -38,7 +38,7 @@ public class ConnectionManager extends AbstractRunnable implements ScheduleTask 
             List<String> onlineDeviceList = Lists.newArrayList();
             List<String> deviceNames = Lists.newArrayList();
             try {
-                sleep(millionSecondFromSecond(interval()));
+                sleep(millionSecondFromSecond(new Long(interval()).intValue()));
                 onlineDeviceList = cloudServerService.getOnlineClientMac("00000000");
             } catch (Exception ignore) {
                 logger.debug("Http request error: ", ignore);
@@ -78,8 +78,12 @@ public class ConnectionManager extends AbstractRunnable implements ScheduleTask 
 
     }
 
-    public int interval() {
+    public long interval() {
         return 60;
+    }
+
+    public long initDelay() {
+        return 0;
     }
 
     public Collection<Device> getOnlineDevicesByAppId(String appId) {

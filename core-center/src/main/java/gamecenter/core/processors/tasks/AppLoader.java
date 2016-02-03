@@ -45,7 +45,11 @@ public class AppLoader extends AbstractRunnable implements ScheduleTask {
 
     }
 
-    public int interval() {
+    public long interval() {
         return 60;
+    }
+
+    public long initDelay() {
+        return 0;
     }
 }

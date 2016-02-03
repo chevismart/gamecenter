@@ -19,6 +19,14 @@
         from charge_history
         where chargeHistoryId = #{chargeHistoryId,jdbcType=INTEGER}
     </select>
+
+    <select id="selectHistoryRecordByDate" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from charge_history
+        where timestamp BETWEEN DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP}, '%Y-%m-%d %H:%i:%s') AND DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP}, '%Y-%m-%d %H:%i:%s')
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from charge_history
         where chargeHistoryId = #{chargeHistoryId,jdbcType=INTEGER}

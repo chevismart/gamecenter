@@ -1,5 +1,6 @@
 package gamecenter.core.services;
 
+import gamecenter.core.beans.DailyReport;
 import gamecenter.core.domain.Device;
 import gamecenter.core.processors.wechat.ProfileManager;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ public class BroadcastService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ProfileManager profileManager;
+    private final List<String> openIdList = asList("oJpyYuBcMmRKmVCt6AaAKN9EDGac", "oJpyYuEVmu6_O4ntXbhyG3GJoUuo", "oJpyYuG9MkaHqr3yFwZJnS3X8X7k");
 
     public BroadcastService(ProfileManager profileManager) {
         this.profileManager = profileManager;
@@ -28,12 +30,25 @@ public class BroadcastService {
 
 
     public void notifyDeviceStatusForOwner(Device device) {
-        List<String> openIdList = asList("oJpyYuBcMmRKmVCt6AaAKN9EDGac","oJpyYuEVmu6_O4ntXbhyG3GJoUuo","oJpyYuG9MkaHqr3yFwZJnS3X8X7k");
-
-        for (String openId: openIdList){
+        for (String openId : openIdList) {
             notifyUserByAppId(profileManager.getAppProfile("liyuanapp").getWechatProfile().getWechatAccessToken().getAccess_token(),
                     createTextMessage(openId,
                             device.getDevicedesc() + ((device.getConnectionstatus().equalsIgnoreCase("ONLINE")) ? "上线" : "下线")));
+        }
+    }
+
+    public void sendDailyReportForOwner(DailyReport report) {
+        String FORMAT = "{} 报告：共出币{}个，收入{}元";
+        for (String openId : openIdList) {
+            notifyUserByAppId(profileManager.getAppProfile("liyuanapp").getWechatProfile().getWechatAccessToken().getAccess_token(),
+                    createTextMessage(openId, String.format(FORMAT, report.getDate(), report.getOutput(), report.getIncome())));
+        }
+    }
+
+    private void dispatchMessage(Message message) {
+        String token = profileManager.getAppProfile("liyuanapp").getWechatProfile().getWechatAccessToken().getAccess_token();
+        for (String openId : openIdList) {
+            notifyUserByAppId(token, message);
         }
     }
 

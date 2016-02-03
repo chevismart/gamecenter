@@ -1,6 +1,10 @@
 package gamecenter.core.dao;
 
 import gamecenter.core.domain.ChargeHistory;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
 
 public interface ChargeHistoryMapper {
 
@@ -15,4 +19,6 @@ public interface ChargeHistoryMapper {
     int updateByPrimaryKeySelective(ChargeHistory chargeHistory);
 
     int updateByPrimaryKey(ChargeHistory chargeHistory);
+
+    List<ChargeHistory> selectHistoryRecordByDate(@Param("startDate") Date startDate, @Param("endDate")Date endDate);
 }

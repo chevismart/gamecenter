@@ -4,17 +4,18 @@ import org.springframework.context.ApplicationContext;
 
 public class ChargeHistoryServiceTest {
 
-    ApplicationContext ctx;
-    ChargeHistoryService chargeHistoryService;
+    static ApplicationContext ctx;
+    static ChargeHistoryService chargeHistoryService;
 
 //    @BeforeClass
-//    public void setUp() throws Exception {
+//    public static void initial() throws Exception {
 //        ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-//        chargeHistoryService = (ChargeHistoryService) ctx.getBean("chargeHistoryService");
+//        chargeHistoryService = (ChargeHistoryService)ctx.getBean("chargeHistoryService");
 //    }
 //
 //    @Test
 //    public void newAChargeHistoryRecord() throws Exception {
-////        chargeHistoryService.addChargeHistory();
+//        chargeHistoryService.addChargeHistory();
+////        System.err.println(list.size());
 //    }
 }

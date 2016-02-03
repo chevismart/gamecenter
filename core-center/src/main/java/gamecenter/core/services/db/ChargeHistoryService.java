@@ -4,6 +4,7 @@ import gamecenter.core.dao.ChargeHistoryMapper;
 import gamecenter.core.domain.ChargeHistory;
 
 import java.util.Date;
+import java.util.List;
 
 public class ChargeHistoryService {
     private final ChargeHistoryMapper chargeHistoryMapper;
@@ -12,14 +13,11 @@ public class ChargeHistoryService {
         this.chargeHistoryMapper = chargeHistoryMapper;
     }
 
-    public void addChargeHistory(){
-        ChargeHistory chargeHistory = new ChargeHistory();
-        chargeHistory.setCenterId(1);
-        chargeHistory.setChargeHistoryId(1);
-        chargeHistory.setCustomerId(39);
-        chargeHistory.setPaid(1.99);
-        chargeHistory.setTimestamp(new Date());
-        chargeHistory.setWechatId(1);
+    public void addChargeHistory(ChargeHistory chargeHistory) {
         chargeHistoryMapper.insert(chargeHistory);
+    }
+
+    public List<ChargeHistory> selectHistoryByDate(Date startDate, Date endDate) {
+        return chargeHistoryMapper.selectHistoryRecordByDate(startDate, endDate);
     }
 }

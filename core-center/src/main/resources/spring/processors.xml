@@ -28,6 +28,10 @@
         </property>
         <property name="scheduledTasks">
             <list>
+                <bean id="reportGenerator" class="gamecenter.core.processors.tasks.ReportGenerator">
+                    <constructor-arg name="dbServices" ref="dbServices"/>
+                    <constructor-arg name="broadcastService" ref="broadcastService"/>
+                </bean>
             </list>
         </property>
     </bean>

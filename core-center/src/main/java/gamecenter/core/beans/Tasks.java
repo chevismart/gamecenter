@@ -1,6 +1,6 @@
 package gamecenter.core.beans;
 
-import org.springframework.scheduling.TaskScheduler;
+import gamecenter.core.processors.tasks.ScheduleTask;
 
 import java.util.List;
 
@@ -8,14 +8,14 @@ import java.util.List;
  * Created by Chevis on 2014/12/11.
  */
 public class Tasks {
-    List<TaskScheduler> scheduledTasks;
+    List<ScheduleTask> scheduledTasks;
     List<Runnable> normalTask;
 
-    public List<TaskScheduler> getScheduledTasks() {
+    public List<ScheduleTask> getScheduledTasks() {
         return scheduledTasks;
     }
 
-    public void setScheduledTasks(List<TaskScheduler> scheduledTasks) {
+    public void setScheduledTasks(List<ScheduleTask> scheduledTasks) {
         this.scheduledTasks = scheduledTasks;
     }
 

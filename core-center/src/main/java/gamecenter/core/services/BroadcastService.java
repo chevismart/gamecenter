@@ -38,7 +38,7 @@ public class BroadcastService {
     }
 
     public void sendDailyReportForOwner(DailyReport report) {
-        String FORMAT = "{} 报告：共出币{}个，收入{}元";
+        String FORMAT = "%s 报告：共出币%s个，收入%s元";
         for (String openId : openIdList) {
             notifyUserByAppId(profileManager.getAppProfile("liyuanapp").getWechatProfile().getWechatAccessToken().getAccess_token(),
                     createTextMessage(openId, String.format(FORMAT, report.getDate(), report.getOutput(), report.getIncome())));

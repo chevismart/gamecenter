@@ -13,6 +13,15 @@ public class DailyReport {
         this.output = output;
     }
 
+    @Override
+    public String toString() {
+        return "DailyReport{" +
+                "date=" + date +
+                ", income=" + income +
+                ", output=" + output +
+                '}';
+    }
+
     public Date getDate() {
         return date;
     }

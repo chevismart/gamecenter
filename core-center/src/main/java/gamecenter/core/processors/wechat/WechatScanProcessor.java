@@ -34,7 +34,7 @@ public class WechatScanProcessor extends GeneralProcessor {
     }
 
     private String getUrl(String code) {
-        return "http://wawaonline.net/corecenter/auth?code=" + code + "&state=appid%3Aliyuanapp%2Cdeviceid%3AATM0001%2CoptionalUrl%3Awawaonline.net/corecenter/pocket";
+        return "http://wawaonline.net/corecenter/auth?code=" + code + "&state=appid%3Aliyuanapp%2Cdeviceid%3AATM0001";
     }
 
 }

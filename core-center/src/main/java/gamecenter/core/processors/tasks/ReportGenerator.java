@@ -54,7 +54,7 @@ public class ReportGenerator implements ScheduleTask {
                 totalCoin += chargeHistory.getCoin();
                 totalMoney += chargeHistory.getPaid();
             }
-            DailyReport report = new DailyReport(today, totalMoney, totalCoin);
+            DailyReport report = new DailyReport(today, totalMoney, totalCoin, 0); //TODO: Check the actual coin output from table playrecord in db
             logger.info("Daily report is {}", report);
             broadcastService.sendDailyReportForOwner(report);
         } catch (ParseException e) {

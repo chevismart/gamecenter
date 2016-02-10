@@ -18,6 +18,14 @@
         from playrecord
         where playrecordId = #{playrecordid,jdbcType=INTEGER}
     </select>
+
+    <select id="selectPlayRecordByDate" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from playrecord
+        where time BETWEEN DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP}, '%Y-%m-%d %H:%i:%s') AND DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP}, '%Y-%m-%d %H:%i:%s')
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from playrecord
         where playrecordId = #{playrecordid,jdbcType=INTEGER}

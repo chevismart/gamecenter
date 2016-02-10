@@ -42,6 +42,7 @@
 
     <bean id="chargeHistoryService" class="gamecenter.core.services.db.ChargeHistoryService">
         <constructor-arg name="chargeHistoryMapper" ref="chargeHistoryMapper"/>
+        <constructor-arg name="playrecordMapper" ref="playrecordMapper"/>
     </bean>
 	<bean id="subscribeService" class="gamecenter.core.services.db.SubscribeService">
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>

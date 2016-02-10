@@ -12,6 +12,7 @@ import weixin.popular.bean.message.message.TextMessage;
 
 import java.util.List;
 
+import static gamecenter.core.utils.DateUtil.fullDate_format;
 import static java.util.Arrays.asList;
 
 public class BroadcastService {
@@ -41,7 +42,7 @@ public class BroadcastService {
         String FORMAT = "%s 报告：共送出%s个币，实际出币%s个，收入%s元";
         for (String openId : openIdList) {
             notifyUserByAppId(profileManager.getAppProfile("liyuanapp").getWechatProfile().getWechatAccessToken().getAccess_token(),
-                    createTextMessage(openId, String.format(FORMAT, report.getDate(), report.getOutput(), report.getOutput(), report.getIncome())));
+                    createTextMessage(openId, String.format(FORMAT, fullDate_format.format(report.getDate()), report.getOutput(), report.getOutput(), report.getIncome())));
         }
     }
 

@@ -7,13 +7,16 @@ public class DailyReport {
     private final double income;
     private final int output;
     private final int actualOutput;
+    private final int newSubscribersQty;
+    private final int allSubscribersQty;
 
-    public DailyReport(Date date, double income, int output, int actualOutput) {
+    public DailyReport(Date date, double income, int output, int actualOutput, int newSubscribersQty, int allSubscribersQty) {
         this.date = date;
         this.income = income;
         this.output = output;
         this.actualOutput = actualOutput;
-
+        this.newSubscribersQty = newSubscribersQty;
+        this.allSubscribersQty = allSubscribersQty;
     }
 
     @Override
@@ -23,6 +26,8 @@ public class DailyReport {
                 ", income=" + income +
                 ", output=" + output +
                 ", actualOutput=" + actualOutput +
+                ", newSubscribersQty=" + newSubscribersQty +
+                ", allSubscribersQty=" + allSubscribersQty +
                 '}';
     }
 
@@ -40,5 +45,14 @@ public class DailyReport {
 
     public int getOutput() {
         return output;
+    }
+
+    public int getAllSubscribersQty() {
+        return allSubscribersQty;
+    }
+
+    public int getNewSubscribersQty() {
+
+        return newSubscribersQty;
     }
 }

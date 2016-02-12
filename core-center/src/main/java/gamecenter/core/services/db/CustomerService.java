@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.List;
 
 public class CustomerService {
 
@@ -46,7 +47,7 @@ public class CustomerService {
         if (customer != null) {
             customer.setWallet(customer.getWallet() + income);
             updateCustomer(customer, customerWechat);
-            ChargeHistory chargeHistory= new ChargeHistory();
+            ChargeHistory chargeHistory = new ChargeHistory();
             chargeHistory.setWechatId(customerWechat.getWechatid());
             chargeHistory.setCustomerId(customer.getCustomerid());
             chargeHistory.setTimestamp(new Date());
@@ -95,6 +96,14 @@ public class CustomerService {
 
     public synchronized void updateCustomer(Customer customer, CustomerWechat customerWechat) {
         customerMapper.updateByPrimaryKey(customer);
+    }
+
+    public List<Customer> getCustomerByRegistrationDateRange(Date startDate, Date endDate) {
+        return customerMapper.selectCustomerByRegistrationDate(startDate, endDate);
+    }
+
+    public int countCustomerByWechatId(int wechatId){
+        return customerWechatMapper.selectByWechatId(wechatId).size();
     }
 
 }

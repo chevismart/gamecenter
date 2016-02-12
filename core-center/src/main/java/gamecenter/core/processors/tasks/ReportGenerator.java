@@ -2,6 +2,7 @@ package gamecenter.core.processors.tasks;
 
 import gamecenter.core.beans.DailyReport;
 import gamecenter.core.domain.ChargeHistory;
+import gamecenter.core.domain.Customer;
 import gamecenter.core.domain.Playrecord;
 import gamecenter.core.services.BroadcastService;
 import gamecenter.core.services.db.DBServices;
@@ -50,6 +51,8 @@ public class ReportGenerator implements ScheduleTask {
             logger.debug("Generating report from {} to {}", yesterday, today);
             List<ChargeHistory> chargeHistoryList = dbServices.getChargeHistoryService().selectHistoryByDate(yesterday, today);
             List<Playrecord> playrecordList = dbServices.getChargeHistoryService().selectPlayRecordByDate(yesterday, today);
+            List<Customer> customersList = dbServices.getCustomerService().getCustomerByRegistrationDateRange(yesterday,today);
+            int totalCustomerQty =  dbServices.getCustomerService().countCustomerByWechatId(1);
             int totalCoin = 0;
             int totalOutput = 0;
             double totalMoney = 0;
@@ -60,7 +63,7 @@ public class ReportGenerator implements ScheduleTask {
             for (Playrecord playrecord : playrecordList) {
                 totalOutput += playrecord.getQuantity();
             }
-            DailyReport report = new DailyReport(today, totalMoney, totalCoin, totalOutput);
+            DailyReport report = new DailyReport(today, totalMoney, totalCoin, totalOutput, customersList.size(), totalCustomerQty);
             logger.info("Daily report is {}", report);
             broadcastService.sendDailyReportForOwner(report);
         } catch (ParseException e) {

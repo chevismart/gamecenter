@@ -39,10 +39,16 @@ public class BroadcastService {
     }
 
     public void sendDailyReportForOwner(DailyReport report) {
-        String FORMAT = "%s 报告：共送出%s个币，实际出币%s个，收入%s元";
+        String FORMAT = "%s 报告：共送出%s个币，实际出币%s个；收入%s元；新增关注人数：%s人，共关注人数：%s人。";
         for (String openId : openIdList) {
             notifyUserByAppId(profileManager.getAppProfile("liyuanapp").getWechatProfile().getWechatAccessToken().getAccess_token(),
-                    createTextMessage(openId, String.format(FORMAT, fullDate_format.format(report.getDate()), report.getOutput(), report.getOutput(), report.getIncome())));
+                    createTextMessage(openId, String.format(FORMAT,
+                            fullDate_format.format(report.getDate()),
+                            report.getOutput(),
+                            report.getActualOutput(),
+                            report.getIncome(),
+                            report.getNewSubscribersQty(),
+                            report.getAllSubscribersQty())));
         }
     }
 

@@ -40,35 +40,35 @@
         <constructor-arg name="chargeHistoryService" ref="chargeHistoryService"/>
     </bean>
 
-    <bean id="chargeHistoryService" class="gamecenter.core.services.db.ChargeHistoryService">
+    <bean id="chargeHistoryService" class="gamecenter.core.services.db.ChargeHistoryService" scope="singleton">
         <constructor-arg name="chargeHistoryMapper" ref="chargeHistoryMapper"/>
         <constructor-arg name="playrecordMapper" ref="playrecordMapper"/>
     </bean>
-	<bean id="subscribeService" class="gamecenter.core.services.db.SubscribeService">
+	<bean id="subscribeService" class="gamecenter.core.services.db.SubscribeService" scope="singleton">
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
         <constructor-arg name="customerMapper" ref="customerMapper"/>
     </bean>
-    <bean id="wechatJsConfigService" class="gamecenter.core.services.wechat.WechatJsConfigService">
+    <bean id="wechatJsConfigService" class="gamecenter.core.services.wechat.WechatJsConfigService" scope="singleton">
     </bean>
     <bean id="deviceService" class="gamecenter.core.services.db.DeviceService">
         <constructor-arg name="deviceMapper" ref="deviceMapper"/>
     </bean>
-    <bean id="userService" class="gamecenter.core.services.db.UserService">
+    <bean id="userService" class="gamecenter.core.services.db.UserService" scope="singleton">
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
         <constructor-arg name="customerMapper" ref="customerMapper"/>
         <constructor-arg name="userMapper" ref="userMapper"/>
         <constructor-arg name="wechatMapper" ref="wechatMapper"/>
         <constructor-arg name="centerMapper" ref="centerMapper"/>
     </bean>
-    <bean id="customerService" class="gamecenter.core.services.db.CustomerService">
+    <bean id="customerService" class="gamecenter.core.services.db.CustomerService" scope="singleton">
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
         <constructor-arg name="customerMapper" ref="customerMapper"/>
         <constructor-arg name="chargeHistoryMapper" ref="chargeHistoryMapper"/>
     </bean>
-    <bean id="appService" class="gamecenter.core.services.db.AppService">
+    <bean id="appService" class="gamecenter.core.services.db.AppService" scope="singleton">
         <constructor-arg name="wechatMapper" ref="wechatMapper"/>
     </bean>
-    <bean id="broadcastService" class="gamecenter.core.services.BroadcastService">
+    <bean id="broadcastService" class="gamecenter.core.services.BroadcastService" scope="singleton">
         <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 </beans>

@@ -43,7 +43,7 @@ public class WechatTopupProcessor extends GeneralProcessor {
             try {
                 int wallet = dbServices.getCustomerService().getCustomerWalletBalanceByOpenId(openId);
                 int balance = wallet - coinsQty;
-                if (balance >= 0) {
+                if (balance >= 0 && !cloudServerService.isHanding(openId)) {
                     result = cloudServerService.topUpCoin(mac, coinsQty, openId);
                     if (result) {
                         dbServices.getCustomerService().payBill(openId, coinsQty);

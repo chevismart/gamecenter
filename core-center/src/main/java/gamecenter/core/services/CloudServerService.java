@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static weixin.popular.util.JsonUtil.parseObject;
 
@@ -26,6 +27,7 @@ public class CloudServerService {
     private final DeviceMapper deviceMapper;
     private final CustomerWechatMapper customerWechatMapper;
     private final PlayrecordMapper playrecordMapper;
+    private final ConcurrentLinkedQueue<String> handlingUsers = new ConcurrentLinkedQueue<String>();
 
     public CloudServerService(DeviceMapper deviceMapper, CustomerWechatMapper customerWechatMapper, PlayrecordMapper playrecordMapper) {
         this.deviceMapper = deviceMapper;
@@ -34,7 +36,7 @@ public class CloudServerService {
     }
 
     public boolean topUpCoin(String mac, int coinsQty, String openId) throws IOException {
-
+        handlingUsers.add(openId);
         String refId = RandomStringUtils.randomAlphabetic(10);
         HttpResponse response = HttpService.get("http://localhost:8003/topup",
                 new BasicNameValuePair("TOP_UP_COIN_QTY", String.valueOf(coinsQty)),
@@ -64,6 +66,7 @@ public class CloudServerService {
         } else {
             logger.warn("Top up failed!");
         }
+        handlingUsers.remove(openId);
         return false;
     }
 
@@ -75,5 +78,10 @@ public class CloudServerService {
         String content = HttpUtil.getContent(response);
         logger.debug("Received online clinet response is {}", content);
         return parseObject(content, List.class);
+    }
+
+    public boolean isHanding(String openId) {
+        logger.info("{} top up request are handling together, current openId is {}.", handlingUsers.size(), openId);
+        return handlingUsers.contains(openId);
     }
 }

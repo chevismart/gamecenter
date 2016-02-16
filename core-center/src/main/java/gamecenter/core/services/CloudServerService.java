@@ -62,6 +62,7 @@ public class CloudServerService {
             playrecord.setQuantity(coinsQty);
             playrecordMapper.insert(playrecord);
             logger.debug("Update Playrecord Table successfully with play record: [{}]", playrecord);
+            handlingUsers.remove(openId);
             return true;
         } else {
             logger.warn("Top up failed!");

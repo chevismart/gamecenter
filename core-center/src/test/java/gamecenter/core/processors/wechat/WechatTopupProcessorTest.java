@@ -116,10 +116,10 @@ public class WechatTopupProcessorTest {
         String result = wechatTopupProcessor.execute();
         verify(logger, times(1)).info("Preparing top up");
         verify(logger, times(1)).debug("Start to topup!\n User profile is: {}", randomString);
-        verify(logger, times(1)).warn("User {} wallet balance {} is insufficient for {} coin top up", oId, 0-1, coins);
+        verify(logger, times(1)).warn("User {} wallet balance {} is insufficient for {} coin top up", oId, 0 - 1, coins);
         verify(dbServices, only()).getCustomerService();
         verify(cloudServerService, never()).isHanding(oId);
-        verify(customerService, times(0)).payBill(anyString(),anyInt());
+        verify(customerService, times(0)).payBill(anyString(), anyInt());
         assertThat(result, is("error"));
     }
 
@@ -136,7 +136,7 @@ public class WechatTopupProcessorTest {
         verify(logger, times(0)).info("Top up {} coins for {} {}", coins, oId, false ? "success" : "fail");
         verify(dbServices, only()).getCustomerService();
         verify(cloudServerService, times(1)).isHanding(oId);
-        verify(customerService, times(0)).payBill(anyString(),anyInt());
+        verify(customerService, times(0)).payBill(anyString(), anyInt());
         assertThat(result, is("error"));
     }
 
@@ -156,7 +156,19 @@ public class WechatTopupProcessorTest {
         verify(dbServices, only()).getCustomerService();
         verify(cloudServerService, times(1)).isHanding(oId);
         verify(customerService, times(1)).getCustomerWalletBalanceByOpenId(oId);
-        verify(customerService, times(0)).payBill(anyString(),anyInt());
+        verify(customerService, times(0)).payBill(anyString(), anyInt());
+        assertThat(result, is("error"));
+    }
+
+    @Test
+    public void userProfileNotExistWillBeError() throws Exception {
+        NullPointerException nullPointerException = new NullPointerException();
+        when(userProfile.getOpenId()).thenThrow(nullPointerException);
+        String result = wechatTopupProcessor.execute();
+        verify(logger, times(0)).info(anyString());
+        verify(dbServices, times(0)).getCustomerService();
+        verify(cloudServerService, times(0)).isHanding(oId);
+        verify(logger, times(1)).error("Top up failed since: {}", nullPointerException);
         assertThat(result, is("error"));
     }
 

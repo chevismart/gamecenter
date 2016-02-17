@@ -25,23 +25,23 @@ public class WechatTopupProcessor extends GeneralProcessor {
     }
 
     public String execute() throws Exception {
-
-        logger.debug("Start to topup!\n User profile is: {}", userProfile.toString());
-
-        String appId = getHttpRequest().getParameter(WECHAT_STATE_PARAM_APPID);
-        String mac = getHttpRequest().getParameter(WECHAT_STATE_PARAM_DEVICEID);
-        String coins = getHttpRequest().getParameter(WECHAT_TOP_UP_COINS);
-        String openId = userProfile.getOpenId();
         boolean result = false;
+        try {
+            logger.debug("Start to topup!\n User profile is: {}", userProfile.toString());
 
-        logger.debug("appId={}, mac={}, openId={}", appId, mac, openId);
+            String appId = getHttpRequest().getParameter(WECHAT_STATE_PARAM_APPID);
+            String mac = getHttpRequest().getParameter(WECHAT_STATE_PARAM_DEVICEID);
+            String coins = getHttpRequest().getParameter(WECHAT_TOP_UP_COINS);
+            String openId = userProfile.getOpenId();
 
-        if (StringUtils.isEmpty(appId) ||  StringUtils.isEmpty(mac) || StringUtils.isEmpty(coins) || StringUtils.isEmpty(openId)) {
-            logger.warn("Missing parameters for top up! appId={}, mac={}, openId={}, coins={}", appId, mac, openId, coins);
-        } else {
-            logger.info("Preparing top up");
-            int coinsQty = Integer.valueOf(coins);
-            try {
+            logger.debug("appId={}, mac={}, openId={}", appId, mac, openId);
+
+            if (StringUtils.isEmpty(appId) || StringUtils.isEmpty(mac) || StringUtils.isEmpty(coins) || StringUtils.isEmpty(openId)) {
+                logger.warn("Missing parameters for top up! appId={}, mac={}, openId={}, coins={}", appId, mac, openId, coins);
+            } else {
+                logger.info("Preparing top up");
+                int coinsQty = Integer.valueOf(coins);
+
                 CustomerService customerService = dbServices.getCustomerService();
                 int wallet = customerService.getCustomerWalletBalanceByOpenId(openId);
                 int balance = wallet - coinsQty;
@@ -54,11 +54,11 @@ public class WechatTopupProcessor extends GeneralProcessor {
                 } else {
                     logger.warn("User {} wallet balance {} is insufficient for {} coin top up", openId, balance, coins);
                 }
-            } catch (Exception e) {
-                logger.error("Top up failed since: {}", e);
-            }
-        }
 
+            }
+        } catch (Exception e) {
+            logger.error("Top up failed since: {}", e);
+        }
         return result ? SUCCESS : ERROR;
     }
 }

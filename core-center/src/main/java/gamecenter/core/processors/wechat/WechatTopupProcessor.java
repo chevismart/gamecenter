@@ -4,6 +4,7 @@ import gamecenter.core.beans.UserProfile;
 import gamecenter.core.processors.GeneralProcessor;
 import gamecenter.core.services.BroadcastService;
 import gamecenter.core.services.CloudServerService;
+import gamecenter.core.services.db.CustomerService;
 import gamecenter.core.services.db.DBServices;
 import org.apache.commons.lang3.StringUtils;
 
@@ -35,18 +36,19 @@ public class WechatTopupProcessor extends GeneralProcessor {
 
         logger.debug("appId={}, mac={}, openId={}", appId, mac, openId);
 
-        if (StringUtils.isEmpty(appId) && StringUtils.isEmpty(mac) || StringUtils.isEmpty(coins) || StringUtils.isEmpty(openId)) {
+        if (StringUtils.isEmpty(appId) ||  StringUtils.isEmpty(mac) || StringUtils.isEmpty(coins) || StringUtils.isEmpty(openId)) {
             logger.warn("Missing parameters for top up! appId={}, mac={}, openId={}, coins={}", appId, mac, openId, coins);
         } else {
             logger.info("Preparing top up");
             int coinsQty = Integer.valueOf(coins);
             try {
-                int wallet = dbServices.getCustomerService().getCustomerWalletBalanceByOpenId(openId);
+                CustomerService customerService = dbServices.getCustomerService();
+                int wallet = customerService.getCustomerWalletBalanceByOpenId(openId);
                 int balance = wallet - coinsQty;
                 if (balance >= 0 && !cloudServerService.isHanding(openId)) {
                     result = cloudServerService.topUpCoin(mac, coinsQty, openId);
                     if (result) {
-                        dbServices.getCustomerService().payBill(openId, coinsQty);
+                        customerService.payBill(openId, coinsQty);
                     }
                     logger.info("Top up {} coins for {} {}", coins, openId, result ? "success" : "fail");
                 } else {

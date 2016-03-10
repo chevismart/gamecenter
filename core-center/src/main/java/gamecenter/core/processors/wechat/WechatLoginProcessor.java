@@ -105,6 +105,10 @@ public class WechatLoginProcessor extends GeneralProcessor implements GeneralLog
                         String pocket = "pocket";
                         logger.info("Redirecting to next processor: {}", pocket);
                         return pocket;
+                    }else if(uri.contains("wawaonline.net/corecenter/payment")){
+                        String payment = "payment";
+                        logger.info("Redirecting to next step: {}", payment);
+                        return payment;
                     }
                 }else {
                     logger.info("No additional processor to be follow up.");

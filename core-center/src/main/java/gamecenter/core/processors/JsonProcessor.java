@@ -36,6 +36,8 @@ public class JsonProcessor extends GeneralProcessor {
             int wallet = dbServices.getCustomerService().getCustomerWalletBalanceByOpenId(userProfile.getOpenId());
             logger.debug("Wallet of {} is {}", userProfile.getOpenId(), wallet);
             jsonString = "{\"wallet\":\"" + wallet + "\"}";
+        } else if(query.contains("charge")){
+
         } else {
             logger.debug("Nothing to do with query: {}", query);
         }

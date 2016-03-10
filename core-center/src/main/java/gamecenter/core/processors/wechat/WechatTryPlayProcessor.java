@@ -19,11 +19,12 @@ public class WechatTryPlayProcessor extends GeneralProcessor {
     @Override
     public String execute() {
         logger.debug("Received try play request!");
-        String openId = userProfile.getOpenId();
         boolean isSuccess = false;
+        try {
+            String openId = userProfile.getOpenId();
         //将试玩数量加入钱包
         int bonus = userProfile.getBonus();
-        try {
+
             if (bonus > 0) {
                 if (dbServices.getCustomerService().chargeWallet(openId, bonus)) {
                     logger.info("Charge {} coins for open id {} success!", bonus, openId);

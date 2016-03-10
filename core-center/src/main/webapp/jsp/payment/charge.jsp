@@ -12,7 +12,9 @@
     <title>充值</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0,user-scalable=0">
     <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-    <script type="text/javascript" src="../../js/third-party/jquery-2.1.1.min.js"></script>
+    <script type="application/javascript"
+            src="http://wawaonline.net/corecenter/js/third-party/jquery-2.1.1.min.js"></script>
+    <script type="application/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <%--<script type="text/javascript">--%>
     <%--function topup() {--%>
     <%--var order = "";//--%>
@@ -32,6 +34,17 @@
     <%--</script>--%>
     <script type="text/javascript">
 
+        function initApi(appId, timestamp, nonce, sign) {
+            wx.config({
+                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: appId, // 必填，公众号的唯一标识
+                timestamp: timestamp, // 必填，生成签名的时间戳
+                nonceStr: nonce, // 必填，生成签名的随机串
+                signature: sign,// 必填，签名，见附录1
+                jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+        }
+
         //调用微信JS api 支付
         function jsApiCall(params) {
             WeixinJSBridge.invoke(
@@ -44,6 +57,24 @@
         }
 
         function callpay() {
+
+            jQuery.ajax({
+                type: "post",
+                async: false,
+                url: "wechatOrder?chargeAmount="+ $("#topupAmount").val(),
+                cache: false,
+                success: function (json) {
+                    //返回的数据用data.d获取内容
+                    //alert("success");
+                    alert(json)
+                },
+                error: function (err) {
+                    alert("error: "+err);
+                }
+            });
+
+
+
             if (typeof WeixinJSBridge == "undefined") {
                 if (document.addEventListener) {
                     document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);

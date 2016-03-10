@@ -48,8 +48,8 @@ public class WechatMenuTool {
 
         Button buttonBuyCoin = new Button();
         buttonBuyCoin.setName("微信购币");
-        buttonBuyCoin.setType("scancode_push");
-        buttonBuyCoin.setKey("buy_coin");
+        buttonBuyCoin.setType("view");
+        buttonBuyCoin.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe89a9d2fa17df80f&redirect_uri=http://wawaonline.net/corecenter/auth&response_type=code&scope=snsapi_base&state=appid:liyuanapp,optionalUrl:wawaonline.net/corecenter/payment#wechat_redirect");
 
         Button buttonBalance = new Button();
         buttonBalance.setName("账户余额");

@@ -15,28 +15,11 @@
     <script type="application/javascript"
             src="http://wawaonline.net/corecenter/js/third-party/jquery-2.1.1.min.js"></script>
     <script type="application/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <%--<script type="text/javascript">--%>
-    <%--function topup() {--%>
-    <%--var order = "";//--%>
-    <%--// alert(order);--%>
-    <%--WeixinJSBridge.invoke('getBrandWCPayRequest', {--%>
-    <%--"appId": "wxe89a9d2fa17df80f",--%>
-    <%--"nonceStr": "125e18d4-ef04-40b1-be99-3bc3feb2328e",--%>
-    <%--"package": "prepay_id=wx20150101143703b473cd24030845926993",--%>
-    <%--"paySign": "9F36CB398AB366F393EB321F7122B8C7",--%>
-    <%--"signType": "MD5",--%>
-    <%--"timeStamp": "1420094192"--%>
-    <%--}, function (res) {--%>
-    <%--//WeixinJSBridge.log(res.err_msg);--%>
-    <%--alert(res.err_code+ ":" + res.err_desc +":" + res.err_msg);--%>
-    <%--});--%>
-    <%--}--%>
-    <%--</script>--%>
     <script type="text/javascript">
 
         function initApi(appId, timestamp, nonce, sign) {
             wx.config({
-                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                 appId: appId, // 必填，公众号的唯一标识
                 timestamp: timestamp, // 必填，生成签名的时间戳
                 nonceStr: nonce, // 必填，生成签名的随机串
@@ -51,29 +34,38 @@
                     'getBrandWCPayRequest', params,
                     function (res) {
                         WeixinJSBridge.log(res.err_msg);
-                        alert(res.err_code + res.err_desc + res.err_msg);
+//                        alert(res.err_code + res.err_desc + res.err_msg);
                     }
             );
         }
 
-        function callpay() {
+        var parameters;
+
+        function callpay(){
+            callpay($("#topupAmount").val());
+        }
+
+        function callpay(coin){
+            callpay(coin, "ATM001");
+        }
+
+
+        function callpay(coin, device) {
 
             jQuery.ajax({
                 type: "post",
                 async: false,
-                url: "wechatOrder?chargeAmount="+ $("#topupAmount").val(),
+                url: "wechatOrder?chargeAmount="+ coin+ "&deviceId="+ device,
                 cache: false,
                 success: function (json) {
                     //返回的数据用data.d获取内容
                     //alert("success");
-                    alert(json)
+                    parameters = eval("("+json+")");
                 },
                 error: function (err) {
                     alert("error: "+err);
                 }
             });
-
-
 
             if (typeof WeixinJSBridge == "undefined") {
                 if (document.addEventListener) {
@@ -83,8 +75,7 @@
                     document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
                 }
             } else {
-                var params = $("#params").text();
-                jsApiCall(params);
+                jsApiCall(parameters);
             }
         }
     </script>
@@ -94,9 +85,13 @@
 <input name="topupAmount" id="topupAmount"/>
 <a href="javascript:void(0)" onclick="callpay()">click me</a>
 
-<div id="params">
-    <s:text name="tempJsonStr"/>
-</div>
+<ul>
+    <li onclick="callpay(5)">5 币 （4.75 元）</li>
+    <li onclick="callpay(10)">10 币 （9.5 元）</li>
+    <li onclick="callpay(20)">20 币 （19 元）</li>
+    <li onclick="callpay(50)">50 币 （47.5 元）</li>
+</ul>
+
 <%--<s:form>--%>
 <%--<s:text name="topupAmount" id="topupAmount"/>--%>
 <%--<s:a href="javascript:void(0);" onclick="topup();"/>--%>

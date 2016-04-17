@@ -12,4 +12,8 @@ public abstract class AbstractTopupProcessor extends GeneralProcessor {
         return 0;
     }
 
+    protected String getDeviceId() {
+        return getHttpRequest().getParameter("deviceId");
+    }
+
 }

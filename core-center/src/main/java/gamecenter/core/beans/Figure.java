@@ -5,23 +5,31 @@ package gamecenter.core.beans;
  */
 public interface Figure {
 
-    public static Figure[] EMPTY_FIGURE = new Figure[]{};
+    Figure[] EMPTY_FIGURE = new Figure[]{};
 
-    public static Figure MONEY_TO_COIN = new Figure() {
+    Figure MONEY_TO_COIN = new Figure() {
         @Override
         public Integer calculate(int base) {
             return base / 100;
         }
     };
 
-    public static Figure COIN_TO_MONEY = new Figure() {
+    Figure COIN_TO_MONEY = new Figure() {
         @Override
         public Integer calculate(int base) {
             return base * 100;
         }
     };
 
-    public static Figure BUY_1_GET_1_FREE = new Figure() {
+
+    Figure FIVE_PERCENTAGE_OFF = new Figure() {
+        @Override
+        public Integer calculate(int base) {
+            return (int) Math.floor(base * 0.95);
+        }
+    };
+
+    Figure BUY_1_GET_1_FREE = new Figure() {
         @Override
         public Integer calculate(int base) {
             return base * 2;

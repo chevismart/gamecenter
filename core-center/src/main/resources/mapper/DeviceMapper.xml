@@ -33,7 +33,13 @@
         select
         <include refid="Base_Column_List"/>
         from device
-        where macAddr = #{macAddr,jdbcType=INTEGER}
+        where macAddr = #{macAddr,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByDeviceName" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from device
+        where deviceName = #{deviceName,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from device

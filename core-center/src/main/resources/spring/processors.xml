@@ -119,6 +119,8 @@
     <bean id="paidNotifyProcessor" class="gamecenter.core.processors.wechat.PaidNotificationResponseHandler">
         <constructor-arg name="profileManager" ref="profileManager"/>
         <constructor-arg name="globalPaymentBean" ref="globalPaymentBean"/>
+        <constructor-arg name="dbServices" ref="dbServices"/>
+        <constructor-arg name="cloudServerService" ref="cloudServerServices"/>
     </bean>
 
     <bean id="prePayOrderProcessor" class="gamecenter.core.processors.wechat.NativePrePayProcessor">

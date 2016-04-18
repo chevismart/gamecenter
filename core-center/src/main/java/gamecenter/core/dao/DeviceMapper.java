@@ -15,6 +15,8 @@ public interface DeviceMapper {
 
     Device selectByMacAddr(String macAddr);
 
+    Device selectByDeviceName(String deviceName);
+
     List<Device> selectByCenterId(int centerid);
 
     int updateByPrimaryKeySelective(Device record);

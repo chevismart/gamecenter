@@ -41,7 +41,7 @@ public class CustomerService {
         }
     }
 
-    public boolean chargeWallet(String openId, int income) {
+    public boolean chargeWallet(String openId, int income, double money, String transationId){
         Customer customer = getCustomer(openId);
         CustomerWechat customerWechat = getCustomerWechat(openId);
         if (customer != null) {
@@ -52,7 +52,8 @@ public class CustomerService {
             chargeHistory.setCustomerId(customer.getCustomerid());
             chargeHistory.setTimestamp(new Date());
             chargeHistory.setCoin(income);
-            chargeHistory.setPaid(0d);
+            chargeHistory.setPaid(money);
+            chargeHistory.setTransactionId(transationId);
             chargeHistory.setCenterId(1);// TODO: fill the value base on the user's actual
             chargeHistoryMapper.insert(chargeHistory);
             return true;
@@ -60,6 +61,11 @@ public class CustomerService {
             logger.warn("Customer info not found for open id = {}", openId);
         }
         return false;
+    }
+
+
+    public boolean chargeWallet(String openId, int income) {
+        return chargeWallet(openId, income, 0d, "系统赠送:000001");
     }
 
     private CustomerWechat getCustomerWechat(String openId) {

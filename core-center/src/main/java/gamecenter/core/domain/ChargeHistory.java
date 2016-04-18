@@ -10,6 +10,7 @@ public class ChargeHistory {
     private Date timestamp;
     private Double paid;
     private Integer coin;
+    private String transactionId;
 
     @Override
     public String toString() {
@@ -21,6 +22,7 @@ public class ChargeHistory {
                 ", timestamp=" + timestamp +
                 ", paid=" + paid +
                 ", coin=" + coin +
+                ", transactionId='" + transactionId + '\'' +
                 '}';
     }
 
@@ -78,5 +80,13 @@ public class ChargeHistory {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
 }

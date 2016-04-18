@@ -26,6 +26,7 @@ import static gamecenter.core.beans.Figure.FIVE_PERCENTAGE_OFF;
 import static gamecenter.core.beans.Figure.MONEY_TO_COIN;
 import static gamecenter.core.utils.ParameterUtil.NativePrePayOrder.APPID;
 import static gamecenter.core.utils.ParameterUtil.NativePrePayOrder.COINS;
+import static gamecenter.core.utils.ParameterUtil.NativePrePayOrder.DEVICE;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static weixin.popular.api.PayMchAPI.payUnifiedorder;
 import static weixin.popular.util.PayUtil.generateMchPayJsRequestJson;
@@ -80,6 +81,7 @@ public class WechatPayOrderProcessor extends AbstractTopupProcessor {
                 Map<String, String> attachMap = Maps.newHashMap();
                 attachMap.put(COINS, String.valueOf(MONEY_TO_COIN.calculate(getChargeAmount())));
                 attachMap.put(APPID, appProfile.getAppId());
+                attachMap.put(DEVICE, getDeviceId());
                 String attach = ParameterUtil.zipParam(attachMap);
 
                 unifiedorder.setAttach(attach);

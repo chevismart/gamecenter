@@ -18,4 +18,8 @@ public class DeviceService extends DBService{
 
     public List<Device> retrieveAllDeviceByCenterId(int centerId){return deviceMapper.selectByCenterId(centerId);}
 
+    public String macAddressByDeviceName(String deviceName){
+        return deviceMapper.selectByDeviceName(deviceName).getMacaddr();
+    }
+
 }

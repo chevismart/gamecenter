@@ -21,6 +21,12 @@ public interface Figure {
         }
     };
 
+    Figure CEN_TO_YUAN =  new Figure() {
+        @Override
+        public Integer calculate(int base) {
+            return base * 100;
+        }
+    };
 
     Figure FIVE_PERCENTAGE_OFF = new Figure() {
         @Override

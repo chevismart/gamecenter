@@ -2,10 +2,7 @@ package gamecenter.core.processors.wechat;
 
 import com.google.common.collect.Maps;
 import com.opensymphony.xwork2.ActionSupport;
-import gamecenter.core.beans.AppProfile;
-import gamecenter.core.beans.CoreCenterHost;
-import gamecenter.core.beans.GlobalPaymentBean;
-import gamecenter.core.beans.UserProfile;
+import gamecenter.core.beans.*;
 import gamecenter.core.beans.wechat.WechatProfile;
 import gamecenter.core.processors.AbstractTopupProcessor;
 import gamecenter.core.utils.ParameterUtil;
@@ -22,11 +19,7 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 import static gamecenter.core.beans.CoreCenterHost.WECHAT_PAYMENT_NOTIFICATION_CALLBACK_URL;
-import static gamecenter.core.beans.Figure.FIVE_PERCENTAGE_OFF;
-import static gamecenter.core.beans.Figure.MONEY_TO_COIN;
-import static gamecenter.core.utils.ParameterUtil.NativePrePayOrder.APPID;
-import static gamecenter.core.utils.ParameterUtil.NativePrePayOrder.COINS;
-import static gamecenter.core.utils.ParameterUtil.NativePrePayOrder.DEVICE;
+import static gamecenter.core.utils.ParameterUtil.NativePrePayOrder.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static weixin.popular.api.PayMchAPI.payUnifiedorder;
 import static weixin.popular.util.PayUtil.generateMchPayJsRequestJson;
@@ -68,7 +61,7 @@ public class WechatPayOrderProcessor extends AbstractTopupProcessor {
                 unifiedorder.setNonce_str(RandomStringUtils.random(32, true, true));
                 unifiedorder.setBody("娃娃机代币" + getChargeAmount()+"个");
                 unifiedorder.setOut_trade_no("trade_" + TimeUtil.getCurrentDateTime().getTime());
-                unifiedorder.setTotal_fee(String.valueOf(FIVE_PERCENTAGE_OFF.calculate(getChargeAmount())));
+                unifiedorder.setTotal_fee(String.valueOf(Figure.FIVE_PERCENTAGE_OFF.calculate(Figure.CEN_TO_YUAN.calculate(getChargeAmount()))));
                 logger.info("Charge {} coins", getChargeAmount());
                 unifiedorder.setSpbill_create_ip(getRemoteAddress(getHttpRequest()));
                 unifiedorder.setNotify_url(CoreCenterHost.getHttpURL(WECHAT_PAYMENT_NOTIFICATION_CALLBACK_URL));
@@ -79,7 +72,7 @@ public class WechatPayOrderProcessor extends AbstractTopupProcessor {
                 logger.debug("Unifiedorder is built: {}", unifiedorder);
 
                 Map<String, String> attachMap = Maps.newHashMap();
-                attachMap.put(COINS, String.valueOf(MONEY_TO_COIN.calculate(getChargeAmount())));
+                attachMap.put(COINS, String.valueOf(getChargeAmount()));
                 attachMap.put(APPID, appProfile.getAppId());
                 attachMap.put(DEVICE, getDeviceId());
                 String attach = ParameterUtil.zipParam(attachMap);

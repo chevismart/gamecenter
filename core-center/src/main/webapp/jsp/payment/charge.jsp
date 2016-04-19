@@ -55,7 +55,7 @@
             jQuery.ajax({
                 type: "post",
                 async: false,
-                url: "wechatOrder?chargeAmount="+ coin+ "&deviceId="+ device,
+                url: "wechatOrder?chargeAmount="+ coin+ "&deviceId=ATM001",//+ device,
                 cache: false,
                 success: function (json) {
                     //返回的数据用data.d获取内容

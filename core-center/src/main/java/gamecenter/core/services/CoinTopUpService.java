@@ -1,7 +1,8 @@
 package gamecenter.core.services;
 
+import gamecenter.core.constants.CommonConstants;
 import gamecenter.core.processors.HttpResponseHandler;
-import org.apache.commons.lang3.RandomStringUtils;
+import gamecenter.core.utils.HttpUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -14,33 +15,31 @@ import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Map;
 import java.util.concurrent.Future;
 
 import static gamecenter.core.beans.builders.TopUpRequestParamsBuilder.newBuilder;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 
-public class CoinTopUpService implements HttpRequestService<Future<HttpResponse>, Integer> {
+public class CoinTopUpService implements HttpRequestService<Future<HttpResponse>, Map<String, String>>, HttpResponseHandler {
 
     public static final int DEFAULT_SOCKET_TIMEOUT = 3000;
     public static final int DEFAULT_CONNECT_TIMEOUT = 3000;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final String serverUrl;
-    private final HttpResponseHandler handler;
 
-
-    public CoinTopUpService(String serverUrl, HttpResponseHandler handler) {
+    public CoinTopUpService(String serverUrl) {
         this.serverUrl = serverUrl;
-        this.handler = handler;
     }
 
     public static boolean verifyTopupResult(String json) {
         return StringUtils.isNotEmpty(json);
     }
 
-    public Future<HttpResponse> submit(Integer coins) {
-
+    public Future<HttpResponse> submit(Map<String, String> params) {
         RequestConfig requestConfig = RequestConfig.custom()
                 .setSocketTimeout(DEFAULT_SOCKET_TIMEOUT).setConnectTimeout(DEFAULT_CONNECT_TIMEOUT).build();
         CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom()
@@ -50,9 +49,9 @@ public class CoinTopUpService implements HttpRequestService<Future<HttpResponse>
 
         String postParams = newBuilder()
                 .centerId("00000000")
-                .macAddress("accf233b95f6")
-                .referenceId(RandomStringUtils.randomAlphanumeric(10))
-                .coins(coins)
+                .macAddress(params.get(CommonConstants.KEY_MAC))
+                .referenceId(params.get(CommonConstants.KEY_REF_ID))
+                .coins(Integer.valueOf(params.get(CommonConstants.KEY_COIN)))
                 .build();
 
         Future<HttpResponse> response = null;
@@ -62,11 +61,30 @@ public class CoinTopUpService implements HttpRequestService<Future<HttpResponse>
                     .setUri(URIUtils.createURI("http", serverUrl, 8003,
                             "/topup", postParams, null))
                     .build();
-            response = httpclient.execute(httpUriRequest, handler);
+            response = httpclient.execute(httpUriRequest, this);
         } catch (URISyntaxException e) {
             logger.error(e.getMessage());
         }
 
         return response;
+    }
+
+    @Override
+    public void completed(HttpResponse httpResponse) {
+        try {
+            logger.info("HttpRequest completed: header({}) body({})", httpResponse, HttpUtil.getContent(httpResponse).trim());
+        } catch (IOException e) {
+            logger.error("Error:", e);
+        }
+    }
+
+    @Override
+    public void failed(Exception e) {
+        logger.warn("HttpRequest failed: {}", e);
+    }
+
+    @Override
+    public void cancelled() {
+        logger.warn("HttpRequest cancelled");
     }
 }

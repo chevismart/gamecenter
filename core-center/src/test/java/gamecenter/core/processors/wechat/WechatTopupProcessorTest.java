@@ -99,66 +99,13 @@ public class WechatTopupProcessorTest {
         when(customerService.payBill(oId, 1)).thenReturn(true);
 
         String result = wechatTopupProcessor.execute();
+        verify(cloudServerService, times(1)).topUpCoin(mac, Integer.valueOf(coins), oId);
         verify(logger, times(1)).info("Preparing top up");
         verify(logger, times(1)).debug("Start to topup!\n User profile is: {}", randomString);
-        verify(logger, times(1)).info("Top up {} coins for {} {}", coins, oId, true ? "success" : "fail");
-        verify(dbServices, only()).getCustomerService();
-        verify(cloudServerService, times(1)).isHanding(oId);
-        verify(customerService, times(1)).getCustomerWalletBalanceByOpenId(oId);
+        verify(logger, times(1)).info("Top up {} coins for {} {}", coins, oId, "success");
         assertThat(result, is("success"));
     }
 
-    @Test
-    public void insufficientCoinToTopUpWillBeError() throws Exception {
-        CustomerService customerService = mock(CustomerService.class);
-        when(dbServices.getCustomerService()).thenReturn(customerService);
-        when(customerService.getCustomerWalletBalanceByOpenId(oId)).thenReturn(0);
-        String result = wechatTopupProcessor.execute();
-        verify(logger, times(1)).info("Preparing top up");
-        verify(logger, times(1)).debug("Start to topup!\n User profile is: {}", randomString);
-        verify(logger, times(1)).warn("User {} wallet balance {} is insufficient for {} coin top up", oId, 0 - 1, coins);
-        verify(dbServices, only()).getCustomerService();
-        verify(cloudServerService, never()).isHanding(oId);
-        verify(customerService, times(0)).payBill(anyString(), anyInt());
-        assertThat(result, is("error"));
-    }
-
-    @Test
-    public void topupCoinIsProcessingWillBeError() throws Exception {
-        CustomerService customerService = mock(CustomerService.class);
-        when(dbServices.getCustomerService()).thenReturn(customerService);
-        when(customerService.getCustomerWalletBalanceByOpenId(oId)).thenReturn(10);
-        when(cloudServerService.isHanding(oId)).thenReturn(true);
-        String result = wechatTopupProcessor.execute();
-        verify(logger, times(1)).info("Preparing top up");
-        verify(logger, times(1)).debug("Start to topup!\n User profile is: {}", randomString);
-        verify(logger, times(1)).warn("User {} wallet balance {} is insufficient for {} coin top up", oId, 9, coins);
-        verify(logger, times(0)).info("Top up {} coins for {} {}", coins, oId, false ? "success" : "fail");
-        verify(dbServices, only()).getCustomerService();
-        verify(cloudServerService, times(1)).isHanding(oId);
-        verify(customerService, times(0)).payBill(anyString(), anyInt());
-        assertThat(result, is("error"));
-    }
-
-    @Test
-    public void topupFailWillBeError() throws Exception {
-        CustomerService customerService = mock(CustomerService.class);
-        when(dbServices.getCustomerService()).thenReturn(customerService);
-        when(customerService.getCustomerWalletBalanceByOpenId(oId)).thenReturn(10);
-        when(cloudServerService.isHanding(oId)).thenReturn(false);
-        when(cloudServerService.topUpCoin(mac, 1, oId)).thenReturn(false);
-        when(customerService.payBill(oId, 1)).thenReturn(true);
-
-        String result = wechatTopupProcessor.execute();
-        verify(logger, times(1)).info("Preparing top up");
-        verify(logger, times(1)).debug("Start to topup!\n User profile is: {}", randomString);
-        verify(logger, times(1)).info("Top up {} coins for {} {}", coins, oId, false ? "success" : "fail");
-        verify(dbServices, only()).getCustomerService();
-        verify(cloudServerService, times(1)).isHanding(oId);
-        verify(customerService, times(1)).getCustomerWalletBalanceByOpenId(oId);
-        verify(customerService, times(0)).payBill(anyString(), anyInt());
-        assertThat(result, is("error"));
-    }
 
     @Test
     public void userProfileNotExistWillBeError() throws Exception {

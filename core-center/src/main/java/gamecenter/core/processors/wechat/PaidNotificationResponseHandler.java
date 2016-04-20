@@ -113,7 +113,6 @@ public class PaidNotificationResponseHandler extends WechatPayNotificationProces
     @Override
     public void failed(Exception e) {
         logger.error("Topup failed due to: {}", e.getMessage());
-//        replyWechatForPayNotification(false);
     }
 
     @Override

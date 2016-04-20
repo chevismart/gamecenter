@@ -14,6 +14,12 @@ import static gamecenter.core.beans.Enums.REQUEST_DATA_TYPE.JSON;
 public class TopUpRequestParamsBuilder implements TopUpRequestParamsBuilderInterface.Builder, TopUpRequestParamsBuilderInterface.CenterIdBuilder, TopUpRequestParamsBuilderInterface.CoinBuilder, TopUpRequestParamsBuilderInterface.MacAddressBuilder, TopUpRequestParamsBuilderInterface.ReferenceIdBuilder {
 
 
+    public static final String CENTER_ID = "CENTER_ID";
+    public static final String DATA_TYPE = "DATA_TYPE";
+    public static final String REQ_TYPE = "REQ_TYPE";
+    public static final String MAC = "MAC";
+    public static final String TOP_UP_REFERENCE_ID = "TOP_UP_REFERENCE_ID";
+    public static final String TOP_UP_COIN_QTY = "TOP_UP_COIN_QTY";
     private final Enums.REQUEST_DATA_TYPE dataType = JSON;
     private final Enums.CORE_CENTER_REQ_TYPE reqType = TOP_UP;
     private String centerId;
@@ -53,12 +59,12 @@ public class TopUpRequestParamsBuilder implements TopUpRequestParamsBuilderInter
     @Override
     public String build() {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("CENTER_ID", centerId)); // 00000000
-        params.add(new BasicNameValuePair("DATA_TYPE", dataType.name())); //JSON
-        params.add(new BasicNameValuePair("REQ_TYPE", reqType.name())); // TOP_UP
-        params.add(new BasicNameValuePair("MAC", macAddress)); // accf233b95f6
-        params.add(new BasicNameValuePair("TOP_UP_REFERENCE_ID", referenceId)); // ABCDE12345
-        params.add(new BasicNameValuePair("TOP_UP_COIN_QTY", String.valueOf(coins))); // 10
+        params.add(new BasicNameValuePair(CENTER_ID, centerId)); // 00000000
+        params.add(new BasicNameValuePair(DATA_TYPE, dataType.name())); //JSON
+        params.add(new BasicNameValuePair(REQ_TYPE, reqType.name())); // TOP_UP
+        params.add(new BasicNameValuePair(MAC, macAddress)); // accf233b95f6
+        params.add(new BasicNameValuePair(TOP_UP_REFERENCE_ID, referenceId)); // ABCDE12345
+        params.add(new BasicNameValuePair(TOP_UP_COIN_QTY, String.valueOf(coins))); // 10
         return URLEncodedUtils.format(params, "UTF-8");
     }
 }

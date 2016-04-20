@@ -28,6 +28,10 @@ public class CommonConstants {
     public static final String ACCESS_ROUTER_PREPAY_ORDER = "prePayOrder";
     public static final String ACCESS_ROUTER_PAID_NOTIFY = "paidNotify";
 
+    public static final String KEY_MAC = "MAC";
+    public static final String KEY_REF_ID = "REF_ID";
+    public static final String KEY_COIN = "COIN";
+
     public static final String SUCCESS = "SUCCESS";
     public static final String FAIL = "FAIL";
 

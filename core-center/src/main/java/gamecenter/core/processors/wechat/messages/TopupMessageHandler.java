@@ -23,14 +23,10 @@ public class TopupMessageHandler extends WechatMessageHandler {
         try {
             String openId = openId(eventMessage);
             Integer coins = Integer.valueOf(eventMessage.getContent().replace("t", ""));
-//            User user = dbServices.getUserService().getOperatorByOpenId(openId);
-            if (!cloudServerService.isHanding(openId)) {
-                String content = cloudServerService.topUpCoin("accf233b95f6", coins, openId) ? "加币" + coins + "个成功" : "加币失败";
-                Message message = new TextMessage(openId, content);
-                replyClient(eventMessage, message);
-            } else {
-                logger.info("Ignore the topup request({} coins) since it is been processing for open id = {}", coins, openId);
-            }
+            dbServices.getCustomerService().chargeWallet(openId, coins, 0, "管理员增值");
+            String content = cloudServerService.topUpCoin("accf233b95f6", coins, openId) ? "加币" + coins + "个成功" : "加币失败";
+            Message message = new TextMessage(openId, content);
+            replyClient(eventMessage, message);
         } catch (Exception e) {
             logger.error("Top up error:", e);
         }

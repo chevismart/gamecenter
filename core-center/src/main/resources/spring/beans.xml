@@ -25,10 +25,17 @@
 
     <bean id="globalPaymentBean" class="gamecenter.core.beans.GlobalPaymentBean" scope="singleton"></bean>
 
+
+    <bean id="coinTopUpService" class="gamecenter.core.services.CoinTopUpService" scope="prototype">
+        <constructor-arg name="serverUrl" value="localhost"/>
+    </bean>
+
     <bean id="cloudServerServices" class="gamecenter.core.services.CloudServerService">
         <constructor-arg name="deviceMapper" ref="deviceMapper"/>
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>
         <constructor-arg name="playrecordMapper" ref="playrecordMapper"/>
+        <constructor-arg name="dbServices" ref="dbServices"/>
+        <constructor-arg name="coinTopUpService" ref="coinTopUpService"/>
     </bean>
 
     <bean id="dbServices" class="gamecenter.core.services.db.DBServices">

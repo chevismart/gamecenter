@@ -22,8 +22,8 @@ public interface Figure {
     };
 
     Figure CEN_TO_YUAN =  new Figure() {
-        @Override
         public Integer calculate(int base) {
+//            return base;
             return base * 100;
         }
     };

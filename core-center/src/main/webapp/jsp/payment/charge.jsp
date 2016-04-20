@@ -41,16 +41,15 @@
 
         var parameters;
 
-        function callpay(){
-            callpay($("#topupAmount").val());
-        }
-
         function callpay(coin){
-            callpay(coin, "ATM001");
+            var coinQty;
+            if(coin) coinQty = coin;
+            else coinQty = $("#topupAmount").val();
+            raiseReq(coinQty, "ATM001");
         }
 
 
-        function callpay(coin, device) {
+        function raiseReq(coin, device) {
 
             jQuery.ajax({
                 type: "post",

@@ -73,6 +73,7 @@ public class GlobalPaymentBean {
         return "GlobalPaymentBean{" +
                 "unSettlementPayments=" + unSettlementPayments +
                 ", settledPayments=" + settledPayments +
+                ", processingPayments=" + processingPayments +
                 '}';
     }
 }

@@ -26,8 +26,8 @@ import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 
 public class CoinTopUpService implements HttpRequestService<Future<HttpResponse>, Map<String, String>>, HttpResponseHandler {
 
-    public static final int DEFAULT_SOCKET_TIMEOUT = 3000;
-    public static final int DEFAULT_CONNECT_TIMEOUT = 3000;
+    public static final int DEFAULT_SOCKET_TIMEOUT = 5000;
+    public static final int DEFAULT_CONNECT_TIMEOUT = 5000;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final String serverUrl;
 
@@ -71,11 +71,8 @@ public class CoinTopUpService implements HttpRequestService<Future<HttpResponse>
 
     @Override
     public void completed(HttpResponse httpResponse) {
-        try {
-            logger.info("HttpRequest completed: header({}) body({})", httpResponse, HttpUtil.getContent(httpResponse).trim());
-        } catch (IOException e) {
-            logger.error("Error:", e);
-        }
+        logger.info("HttpRequest completed.");
+
     }
 
     @Override

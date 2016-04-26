@@ -9,9 +9,11 @@
 <%@taglib prefix="s" uri="/struts-tags" %>
 <html>
 <head>
-    <title>充值</title>
+    <title>代币充值</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0,user-scalable=0">
     <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" href="http://wawaonline.net/corecenter/css/weui.min.css"/>
+    <link rel="stylesheet" href="http://wawaonline.net/corecenter/css/style.css"/>
     <script type="application/javascript"
             src="http://wawaonline.net/corecenter/js/third-party/jquery-2.1.1.min.js"></script>
     <script type="application/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
@@ -77,19 +79,41 @@
                 jsApiCall(parameters);
             }
         }
+
+        function updatePay(coin){
+            $(".chargeAmount .weui_btn").html("支付"+coin+"元购买"+coin+"个代币");
+            $(".chargeAmount .weui_btn").attr("coin", coin);
+        }
+
+        function payIt(){
+            var coin = $(".chargeAmount .weui_btn").attr("coin");
+            if(coin){
+                callpay(coin);
+            }
+        }
     </script>
 </head>
 <body>
+<div class="charge_main">
+    <div class="title">
+        <h2>欢迎使用微信支付购买娃娃机代币</h2>
+    </div>
+    <div class="chargeList">
+        <ul>
+            <li onclick="updatePay(5)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">5 币</a></li>
+            <li onclick="updatePay(10)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">10 币</a></li>
+            <li onclick="updatePay(20)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">20 币</a></li>
+            <li onclick="updatePay(50)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">50 币</a></li>
+        </ul>
 
-<input name="topupAmount" id="topupAmount"/>
-<a href="javascript:void(0)" onclick="callpay()">click me</a>
+    </div>
 
-<ul>
-    <li onclick="callpay(5)">5 币 （4.75 元）</li>
-    <li onclick="callpay(10)">10 币 （9.5 元）</li>
-    <li onclick="callpay(20)">20 币 （19 元）</li>
-    <li onclick="callpay(50)">50 币 （47.5 元）</li>
-</ul>
+    <div class="chargeAmount">
+        <a href="#" id="payButton" class="weui_btn weui_btn_primary" onclick="payIt()">选择购买代币数量</a>
+        <%--<input name="topupAmount" id="topupAmount"/>--%>
+        <%--<a href="javascript:void(0)" onclick="callpay()">click me</a>--%>
+    </div>
+</div>
 
 <%--<s:form>--%>
 <%--<s:text name="topupAmount" id="topupAmount"/>--%>

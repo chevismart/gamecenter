@@ -100,3 +100,41 @@ body {
 .hidden {
     display: none
 }
+
+.chargeOption{
+    width: 45%;
+    float: left;
+    height: 80px;
+    margin: 5px;
+    padding: 2%;
+    font-size:2em;
+}
+
+.chargeList{
+    margin-left: 4%;
+}
+
+.chargeAmount{
+    margin: 0 auto;
+}
+
+.chargeAmount a{
+    padding: 5%;
+}
+
+.chargeAmount .weui_btn{
+    width: 90%;
+    height: 80px;
+}
+
+li{
+    list-style-type:none;
+}
+
+.charge_main{
+    padding-top: 20%;
+}
+
+.charge_main .title{
+    text-align:center
+}

@@ -1,8 +1,5 @@
 package gamecenter.core.beans.wechat;
 
-/**
- * Created by Frank on 2015/02/16.
- */
 public class WechatJsConfig {
     private String appId;
     private String timestamp;
@@ -41,5 +38,13 @@ public class WechatJsConfig {
         this.signature = signature;
     }
 
-
+    @Override
+    public String toString() {
+        return "WechatJsConfig{" +
+                "appId='" + appId + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", nonceStr='" + nonceStr + '\'' +
+                ", signature='" + signature + '\'' +
+                '}';
+    }
 }

@@ -34,7 +34,7 @@ public class WechatMenuTool {
         buttonPlayIt.setType("view");
 
         //https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe89a9d2fa17df80f&redirect_uri=http://wawaonline.net/corecenter/pocket&response_type=code&scope=snsapi_base&state=appid:liyuanapp,deviceid:ATM0001#wechat_redirect
-        buttonPlayIt.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe89a9d2fa17df80f&redirect_uri=http://wawaonline.net/corecenter/auth&response_type=code&scope=snsapi_base&state=appid:liyuanapp,deviceid:ATM0001,optionalUrl:wawaonline.net/corecenter/pocket#wechat_redirect");
+        buttonPlayIt.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe89a9d2fa17df80f&redirect_uri=http://wawaonline.net/corecenter/auth&response_type=code&scope=snsapi_base&state=appid:liyuanapp,optionalUrl:wawaonline.net/corecenter/pocket#wechat_redirect");
 
         Button buttonPlayFree = new Button();
         buttonPlayFree.setName("免费试玩");

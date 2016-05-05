@@ -3,6 +3,7 @@ https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe89a9d2fa17df80f&red
 
 Wechat liyuan qr code
 http://weixin.qq.com/r/8ENAWELECh91rQY79xbi#accf233b95f6
+http://weixin.qq.com/r/8ENAWELECh91rQY79xbi#deviceid=ATM001&appid=liyuanapp
 
 http://wawaonline.net/corecenter/wechatOrder?chargeAmount=1
 

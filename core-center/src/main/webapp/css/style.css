@@ -138,3 +138,15 @@ li{
 .charge_main .title{
     text-align:center
 }
+
+.weui_btn_default{
+    color: black;
+}
+
+.charge_main .deviceInfo{
+    text-align: center;
+}
+
+.inactive{
+    display:none;
+}

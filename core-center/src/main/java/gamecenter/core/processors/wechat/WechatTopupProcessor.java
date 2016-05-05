@@ -29,16 +29,21 @@ public class WechatTopupProcessor extends GeneralProcessor {
             logger.debug("Start to topup!\n User profile is: {}", userProfile.toString());
 
             String appId = getHttpRequest().getParameter(WECHAT_STATE_PARAM_APPID);
-            String mac = getHttpRequest().getParameter(WECHAT_STATE_PARAM_DEVICEID);
+            String deviceId = getHttpRequest().getParameter(WECHAT_STATE_PARAM_DEVICEID);
             String coins = getHttpRequest().getParameter(WECHAT_TOP_UP_COINS);
             String openId = userProfile.getOpenId();
 
-            logger.debug("appId={}, mac={}, openId={}", appId, mac, openId);
+            logger.debug("appId={}, mac={}, openId={}", appId, deviceId, openId);
 
-            if (StringUtils.isEmpty(appId) || StringUtils.isEmpty(mac) || StringUtils.isEmpty(coins) || StringUtils.isEmpty(openId)) {
-                logger.warn("Missing parameters for top up! appId={}, mac={}, openId={}, coins={}", appId, mac, openId, coins);
+            if (StringUtils.isEmpty(appId) || StringUtils.isEmpty(deviceId) || StringUtils.isEmpty(coins) || StringUtils.isEmpty(openId)) {
+                logger.warn("Missing parameters for top up! appId={}, deviceId={}, openId={}, coins={}", appId, deviceId, openId, coins);
             } else {
                 logger.info("Preparing top up");
+
+                String mac = dbServices.getDeviceService().macAddressByDeviceName("ATM001");
+
+                logger.info("Device({}) mac address is {}", deviceId, mac);
+
                 result = cloudServerService.topUpCoin(mac, Integer.valueOf(coins), openId);
                 logger.info("Top up {} coins for {} {}", coins, openId, result ? "success" : "fail");
             }

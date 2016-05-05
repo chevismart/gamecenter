@@ -50,7 +50,7 @@
             <result name="wechatOAuth" type="chain">wechatOAuth</result>
             <result name="success" type="chain">scan</result>
             <result name="pocket" type="chain">pocket</result>
-            <result name="payment" type="chain">wechatOrder</result>
+            <result name="payment" type="chain">webPrePayOrderProcessor</result>
         </action>
         <action name="wechatOAuth" class="wechatOAuthProcessor"/>
 
@@ -97,6 +97,10 @@
         </action>
 
         <action name="prePayOrderProcessor" class="prePayOrderProcessor">
+            <result name="success" type="dispatcher">/jsp/payment/charge.jsp</result>
+        </action>
+
+        <action name="webPrePayOrderProcessor" class="jsPrePayProcessor">
             <result name="success" type="dispatcher">/jsp/payment/charge.jsp</result>
         </action>
 

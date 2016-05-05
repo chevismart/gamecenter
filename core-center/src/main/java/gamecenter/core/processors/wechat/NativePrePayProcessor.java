@@ -8,9 +8,6 @@ import gamecenter.core.utils.ParameterUtil;
 
 import java.util.Map;
 
-/**
- * Created by Chevis on 15/2/20.
- */
 public class NativePrePayProcessor extends WechatPayNotificationProcessor {
 
     NativePrePayOrderService nativePrePayOrderService = new NativePrePayOrderService();

@@ -127,6 +127,11 @@
         <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 
+    <bean id="jsPrePayProcessor" class="gamecenter.core.processors.wechat.JSPrePayProcessor">
+        <constructor-arg name="userProfile" ref="userProfile"/>
+        <constructor-arg name="wechatJsConfigService" ref="wechatJsConfigService"/>
+    </bean>
+
     <bean id="topupProcessor" class="gamecenter.core.processors.wechat.WechatTopupProcessor">
         <constructor-arg name="userProfile" ref="userProfile"/>
         <constructor-arg name="dbServices" ref="dbServices"/>

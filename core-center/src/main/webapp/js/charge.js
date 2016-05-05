@@ -22,11 +22,12 @@ function jsApiCall(params) {
 
 var parameters;
 
-function callpay(coin){
+function callpay(coin, device) {
     var coinQty;
-    if(coin) coinQty = coin;
+    if (coin) coinQty = coin;
     else coinQty = $("#topupAmount").val();
-    raiseReq(coinQty, "ATM001");
+    //scanQrcode(coinQty);
+    raiseReq(coinQty, device);
 }
 
 
@@ -35,15 +36,15 @@ function raiseReq(coin, device) {
     jQuery.ajax({
         type: "post",
         async: false,
-        url: "wechatOrder?chargeAmount="+ coin+ "&deviceId=ATM001",//+ device,
+        url: "wechatOrder?chargeAmount=" + coin + "&deviceId=ATM001",//+ device,
         cache: false,
         success: function (json) {
             //返回的数据用data.d获取内容
             //alert("success");
-            parameters = eval("("+json+")");
+            parameters = eval("(" + json + ")");
         },
         error: function (err) {
-            alert("error: "+err);
+            alert("error: " + err);
         }
     });
 
@@ -59,14 +60,41 @@ function raiseReq(coin, device) {
     }
 }
 
-function updatePay(coin){
-    $(".chargeAmount .weui_btn").html("支付"+coin+"元购买"+coin+"个代币");
+function updatePay(coin) {
+    $(".chargeAmount .weui_btn").html("支付" + coin + "元购买" + coin + "个代币");
     $(".chargeAmount .weui_btn").attr("coin", coin);
+    if (!!$(".chargeAmount .weui_btn").hasClass("weui_btn_disabled")) {
+        $(".chargeAmount .weui_btn").removeClass("weui_btn_disabled");
+        $(".chargeAmount .weui_btn").removeClass("weui_btn_default");
+        $(".chargeAmount .weui_btn").addClass("weui_btn_primary");
+    }
 }
 
-function payIt(){
+function payIt() {
     var coin = $(".chargeAmount .weui_btn").attr("coin");
-    if(coin){
-        callpay(coin);
+    if (coin) {
+        $(".weui_dialog_alert").removeClass("inactive");
     }
+}
+
+function scanQrcode(callback){
+    return scanDeviceInfo(appId, nonceStr, timestamp, signature, callback);
+}
+
+function closeAlert(){
+    $(".weui_dialog_alert").addClass("inactive");
+    scanQrcode(function(result){
+        var device;
+        var params = result.split("#")[1].split("&");
+
+        for(var i = 0;i < params.length; i++) {
+            if(params[i].split("=")[0] === 'deviceid'){
+                device = params[i].split("=")[1];
+                callpay(coin, device);
+            }
+        }
+        if(!device){
+            alert("找不到设备,请重新扫描！");
+        }
+    });
 }

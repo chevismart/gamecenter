@@ -10,14 +10,25 @@
     <script type="application/javascript"
             src="http://wawaonline.net/corecenter/js/third-party/jquery-2.1.1.min.js"></script>
     <script type="application/javascript" src="http://wawaonline.net/corecenter/js/charge.js"></script>
+    <script type="application/javascript" src="http://wawaonline.net/corecenter/js/wechatJs.js"></script>
     <script type="application/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
 
+    <script type="application/javascript">
+        var appId = '${wechatJsConfig.appId}';
+        var nonceStr = '${wechatJsConfig.nonceStr}';
+        var timestamp = '${wechatJsConfig.timestamp}';
+        var signature = '${wechatJsConfig.signature}';
+    </script>
 </head>
 <body>
 <div class="charge_main">
     <div class="title">
         <h2>欢迎使用微信支付购买娃娃机代币</h2>
+    </div>
+    <div class="deviceInfo">
+        当前设备:
+        <span><b>ATM001</b></span>
     </div>
     <div class="chargeList">
         <ul>
@@ -26,13 +37,21 @@
             <li onclick="updatePay(20)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">20 币</a></li>
             <li onclick="updatePay(50)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">50 币</a></li>
         </ul>
-
     </div>
 
     <div class="chargeAmount">
-        <a href="#" id="payButton" class="weui_btn weui_btn_primary" onclick="payIt()">选择购买代币数量</a>
-        <%--<input name="topupAmount" id="topupAmount"/>--%>
-        <%--<a href="javascript:void(0)" onclick="callpay()">click me</a>--%>
+        <a href="#" id="payButton" class="weui_btn weui_btn_default weui_btn_disabled" onclick="payIt()">选择购买代币数量</a>
+    </div>
+</div>
+
+<div class="weui_dialog_alert inactive">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">疯狂的娃娃机提示你</strong></div>
+        <div class="weui_dialog_bd">请扫描售币机上的二维码继续购币！</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:void(0)" class="weui_btn_dialog primary" onclick="closeAlert()">确定</a>
+        </div>
     </div>
 </div>
 </body>

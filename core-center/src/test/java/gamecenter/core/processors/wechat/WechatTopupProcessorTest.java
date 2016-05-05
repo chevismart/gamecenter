@@ -6,6 +6,7 @@ import gamecenter.core.services.BroadcastService;
 import gamecenter.core.services.CloudServerService;
 import gamecenter.core.services.db.CustomerService;
 import gamecenter.core.services.db.DBServices;
+import gamecenter.core.services.db.DeviceService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.struts2.StrutsStatics;
 import org.junit.After;
@@ -61,7 +62,7 @@ public class WechatTopupProcessorTest {
     public void missingAppIdWillBeWarningAndReturnError() throws Exception {
         when(request.getParameter(WECHAT_STATE_PARAM_APPID)).thenReturn(null);
         String result = wechatTopupProcessor.execute();
-        verify(logger, times(1)).warn("Missing parameters for top up! appId={}, mac={}, openId={}, coins={}", null, mac, oId, coins);
+        verify(logger, times(1)).warn("Missing parameters for top up! appId={}, deviceId={}, openId={}, coins={}", null, mac, oId, coins);
         assertThat(result, is(ERROR));
     }
 
@@ -69,7 +70,7 @@ public class WechatTopupProcessorTest {
     public void missingMacWillBeWarningAndReturnError() throws Exception {
         when(request.getParameter(WECHAT_STATE_PARAM_DEVICEID)).thenReturn(null);
         String result = wechatTopupProcessor.execute();
-        verify(logger, times(1)).warn("Missing parameters for top up! appId={}, mac={}, openId={}, coins={}", appId, null, oId, coins);
+        verify(logger, times(1)).warn("Missing parameters for top up! appId={}, deviceId={}, openId={}, coins={}", appId, null, oId, coins);
         assertThat(result, is(ERROR));
     }
 
@@ -77,7 +78,7 @@ public class WechatTopupProcessorTest {
     public void missingOpenIdWillBeWarningAndReturnError() throws Exception {
         when(userProfile.getOpenId()).thenReturn(null);
         String result = wechatTopupProcessor.execute();
-        verify(logger, times(1)).warn("Missing parameters for top up! appId={}, mac={}, openId={}, coins={}", appId, mac, null, coins);
+        verify(logger, times(1)).warn("Missing parameters for top up! appId={}, deviceId={}, openId={}, coins={}", appId, mac, null, coins);
         assertThat(result, is(ERROR));
     }
 
@@ -85,18 +86,21 @@ public class WechatTopupProcessorTest {
     public void missingCoinWillBeWarningAndReturnError() throws Exception {
         when(request.getParameter(WECHAT_TOP_UP_COINS)).thenReturn(null);
         String result = wechatTopupProcessor.execute();
-        verify(logger, times(1)).warn("Missing parameters for top up! appId={}, mac={}, openId={}, coins={}", appId, mac, oId, null);
+        verify(logger, times(1)).warn("Missing parameters for top up! appId={}, deviceId={}, openId={}, coins={}", appId, mac, oId, null);
         assertThat(result, is(ERROR));
     }
 
     @Test
     public void executeAsExcepted() throws Exception {
         CustomerService customerService = mock(CustomerService.class);
+        DeviceService deviceService = mock(DeviceService.class);
         when(dbServices.getCustomerService()).thenReturn(customerService);
         when(customerService.getCustomerWalletBalanceByOpenId(oId)).thenReturn(10);
         when(cloudServerService.isHanding(oId)).thenReturn(false);
         when(cloudServerService.topUpCoin(mac, 1, oId)).thenReturn(true);
         when(customerService.payBill(oId, 1)).thenReturn(true);
+        when(dbServices.getDeviceService()).thenReturn(deviceService);
+        when(deviceService.macAddressByDeviceName(anyString())).thenReturn(mac);
 
         String result = wechatTopupProcessor.execute();
         verify(cloudServerService, times(1)).topUpCoin(mac, Integer.valueOf(coins), oId);

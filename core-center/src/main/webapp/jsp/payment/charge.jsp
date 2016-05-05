@@ -23,24 +23,40 @@
 </head>
 <body>
 <div class="charge_main">
-    <div class="title">
-        <h2>欢迎使用微信支付购买娃娃机代币</h2>
-    </div>
-    <div class="deviceInfo">
-        当前设备:
-        <span><b>ATM001</b></span>
-    </div>
-    <div class="chargeList">
-        <ul>
-            <li onclick="updatePay(5)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">5 币</a></li>
-            <li onclick="updatePay(10)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">10 币</a></li>
-            <li onclick="updatePay(20)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">20 币</a></li>
-            <li onclick="updatePay(50)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">50 币</a></li>
-        </ul>
-    </div>
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_text">
+            <div class="title">
+                <h2 class="weui_media_title">欢迎使用微信支付购买娃娃机代币</h2>
+            </div>
+            <div class="deviceInfo">
+                当前设备:
+                <span><b>ATM001</b></span>
+            </div>
+        </div>
+        <div class="chargeList">
+            <ul>
+                <li onclick="updatePay(5)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">5 币</a></li>
+                <li onclick="updatePay(10)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">10 币</a>
+                </li>
+                <li onclick="updatePay(20)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">20 币</a>
+                </li>
+                <li onclick="updatePay(50)"><a href="#" class="weui_btn weui_btn_plain_default chargeOption">50 币</a>
+                </li>
+            </ul>
+        </div>
 
-    <div class="chargeAmount">
-        <a href="#" id="payButton" class="weui_btn weui_btn_default weui_btn_disabled" onclick="payIt()">选择购买代币数量</a>
+        <div class="chargeAmount">
+            <a href="#" id="payButton" class="weui_btn weui_btn_default weui_btn_disabled"
+               onclick="payIt()">选择购买代币数量</a>
+        </div>
+
+        <div class="declaration">
+            <section>
+                <h3>温馨提示：</h3>
+                <p>代币售出恕不退回，不设找零。</p>
+            </section>
+
+        </div>
     </div>
 </div>
 

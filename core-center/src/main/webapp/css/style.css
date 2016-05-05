@@ -132,7 +132,7 @@ li{
 }
 
 .charge_main{
-    padding-top: 20%;
+    padding-top: 10%;
 }
 
 .charge_main .title{
@@ -145,6 +145,12 @@ li{
 
 .charge_main .deviceInfo{
     text-align: center;
+}
+
+.charge_main .declaration{
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-left:5%;
 }
 
 .inactive{

@@ -81,6 +81,10 @@ function scanQrcode(callback){
     return scanDeviceInfo(appId, nonceStr, timestamp, signature, callback);
 }
 
+function getSelectedCoin(){
+    return $(".chargeAmount .weui_btn").attr("coin");
+}
+
 function closeAlert(){
     $(".weui_dialog_alert").addClass("inactive");
     scanQrcode(function(result){
@@ -90,7 +94,7 @@ function closeAlert(){
         for(var i = 0;i < params.length; i++) {
             if(params[i].split("=")[0] === 'deviceid'){
                 device = params[i].split("=")[1];
-                callpay(coin, device);
+                callpay(getSelectedCoin(), device);
             }
         }
         if(!device){

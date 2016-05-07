@@ -1,17 +1,16 @@
 package gamecenter.core.processors.tasks;
 
 import com.gamecenter.server.CloudServer;
-import gamecenter.core.listeners.AbstractRunnable;
 import org.apache.commons.lang3.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-/**
- * Created by Chevis on 2014/12/23.
- */
-public class CloudServerLoader extends AbstractRunnable {
+public class CloudServerLoader implements Runnable {
 
-    CloudServer cloudServer = new CloudServer();
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private CloudServer cloudServer = new CloudServer();
 
     public CloudServer getCloudServer() {
         return cloudServer;

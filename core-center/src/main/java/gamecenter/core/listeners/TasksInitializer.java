@@ -41,7 +41,7 @@ public class TasksInitializer implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         for (Runnable normalTask : tasks.getNormalTask()) {
-            ((AbstractRunnable) normalTask).stop();//TODO: Refactor here
+            //TODO: Refactor here
         }
     }
 }

@@ -1,15 +1,14 @@
 package gamecenter.core.processors.tasks;
 
-import gamecenter.core.constants.CommonConstants;
-import gamecenter.core.listeners.AbstractRunnable;
 import gamecenter.core.processors.wechat.ProfileManager;
-import gamecenter.core.utils.TimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * Created by Chevis on 2014/12/11.
- */
-public class WechatTokenManager extends AbstractRunnable {
+import static gamecenter.core.constants.CommonConstants.DEFAULT_WECHAT_ACCESS_TOKEN_CHECK_INTERVAL_IN_SECOND;
+import static gamecenter.core.utils.TimeUtil.millionSecondFromSecond;
 
+public class WechatTokenManager implements ScheduleTask {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ProfileManager profileManager;
 
     public WechatTokenManager(ProfileManager profileManager) {
@@ -18,19 +17,17 @@ public class WechatTokenManager extends AbstractRunnable {
 
     @Override
     public void run() {
-
-        while (isContinue) {
-            try {
-                //休眠时间
-                Thread.sleep(TimeUtil.millionSecondFromSecond(CommonConstants.DEFAULT_WECHAT_ACCESS_TOKEN_CHECK_INTERVAL_IN_SECOND));
                 logger.debug("Start to check the access token.");
                 profileManager.checkAndUpdateAllAccessToken();
+    }
 
-            } catch (InterruptedException e) {
-                logger.error(e.getMessage());
-            }
+    @Override
+    public long interval() {
+        return millionSecondFromSecond(DEFAULT_WECHAT_ACCESS_TOKEN_CHECK_INTERVAL_IN_SECOND);
+    }
 
-        }
-
+    @Override
+    public long initDelay() {
+        return 0;
     }
 }

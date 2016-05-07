@@ -2,16 +2,16 @@ package gamecenter.core.processors.tasks;
 
 import gamecenter.core.beans.AppProfile;
 import gamecenter.core.beans.wechat.WechatProfile;
-import gamecenter.core.listeners.AbstractRunnable;
 import gamecenter.core.processors.wechat.ProfileManager;
 import gamecenter.core.utils.XMLMessageConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class AppLoader extends AbstractRunnable implements ScheduleTask {
-
+public class AppLoader implements Runnable {
     private final static String ROOT_NODE = "applications";
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ProfileManager profileManager;
 
     public AppLoader(ProfileManager profileManager) {
@@ -41,15 +41,5 @@ public class AppLoader extends AbstractRunnable implements ScheduleTask {
             }
             logger.info("{}({}) is successfully loaded!", appProfile.getAppName(), appProfile.getAppId());
         }
-
-
-    }
-
-    public long interval() {
-        return 60;
-    }
-
-    public long initDelay() {
-        return 0;
     }
 }

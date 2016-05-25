@@ -24,6 +24,10 @@ public abstract class GeneralProcessor extends ActionSupport {
         return (HttpServletResponse) ActionContext.getContext().get(StrutsStatics.HTTP_RESPONSE);
     }
 
+    protected String getParameter(String key){
+        return getHttpRequest().getParameter(key);
+    }
+
     protected String getScanUrl(String action) {
         String code = getHttpRequest().getParameter(WECHAT_AUTH_CODE);
         String url;

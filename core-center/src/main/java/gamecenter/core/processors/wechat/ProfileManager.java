@@ -22,9 +22,7 @@ import java.util.Map;
 
 import static gamecenter.core.constants.CommonConstants.DEFAULT_WECHAT_ACCESS_TOKEN_EXPIRY_TIME_IN_SECOND;
 import static gamecenter.core.constants.CommonConstants.EXPIRY_SHIFT_PERIOD_IN_SECOND;
-import static gamecenter.core.utils.TimeUtil.getCurrentDateTime;
-import static gamecenter.core.utils.TimeUtil.getExpiryDateTime;
-import static gamecenter.core.utils.TimeUtil.isExpiry;
+import static gamecenter.core.utils.TimeUtil.*;
 
 public class ProfileManager {
 
@@ -143,6 +141,10 @@ public class ProfileManager {
             logger.warn("User info is not found for {}", appId);
         }
         return user;
+    }
+
+    public String getOpenId(String appId, String code) {
+        return snsAuthService.getUserOpenId(profiles.get(appId), code).getOpenid();
     }
 
     public User getUserInfo(String appId, Locale locale, String openId) {

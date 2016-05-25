@@ -46,6 +46,7 @@
         <action name="auth" class="accessRouterProcessor">
             <result name="wechatLogin" type="chain">wechatLogin</result>
         </action>
+        <action name="prepay" class="youbaoPrepayProcessor"/>
         <action name="wechatLogin" class="wechatLoginProcessor">
             <result name="wechatOAuth" type="chain">wechatOAuth</result>
             <result name="success" type="chain">scan</result>

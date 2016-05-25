@@ -19,6 +19,13 @@
                 <bean id="appLoader" class="gamecenter.core.processors.tasks.AppLoader">
                     <constructor-arg name="profileManager" ref="profileManager"/>
                 </bean>
+                <bean id="externalServiceLoader" class="gamecenter.core.processors.tasks.ExternalServiceLoader">
+                    <constructor-arg name="externalServices">
+                        <list>
+                            <ref bean="youbaoPaymentService"/>
+                        </list>
+                    </constructor-arg>
+                </bean>
                 <!--<bean id="cloudServerLoader" class="gamecenter.core.processors.tasks.CloudServerLoader"/>-->
             </list>
         </property>
@@ -169,7 +176,8 @@
         <constructor-arg name="broadcastService" ref="broadcastService"/>
     </bean>
 
-    <bean id="connectionStatusMessageHandler" class="gamecenter.core.processors.wechat.messages.ConnectionStatusMessageHandler">
+    <bean id="connectionStatusMessageHandler"
+          class="gamecenter.core.processors.wechat.messages.ConnectionStatusMessageHandler">
         <constructor-arg name="msgTypeFilter" ref="textFilter"/>
         <constructor-arg name="eventTypeFilter" ref="clickEventFilter"/>
         <constructor-arg name="keyFilter" ref="checkConnectionFilter"/>
@@ -192,6 +200,10 @@
         <constructor-arg name="profileManager" ref="profileManager"/>
         <constructor-arg name="dbServices" ref="dbServices"/>
         <constructor-arg name="cloudServerService" ref="cloudServerServices"/>
+    </bean>
+
+    <bean id="youbaoPrepayProcessor" class="gamecenter.core.processors.thirdparty.YoubaoPrepayProcessor">
+        <constructor-arg name="profileManager" ref="profileManager"/>
     </bean>
 
     <bean id="eventFilter" class="gamecenter.core.processors.StringIncludedFilter" scope="singleton">

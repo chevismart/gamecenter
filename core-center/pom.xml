@@ -6,6 +6,14 @@
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
+    <repositories>
+        <repository>
+            <id>maven-restlet</id>
+            <name>Restlet repository</name>
+            <url>https://maven.restlet.com</url>
+        </repository>
+    </repositories>
+
     <properties>  <!--为pom定义一些常量,在pom中的其它地方可以直接引用-->
         <spring.version>3.1.1.RELEASE</spring.version>
         <struts.version>2.3.4</struts.version>
@@ -17,6 +25,7 @@
         <logback.version>1.1.2</logback.version>
         <cloudServer.version>1.0-SNAPSHOT</cloudServer.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <restlet-version>2.3.6</restlet-version>
     </properties>
 
 
@@ -35,6 +44,25 @@
             <version>3.1</version>
         </dependency>
 
+        <!-- http://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+
+        <!-- Restlet -->
+        <dependency>
+            <groupId>org.restlet.jse</groupId>
+            <artifactId>org.restlet</artifactId>
+            <version>${restlet-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.restlet.jse</groupId>
+            <artifactId>org.restlet.ext.jackson</artifactId>
+            <version>${restlet-version}</version>
+        </dependency>
         <!-- easymock -->
         <dependency>
             <groupId>org.easymock</groupId>

@@ -30,6 +30,8 @@
         <constructor-arg name="serverUrl" value="localhost"/>
     </bean>
 
+    <bean id="youbaoPaymentService" class="gamecenter.core.services.external.YoubaoPaymentService" scope="singleton"></bean>
+
     <bean id="cloudServerServices" class="gamecenter.core.services.CloudServerService">
         <constructor-arg name="deviceMapper" ref="deviceMapper"/>
         <constructor-arg name="customerWechatMapper" ref="customerWechatMapper"/>

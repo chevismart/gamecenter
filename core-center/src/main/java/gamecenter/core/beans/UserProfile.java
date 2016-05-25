@@ -1,8 +1,5 @@
 package gamecenter.core.beans;
 
-/**
- * Created by Chevis on 2014/12/16.
- */
 public class UserProfile {
     private String openId;
     private String displayName;
@@ -12,6 +9,7 @@ public class UserProfile {
     private Boolean isFollowed;
     private String deviceId;
     private int bonus = 0;
+    private String currentDeviceId;
 
     @Override
     public String toString() {
@@ -24,6 +22,7 @@ public class UserProfile {
                 ", isFollowed=" + isFollowed +
                 ", deviceId='" + deviceId + '\'' +
                 ", bonus=" + bonus +
+                ", currentDeviceId='" + currentDeviceId + '\'' +
                 '}';
     }
 
@@ -90,5 +89,13 @@ public class UserProfile {
 
     public void setBonus(int bonus) {
         this.bonus = bonus;
+    }
+
+    public String getCurrentDeviceId() {
+        return currentDeviceId;
+    }
+
+    public void setCurrentDeviceId(String currentDeviceId) {
+        this.currentDeviceId = currentDeviceId;
     }
 }

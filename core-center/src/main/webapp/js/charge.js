@@ -36,7 +36,7 @@ function raiseReq(coin, device) {
     jQuery.ajax({
         type: "post",
         async: false,
-        url: "wechatOrder?chargeAmount=" + coin + "&deviceId=ATM001",//+ device,
+        url: "wechatOrder?chargeAmount=" + coin + "&deviceId=" + device,
         cache: false,
         success: function (json) {
             //返回的数据用data.d获取内容
@@ -77,27 +77,27 @@ function payIt() {
     }
 }
 
-function scanQrcode(callback){
+function scanQrcode(callback) {
     return scanDeviceInfo(appId, nonceStr, timestamp, signature, callback);
 }
 
-function getSelectedCoin(){
+function getSelectedCoin() {
     return $(".chargeAmount .weui_btn").attr("coin");
 }
 
-function closeAlert(){
+function closeAlert() {
     $(".weui_dialog_alert").addClass("inactive");
-    scanQrcode(function(result){
+    scanQrcode(function (result) {
         var device;
         var params = result.split("#")[1].split("&");
 
-        for(var i = 0;i < params.length; i++) {
-            if(params[i].split("=")[0] === 'deviceid'){
+        for (var i = 0; i < params.length; i++) {
+            if (params[i].split("=")[0] === 'deviceid') {
                 device = params[i].split("=")[1];
                 callpay(getSelectedCoin(), device);
             }
         }
-        if(!device){
+        if (!device) {
             alert("找不到设备,请重新扫描！");
         }
     });

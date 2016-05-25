@@ -40,7 +40,7 @@ public class WechatTopupProcessor extends GeneralProcessor {
             } else {
                 logger.info("Preparing top up");
 
-                String mac = dbServices.getDeviceService().macAddressByDeviceName("ATM001");
+                String mac = dbServices.getDeviceService().macAddressByDeviceName(deviceId);
 
                 logger.info("Device({}) mac address is {}", deviceId, mac);
 

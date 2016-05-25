@@ -8,12 +8,9 @@ import weixin.popular.api.SnsAPI;
 import weixin.popular.bean.sns.SnsToken;
 import weixin.popular.bean.user.User;
 
-import static weixin.popular.api.SnsAPI.*;
+import static weixin.popular.api.SnsAPI.oauth2AccessToken;
 import static weixin.popular.api.UserAPI.userInfo;
 
-/**
- * Created by Chevis on 2014/12/15.
- */
 public class SnsAuthService extends Service {
     private static boolean IS_USER_INFO_CACHED = false;
     private SnsAPI wechatSnsApi;
@@ -26,14 +23,20 @@ public class SnsAuthService extends Service {
         return IS_USER_INFO_CACHED ? wechatProfile.getActiveUserList().keySet().contains(openId) : false;
     }
 
-    public User getUserInfo(AppProfile appProfile, String code, String local) {
-        User userInfo = null;
+    public SnsToken getUserOpenId(AppProfile appProfile, String code) {
+        SnsToken snsToken = null;
         if (appProfile.isWechatProfileValid()) {
             WechatProfile wechatProfile = appProfile.getWechatProfile();
-            SnsToken snsToken = oauth2AccessToken(wechatProfile.getWechatAppId(), wechatProfile.getWechatAppSecret(), code);
+            snsToken = oauth2AccessToken(wechatProfile.getWechatAppId(), wechatProfile.getWechatAppSecret(), code);
+        }
+        return snsToken;
+    }
 
-            userInfo = getUser(appProfile, local, wechatProfile, snsToken.getOpenid(), snsToken.getAccess_token());
-
+    public User getUserInfo(AppProfile appProfile, String code, String local) {
+        User userInfo = null;
+        SnsToken snsToken = getUserOpenId(appProfile, code);
+        if (snsToken != null) {
+            userInfo = getUser(appProfile, local, appProfile.getWechatProfile(), snsToken.getOpenid(), snsToken.getAccess_token());
         }
         return userInfo;
     }

@@ -2,9 +2,6 @@ package gamecenter.core.beans;
 
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * Created by Chevis on 2015/1/17.
- */
 public class CoreCenterHost {
     public static final String CORECENTER_HOST = "wawaonline.net";
     public static final int CORECENTER_PORT = 80;
@@ -21,6 +18,8 @@ public class CoreCenterHost {
     private static final String AUTH = "auth";
     // Sample: alcock.gicp.net:8888/corecenter/auth
     public static final String AUTH_URL = StringUtils.join(StringJoiner(CORECENTER_HOST, CONTEXT_NAME, AUTH), SEPEARTOR);
+    private static final String PREPAY = "prepay";
+    public static final String PREPAY_URL = StringUtils.join(StringJoiner(CORECENTER_HOST, CONTEXT_NAME, PREPAY), SEPEARTOR);
 
     public static String getHttpURL(String val) {
         return "http://" + val;

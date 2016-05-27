@@ -6,7 +6,7 @@ import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.Parameter;
 import org.restlet.data.Reference;
-import org.restlet.resource.Get;
+import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class SettlementResource extends ServerResource {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private String queryString;
 
-    @Get
+    @Post
     @Produces(MediaType.APPLICATION_JSON)
     public String retrieve() throws IOException {
 

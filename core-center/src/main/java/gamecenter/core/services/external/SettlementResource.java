@@ -6,6 +6,8 @@ import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.Parameter;
 import org.restlet.data.Reference;
+import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
@@ -23,9 +25,10 @@ public class SettlementResource extends ServerResource {
 
     @Post
     @Produces(MediaType.APPLICATION_JSON)
-    public String retrieve() throws IOException {
-
-        String appId = "wxe89a9d2fa17df80f";
+    public StringRepresentation retrieve(Representation entity) throws IOException {
+        form = new Form(entity);
+//        String internalAppId = "wxe89a9d2fa17df80f";
+        String internalAppId = "liyuanapp";
         logger.info("Receive paid notification with: {}", form.getQueryString());
 
         String type = getParameter("type");
@@ -39,11 +42,10 @@ public class SettlementResource extends ServerResource {
         String nonstr = getParameter("nonstr");
         String sign = getParameter("sign");
 
-        SettlementInfo settlementInfo = new SettlementInfo(type, openId, orderNum, deviceId, code, tradeId, amount, timestamp, nonstr, sign);
+        SettlementInfo settlementInfo = new SettlementInfo(internalAppId, type, openId, orderNum, deviceId, code, tradeId, amount, timestamp, nonstr, sign);
 
         logger.info("Received settlement notification details is {}", settlementInfo);
-
-        return "SUCCESS";
+        return new StringRepresentation("SUCCESS".toCharArray());
     }
 
     private void redirectTo(String to, Parameter... parameters) {
@@ -65,6 +67,7 @@ public class SettlementResource extends ServerResource {
     }
 
     private class SettlementInfo {
+        private final String internalAppId;
         private final String type;
         private final String openId;
         private final String orderNum;
@@ -76,7 +79,8 @@ public class SettlementResource extends ServerResource {
         private final String nonstr;
         private final String sign;
 
-        private SettlementInfo(String type, String openId, String orderNum, String deviceId, String code, String tradeId, String amount, String timestamp, String nonstr, String sign) {
+        private SettlementInfo(String internalAppId, String type, String openId, String orderNum, String deviceId, String code, String tradeId, String amount, String timestamp, String nonstr, String sign) {
+            this.internalAppId = internalAppId;
             this.type = type;
             this.openId = openId;
             this.orderNum = orderNum;
@@ -92,7 +96,8 @@ public class SettlementResource extends ServerResource {
         @Override
         public String toString() {
             return "SettlementInfo{" +
-                    "type='" + type + '\'' +
+                    "internalAppId='" + internalAppId + '\'' +
+                    ", type='" + type + '\'' +
                     ", openId='" + openId + '\'' +
                     ", orderNum='" + orderNum + '\'' +
                     ", deviceId='" + deviceId + '\'' +
@@ -143,6 +148,10 @@ public class SettlementResource extends ServerResource {
 
         public String getSign() {
             return sign;
+        }
+
+        public String getInternalAppId() {
+            return internalAppId;
         }
     }
 }

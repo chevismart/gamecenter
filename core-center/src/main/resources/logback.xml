@@ -35,7 +35,7 @@
         <Encoding>UTF-8</Encoding>
         <file>${LOG_HOME}/wechatPayment.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_HOME}/%d{yyy-MM-dd,aux}/wechatPayment.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/%d{yyy-MM-dd,aux}/wechatPayment.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <MaxHistory>60</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">

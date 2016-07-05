@@ -10,8 +10,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import weixin.popular.client.HttpClientFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,14 +21,13 @@ import static org.apache.http.client.utils.URLEncodedUtils.format;
 
 public class HttpService {
     public static final int HTTP_TIMEOUT = 15000;
-    public static HttpClient httpClient = HttpClientFactory.createHttpClient();
-    private static Logger logger = LoggerFactory.getLogger(HttpService.class);
     private static HttpRequestRetryHandler retryhandler = new DefaultHttpRequestRetryHandler(1, false);
+    public static HttpClient httpClient = HttpClients.custom().setRetryHandler(retryhandler).build();
+    private static Logger logger = LoggerFactory.getLogger(HttpService.class);
 
     public static HttpResponse get(String uri, BasicNameValuePair... params) throws IOException {
         HttpGet httpGet = new HttpGet(uri.concat("?").concat(getParams(params)));
         httpGet.setConfig(getHttpConfig());
-//        httpClient.getParams().setParameter("http.method.retry-handler", retryhandler);
         return httpClient.execute(httpGet);
     }
 
@@ -36,7 +35,6 @@ public class HttpService {
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setConfig(getHttpConfig());
         httpPost.setEntity(new UrlEncodedFormEntity(params));
-//        httpClient.getParams().setParameter("http.method.retry-handler", retryhandler);
         return httpClient.execute(httpPost);
     }
 

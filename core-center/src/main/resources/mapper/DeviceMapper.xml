@@ -9,13 +9,14 @@
         <result column="macAddr" property="macaddr" jdbcType="VARCHAR"/>
         <result column="powerStatus" property="powerstatus" jdbcType="VARCHAR"/>
         <result column="connectionStatus" property="connectionstatus" jdbcType="VARCHAR"/>
+        <result column="paymentType" property="paymenttype" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
     <resultMap id="ResultMapWithBLOBs" type="Device" extends="BaseResultMap">
         <result column="deviceDesc" property="devicedesc" jdbcType="LONGVARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    deviceId, centerId, deviceName, macAddr, powerStatus, connectionStatus, remark, devicedesc
+    deviceId, centerId, deviceName, macAddr, powerStatus, connectionStatus, remark, devicedesc, paymentType
   </sql>
     <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
         select
@@ -40,6 +41,19 @@
         <include refid="Base_Column_List"/>
         from device
         where deviceName = #{deviceName,jdbcType=VARCHAR}
+    </select>    
+    <select id="selectByMacAnd" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from device
+        where macAddr = #{macAddr,jdbcType=VARCHAR}
+    </select>
+    <select id="selectWechatIdByMacAndPaymentType" resultType="java.lang.Integer">
+        select center_payment_wechat.wechatId
+        from center_payment_wechat
+        left join device
+        on center_payment_wechat.centerId=device.centerId and center_payment_wechat.paymentChannelId=device.paymentType
+        where device.paymentType=#{paymentType,jdbcType=INTEGER} and device.macAddr=#{macAddr,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from device
@@ -48,10 +62,10 @@
     <insert id="insert" parameterType="Device">
     insert into device (deviceId, centerId, deviceName, 
       macAddr, powerStatus, connectionStatus, 
-      remark, deviceDesc)
+      remark, deviceDesc, paymentType)
     values (#{deviceid,jdbcType=INTEGER}, #{centerid,jdbcType=INTEGER}, #{devicename,jdbcType=VARCHAR}, 
       #{macaddr,jdbcType=VARCHAR}, #{powerstatus,jdbcType=VARCHAR}, #{connectionstatus,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{devicedesc,jdbcType=LONGVARCHAR})
+      #{remark,jdbcType=VARCHAR}, #{devicedesc,jdbcType=LONGVARCHAR}, #{paymentType,jdbcType=VARCHAR} )
   </insert>
     <insert id="insertSelective" parameterType="Device">
         insert into device
@@ -80,6 +94,9 @@
             <if test="devicedesc != null">
                 deviceDesc,
             </if>
+            <if test="paymenttype != null">
+                deviceDesc,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="deviceid != null">
@@ -105,6 +122,9 @@
             </if>
             <if test="devicedesc != null">
                 #{devicedesc,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="paymenttype != null">
+                #{paymenttype,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -133,6 +153,9 @@
             <if test="devicedesc != null">
                 deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR},
             </if>
+            <if test="paymenttype != null">
+                paymentType = #{paymenttype,jdbcType=VARCHAR},
+            </if>
         </set>
         where deviceId = #{deviceid,jdbcType=INTEGER}
     </update>
@@ -144,7 +167,8 @@
         powerStatus = #{powerstatus,jdbcType=VARCHAR},
         connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
         remark = #{remark,jdbcType=VARCHAR},
-        deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR}
+        deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR},
+        paymentType = #{paymenttype,jdbcType=VARCHAR}
         where deviceId = #{deviceid,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="Device">
@@ -154,7 +178,9 @@
         macAddr = #{macaddr,jdbcType=VARCHAR},
         powerStatus = #{powerstatus,jdbcType=VARCHAR},
         connectionStatus = #{connectionstatus,jdbcType=VARCHAR},
-        remark = #{remark,jdbcType=VARCHAR}
+        remark = #{remark,jdbcType=VARCHAR},
+        deviceDesc = #{devicedesc,jdbcType=LONGVARCHAR},
+        paymentType = #{paymenttype,jdbcType=VARCHAR}
         where deviceId = #{deviceid,jdbcType=INTEGER}
     </update>
 </mapper>

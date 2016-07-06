@@ -1,6 +1,7 @@
 package gamecenter.core.dao;
 
 import gamecenter.core.domain.Device;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface DeviceMapper {
     int updateByPrimaryKeyWithBLOBs(Device record);
 
     int updateByPrimaryKey(Device record);
+
+    int selectWechatIdByMacAndPaymentType(@Param("paymentType") int paymentType, @Param("macAddr") String macAddr);
 }

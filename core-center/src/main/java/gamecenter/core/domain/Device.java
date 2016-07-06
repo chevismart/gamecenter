@@ -17,6 +17,8 @@ public class Device {
 
     private String devicedesc;
 
+    private int paymenttype;
+
     public Integer getDeviceid() {
         return deviceid;
     }
@@ -81,6 +83,14 @@ public class Device {
         this.devicedesc = devicedesc == null ? null : devicedesc.trim();
     }
 
+    public int getPaymenttype() {
+        return paymenttype;
+    }
+
+    public void setPaymenttype(int paymenttype) {
+        this.paymenttype = paymenttype;
+    }
+
     @Override
     public String toString() {
         return "Device{" +
@@ -92,6 +102,7 @@ public class Device {
                 ", connectionstatus='" + connectionstatus + '\'' +
                 ", remark='" + remark + '\'' +
                 ", devicedesc='" + devicedesc + '\'' +
+                ", paymenttype=" + paymenttype +
                 '}';
     }
 }

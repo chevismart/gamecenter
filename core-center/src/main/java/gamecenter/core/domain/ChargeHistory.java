@@ -11,6 +11,7 @@ public class ChargeHistory {
     private Double paid;
     private Integer coin;
     private String transactionId;
+    private Integer paymentSystemId;
 
     @Override
     public String toString() {
@@ -23,6 +24,7 @@ public class ChargeHistory {
                 ", paid=" + paid +
                 ", coin=" + coin +
                 ", transactionId='" + transactionId + '\'' +
+                ", paymentSystemId=" + paymentSystemId +
                 '}';
     }
 
@@ -88,5 +90,13 @@ public class ChargeHistory {
 
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
+    }
+
+    public Integer getPaymentSystemId() {
+        return paymentSystemId;
+    }
+
+    public void setPaymentSystemId(Integer paymentSystemId) {
+        this.paymentSystemId = paymentSystemId;
     }
 }

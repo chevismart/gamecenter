@@ -1,5 +1,10 @@
 package gamecenter.core.services.external;
 
+import com.google.common.base.Optional;
+import gamecenter.core.domain.Device;
+import gamecenter.core.domain.PaymentHistory;
+import gamecenter.core.services.db.DBServices;
+import org.apache.commons.lang3.StringUtils;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -12,6 +17,7 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -19,13 +25,20 @@ import java.io.IOException;
 
 public class SettlementResource extends ServerResource {
 
+    public static final int YOUBAO_PAYMENT_TYPE = 2;
     public static String SETTLEMENT_URI = "/external/youbao/settlement";
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private DBServices dbServices;
     private Form form;
 
     @Post
     @Produces(MediaType.APPLICATION_JSON)
     public StringRepresentation retrieve(Representation entity) throws IOException {
+
+        DBServices instance = DBServices.instance();
+        logger.info("DB service is {}", instance);
+
         form = new Form(entity);
 //        String internalAppId = "wxe89a9d2fa17df80f";
         String internalAppId = "liyuanapp";
@@ -42,9 +55,21 @@ public class SettlementResource extends ServerResource {
         String nonstr = getParameter("nonstr");
         String sign = getParameter("sign");
 
-        SettlementInfo settlementInfo = new SettlementInfo(internalAppId, type, openId, orderNum, deviceId, code, tradeId, amount, timestamp, nonstr, sign);
+        if (StringUtils.isNotEmpty(code)) {
+            SettlementInfo settlementInfo = new SettlementInfo(internalAppId, type, openId, orderNum, deviceId, code, tradeId, amount, timestamp, nonstr, sign);
+            logger.info("Settlement Info is: {}", settlementInfo);
+            logger.info("Device Service is: ", instance.getDeviceService());
+            Optional<Device> deviceOptional = instance.getDeviceService().deviceByMac(deviceId);
+            if (deviceOptional.isPresent()) {
+                PaymentHistory paymentHistory = new PaymentHistory(2, 2, deviceOptional.get().getCenterid(), Double.valueOf(amount));
+                instance.getPaymentHistoryService().addWechatPaymentHistory(paymentHistory);
+                logger.info("Add payment history successfully for {}: {}", tradeId, paymentHistory);
+            } else {
+                logger.warn("Device not found when adding payment history!");
+            }
 
-        logger.info("Received settlement notification details is {}", settlementInfo);
+            logger.info("Received settlement notification details is {}", settlementInfo);
+        }
         return new StringRepresentation("SUCCESS".toCharArray());
     }
 

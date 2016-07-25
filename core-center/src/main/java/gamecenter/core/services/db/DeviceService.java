@@ -29,4 +29,8 @@ public class DeviceService extends DBService {
         return Optional.fromNullable(deviceMapper.selectWechatIdByMacAndPaymentType(paymentType, mac));
     }
 
+    public Optional<Device> deviceByMac(String mac) {
+        return Optional.fromNullable(deviceMapper.selectByMacAddr(mac));
+    }
+
 }

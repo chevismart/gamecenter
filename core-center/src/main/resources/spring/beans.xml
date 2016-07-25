@@ -47,8 +47,12 @@
         <constructor-arg name="subscribeService" ref="subscribeService"/>
         <constructor-arg name="userService" ref="userService"/>
         <constructor-arg name="chargeHistoryService" ref="chargeHistoryService"/>
+        <constructor-arg name="paymentHistoryService" ref="paymentHistoryService"/>
     </bean>
 
+    <bean id="paymentHistoryService" class="gamecenter.core.services.db.PaymentHistoryService" scope="singleton">
+        <constructor-arg name="paymentHistoryMapper" ref="paymentHistoryMapper"/>
+    </bean>
     <bean id="chargeHistoryService" class="gamecenter.core.services.db.ChargeHistoryService" scope="singleton">
         <constructor-arg name="chargeHistoryMapper" ref="chargeHistoryMapper"/>
         <constructor-arg name="playrecordMapper" ref="playrecordMapper"/>

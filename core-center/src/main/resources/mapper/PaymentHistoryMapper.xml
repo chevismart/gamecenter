@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="gamecenter.core.dao.PaymentHistoryMapper">
+    <resultMap id="BaseResultMap" type="PaymentHistory">
+        <id column="index" property="index" jdbcType="INTEGER"/>
+        <result column="payment_system_id" property="paymentSystemId" jdbcType="INTEGER"/>
+        <result column="charge_history_id" property="chargeHistoryId" jdbcType="INTEGER"/>
+        <result column="center_id" property="centerId" jdbcType="INTEGER"/>
+        <result column="amount" property="amount" jdbcType="DOUBLE"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        payment_system_id, charge_history_id, center_id, amount
+    </sql>
+    <insert id="addWechatPaymentHistory" parameterType="PaymentHistory">
+        insert into payment_history (payment_system_id,charge_history_id, center_id, amount)
+        values (#{paymentSystemId,jdbcType=INTEGER}, #{chargeHistoryId,jdbcType=INTEGER}, #{centerId,jdbcType=INTEGER}, #{amount, jdbcType=DOUBLE})
+    </insert>
+</mapper>

@@ -10,10 +10,9 @@
         <result column="coin" property="coin" jdbcType="INTEGER"/>
         <result column="paid" property="paid" jdbcType="DOUBLE"/>
         <result column="transactionId" property="transactionId" jdbcType="VARCHAR"/>
-        <result column="paymentSystemId" property="paymentSystemId" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        chargeHistoryId, centerId, customerId, wechatId, timestamp, coin, paid, transactionId, paymentSystemId
+        chargeHistoryId, centerId, customerId, wechatId, timestamp, coin, paid, transactionId
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -36,7 +35,7 @@
     <insert id="insert" parameterType="ChargeHistory">
         insert into charge_history (chargeHistoryId,centerId, customerId, wechatId, timestamp, coin, paid, transactionId)
         values (#{chargeHistoryId,jdbcType=INTEGER}, #{centerId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER},#{wechatId,jdbcType=INTEGER},#{timestamp,jdbcType=TIMESTAMP},
-        #{coin,jdbcType=INTEGER}, #{paid, jdbcType=DOUBLE}, #{transactionId, jdbcType=VARCHAR}, #{paymentSystemId, jdbcType=INTEGER})
+        #{coin,jdbcType=INTEGER}, #{paid, jdbcType=DOUBLE}, #{transactionId, jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="ChargeHistory">
         insert into charge_history
@@ -65,9 +64,6 @@
             <if test="transactionId != null">
                 transactionId,
             </if>
-            <if test="paymentSystemId != null">
-                paymentSystemId,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="chargeHistoryId != null">
@@ -93,9 +89,6 @@
             </if>
             <if test="transactionId != null">
                 #{transactionId,jdbcType=VARCHAR},
-            </if>
-            <if test="paymentSystemId != null">
-                #{paymentSystemId,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -123,9 +116,6 @@
             <if test="transactionId != null">
                 transactionId = #{transactionId,jdbcType=VARCHAR},
             </if>
-            <if test="paymentSystemId != null">
-                paymentSystemId = #{paymentSystemId,jdbcType=INTEGER},
-            </if>
         </set>
         where chargeHistoryId = #{chargeHistoryId,jdbcType=INTEGER}
     </update>
@@ -137,8 +127,7 @@
         timestamp = #{timestamp,jdbcType=TIMESTAMP},
         coin = #{coin,jdbcType=INTEGER},
         paid = #{paid,jdbcType=DOUBLE},
-        transactionId = #{transactionId,jdbcType=VARCHAR},
-        paymentSystemId = #{paymentSystemId,jdbcType=INTEGER}
+        transactionId = #{transactionId,jdbcType=VARCHAR}
         where chargeHistoryId = #{chargeHistoryId,jdbcType=INTEGER}
     </update>
 </mapper>

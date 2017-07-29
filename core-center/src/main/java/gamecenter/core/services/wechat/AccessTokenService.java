@@ -40,6 +40,7 @@ public class AccessTokenService extends Service {
         String appId = appProfile.getAppId();
         if (appProfile.isWechatProfileValid()) {
             WechatProfile wechatProfile = appProfile.getWechatProfile();
+            logger.info("Calling api for requesting wechat token: {}" + wechatProfile);
             accessToken = verifyToken(TokenAPI.token(wechatProfile.getWechatAppId(), wechatProfile.getWechatAppSecret()),
                     wechatProfile.getWechatAppId(),
                     wechatProfile);
@@ -53,6 +54,7 @@ public class AccessTokenService extends Service {
         Token token = null;
         if (!isAccessTokenValid(accessToken)) {
             logger.error("Request wechat access token failed: error code = {}, error message ={}", accessToken.getErrcode(), accessToken.getErrmsg());
+            throw new RuntimeException("Invalid token: " + accessToken.toString());
         } else {
             token = accessToken;
             wechatProfile.setWechatAccessTokenUpdateTime(TimeUtil.getCurrentDateTime());

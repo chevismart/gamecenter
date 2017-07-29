@@ -6,6 +6,7 @@ import gamecenter.core.processors.wechat.ProfileManager;
 import gamecenter.core.utils.XMLMessageConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import weixin.popular.bean.token.Token;
 
 import java.util.List;
 
@@ -28,16 +29,21 @@ public class AppLoader implements Runnable {
             profileManager.addAppProfile(appProfile.getAppId(), appProfile.getAppName());
             WechatProfile wechatProfile = appProfile.getWechatProfile();
             if (null != wechatProfile) {
+                logger.info("Ready for requesting the wechat access token with wechat profile: {}", wechatProfile);
                 profileManager.addWechatProfile(appProfile.getAppId(),
                         wechatProfile.getWechatAppId(),
                         wechatProfile.getWechatAppSecret(),
                         wechatProfile.getMchid(),
                         wechatProfile.getPayKey(),
                         wechatProfile.getInitId());
-                profileManager.requestWechatAccessToken(appProfile.getAppId());
-                logger.info("Wechat access token is successfully obtained!");
-                profileManager.requestWechatJsapiTicket(appProfile.getAppId());
-                logger.info("Wechat jsapi ticket is successfully obtained!");
+                Token token = profileManager.requestWechatAccessToken(appProfile.getAppId());
+                if (null != token) {
+                    logger.info("Wechat access token is successfully obtained!");
+                }
+                String jsapiTicket = profileManager.requestWechatJsapiTicket(appProfile.getAppId());
+                if (null != jsapiTicket) {
+                    logger.info("Wechat jsapi ticket is successfully obtained!");
+                }
             }
             logger.info("{}({}) is successfully loaded!", appProfile.getAppName(), appProfile.getAppId());
         }

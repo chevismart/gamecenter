@@ -27,8 +27,14 @@ public class YoubaoPrepayProcessor extends GeneralProcessor {
         AppProfile appProfile = profileManager.getAppProfile("liyuanapp");
         logger.info("State = {}, Code = {}, AppId= {}", state, code, appProfile.getWechatProfile().getWechatAppId());
         String openId = profileManager.getOpenId(appProfile.getAppId(), code);
-        logger.info("Retrieve openId = {}", openId);
-        getHttpResponse().sendRedirect("http://www.youbon.net/p/thirdpay?openid=" + openId + "&state=" + state);
+        logger.info("Retrieved openId = {}", openId);
+        String youbaoUri = uri(state, openId);
+        logger.info("Redirecting to external system: " + youbaoUri);
+        getHttpResponse().sendRedirect(youbaoUri);
         return null;
+    }
+
+    private String uri(String state, String openId) {
+        return "http://www.youbon.net/p/thirdpay?openid=" + openId + "&state=" + state;
     }
 }
